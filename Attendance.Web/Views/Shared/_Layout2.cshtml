@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <meta charset="utf-8">
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
+    <meta content="template language" name="keywords">
+    <meta content="Tamerlan Soziev" name="author">
+    <meta content="Admin dashboard html template" name="description">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="~/Content/images/favicon.png" rel="shortcut icon">
+    <link href="~/Content/images/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <link href="~/Content/select2.min.css" rel="stylesheet">
+    <link href="~/Content/daterangepicker.css" rel="stylesheet">
+    <link href="~/Content/dropzone.css" rel="stylesheet">
+    <link href="~/Content/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/fullcalendar.min.css" rel="stylesheet">
+    <link href="~/Content/perfect-scrollbar.min.css" rel="stylesheet">
+    <link href="~/Content/slick.css" rel="stylesheet">
+    <link href="~/Content/main5f48.css?version=4.0.0" rel="stylesheet">
+</head>
+
+<body>
+    <div class="all-wrapper menu-side menu-top solid-bg-all">
+        <div class="top-menu-secondary with-overflow color-scheme-dark">
+
+            <div class="logo-w menu-size"><a class="logo" href="@Url.Action("Index", "Home")"><img src="~/Content/images/logo.png"><span>Attendance</span></a></div>
+
+            <div class="top-menu-controls">
+                <div class="element-search hidden-lg-down"><input placeholder="Start typing to search..." type="text"></div>
+                <div class="top-icon top-search hidden-xl-up"><i class="os-icon os-icon-ui-37"></i></div>
+                <!--------------------
+                START - User avatar and menu in secondary top menu
+                -------------------->
+                <div class="logged-user-w">
+                    <div class="logged-user-i">
+                        <div class="avatar-w"><img alt="" src="~/Content/images/avatar1.jpg"></div>
+                        <div class="logged-user-menu">
+                            <div class="logged-user-avatar-info">
+                                <div class="avatar-w"><img alt="" src="~/Content/images/avatar1.jpg"></div>
+                                <div class="logged-user-info-w">
+                                    <div class="logged-user-name">User</div>
+                                </div>
+                            </div>
+                            <div class="bg-icon"><i class="os-icon os-icon-wallet-loaded"></i></div>
+                            <ul>
+                                <li><a href="@Url.Action("Login", "Account", new { area = "Security" })"><i class="os-icon os-icon-signs-11"></i><span>Logout</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!--------------------
+                END - User avatar and menu in secondary top menu
+                -------------------->
+            </div>
+        </div>
+        <div class="layout-w">
+            <!--------------------
+            START - Mobile Menu
+            -------------------->
+            <div class="menu-mobile menu-activated-on-click color-scheme-dark">
+                <div class="mm-logo-buttons-w">
+                    <a class="mm-logo" href="@Url.Action("Index", "Home")"><img src="img/logo.png"><span>STAFF PORTAL</span></a>
+                    <div class="mm-buttons">
+                        <div class="content-panel-open">
+                            <div class="os-icon os-icon-grid-circles"></div>
+                        </div>
+                        <div class="mobile-menu-trigger">
+                            <div class="os-icon os-icon-hamburger-menu-1"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-and-user">
+                    <div class="logged-user-w">
+                        <div class="avatar-w"><img alt="" src="~/Content/images/avatar1.jpg"></div>
+                        <div class="logged-user-info-w">
+                            <div class="logged-user-name">STAFF</div>
+                        </div>
+                    </div>
+
+                    <ul class="main-menu">
+                        <li class="has-sub-menu">
+                            <a href="@Url.Action("Index", "Home")">
+                                <div class="icon-w">
+                                    <div class="os-icon os-icon-window-content"></div>
+                                </div><span>Staff Menu</span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li><a href="#">Activities</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="desktop-menu menu-side-v2-w menu-activated-on-hover flying-menu">
+                <ul class="main-menu">
+                    <li class="menu-sub-header"><span>Menu</span></li>
+                    <li class="has-sub-menu">
+                        <a href="@Url.Action("Index", "Home")">
+                            <div class="icon-w">
+                                <div class="os-icon os-icon-window-content"></div>
+                            </div><span>Staff Menu</span>
+                        </a>
+                        <div class="sub-menu-w">
+                            <div class="sub-menu-header">Staff Menu</div>
+                            <div class="sub-menu-i">
+                                <ul class="sub-menu">
+                                    <li><a href="#">Activities</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+
+            <div class="content-w">
+                <div class="content-i">
+                    <div class="content-box">
+                        <div class="row pt-4">
+                            <div class="col-sm-12">
+                                <div class="element-wrapper">
+                                    <div class="element-actions">
+                                        <form class="form-inline justify-content-sm-end">
+                                            <select class="form-control form-control-sm rounded">
+                                                <option value="Pending">Today</option>
+                                                <option value="Active">Last Week </option>
+                                                <option value="Cancelled">Last 30 Days</option>
+                                            </select>
+                                        </form>
+                                    </div>
+                                    <h6 class="element-header">Staff Dashboard</h6>
+                                    <div class="element-content">
+                                        <div class="element-box">
+                                            @RenderBody()
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="floated-colors-btn second-floated-btn">
+                            <div class="os-toggler-w">
+                                <div class="os-toggler-i">
+                                    <div class="os-toggler-pill"></div>
+                                </div>
+                            </div><span>Dark </span><span>Colors</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="display-type"></div>
+    </div>
+
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/moment.js"></script>
+    <script src="~/Scripts/Chart.min.js"></script>
+    <script src="~/Scripts/select2.full.min.js"></script>
+    <script src="~/Scripts/jquery.barrating.min.js"></script>
+    <script src="~/Scripts/ckeditor.js"></script>
+    <script src="~/Scripts/validator.min.js"></script>
+    <script src="~/Scripts/daterangepicker.js"></script>
+    <script src="~/Scripts/ion.rangeSlider.min.js"></script>
+    <script src="~/Scripts/dropzone.js"></script>
+    <script src="~/Scripts/mindmup-editabletable.js"></script>
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/fullcalendar.min.js"></script>
+    <script src="~/Scripts/perfect-scrollbar.jquery.min.js"></script>
+    <script src="~/Scripts/tether.min.js"></script>
+    <script src="~/Scripts/slick.min.js"></script>
+    <script src="~/Scripts/util.js"></script>
+    <script src="~/Scripts/alert.js"></script>
+    <script src="~/Scripts/button.js"></script>
+    <script src="~/Scripts/carousel.js"></script>
+    <script src="~/Scripts/collapse.js"></script>
+    <script src="~/Scripts/dropdown.js"></script>
+    <script src="~/Scripts/modal.js"></script>
+    <script src="~/Scripts/tab.js"></script>
+    <script src="~/Scripts/tooltip.js"></script>
+    <script src="~/Scripts/popover.js"></script>
+    <script src="~/Scripts/main5f48.js?version=4.0.0"></script>
+    <script>
+        function showResult() {
+            $("#result").show();
+        }
+        function showSuccess() {
+            alert('Operation Succesful!');
+        }
+    </script>
+</body>
+
+</html>
