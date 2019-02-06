@@ -103,13 +103,15 @@ namespace Attendance.Business
             }
         }
 
-        public virtual int Create(E entity)
+        public virtual E Create(E entity)
         {
             try
             {
                 E addedEntity = repository.Add(entity);
 
-                return repository.Save();
+                repository.Save();
+
+                return addedEntity;
             }
             catch (ArgumentNullException)
             {

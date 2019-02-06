@@ -57,6 +57,12 @@
         <AssociationConnector Association="AttendanceModel.FK_STUDENT_LEVEL_SESSION" ManuallyRouted="false" />
         <AssociationConnector Association="AttendanceModel.FK_STAFF_STAFF_TYPE" ManuallyRouted="false" />
         <AssociationConnector Association="AttendanceModel.FK_STUDENT_LEVEL_STUDENT" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="AttendanceModel.MENU" Width="1.5" PointX="6.75" PointY="23.125" />
+        <EntityTypeShape EntityType="AttendanceModel.MENU_GROUP" Width="1.5" PointX="4.5" PointY="23.625" />
+        <EntityTypeShape EntityType="AttendanceModel.MENU_IN_ROLE" Width="1.5" PointX="9" PointY="14.375" />
+        <AssociationConnector Association="AttendanceModel.FK_MENU_IN_ROLE_MENU" />
+        <AssociationConnector Association="AttendanceModel.FK_ROLE_MENU_MENU_GROUP" />
+        <AssociationConnector Association="AttendanceModel.FK_MENU_IN_ROLE_ROLE" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

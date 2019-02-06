@@ -19,6 +19,7 @@
     <link href="~/Content/perfect-scrollbar.min.css" rel="stylesheet">
     <link href="~/Content/slick.css" rel="stylesheet">
     <link href="~/Content/main5f48.css?version=4.0.0" rel="stylesheet">
+    <link href="~/Content/toastr.css" rel="stylesheet" />
 </head>
 
 <body class="auth-wrapper">
@@ -30,15 +31,17 @@
             <h4 class="auth-header">Login</h4>
             <form action="#">
                 <div class="form-group">
-                    <label for="">Username</label><input class="form-control" placeholder="Enter your username" type="text">
+                    <label for="">Username</label><input id="username" class="form-control" placeholder="Enter your username" type="text">
                     <div class="pre-icon os-icon os-icon-user-male-circle"></div>
                 </div>
                 <div class="form-group">
-                    <label for="">Password</label><input class="form-control" placeholder="Enter your password" type="password">
+                    <label for="">Password</label><input id="password" class="form-control" placeholder="Enter your password" type="password">
                     <div class="pre-icon os-icon os-icon-fingerprint"></div>
                 </div>
                 <div class="buttons-w">
-                    <a class="btn btn-primary" href="#">Log me in</a>
+                    <a class="btn btn-primary" onclick="login()" id="btnLogin" style="color:white;">Log me in</a>
+                    <button class="btn btn-primary" disabled="disabled" id="btnLoginDisabled" style="display:none">Log me in</button>
+                    <span id="loading" style="display:none"><img src="~/Content/images/bx_loader.gif" width="20px" /></span>
                     <div class="form-check-inline">
                         <label class="form-check-label">
                             <input class="form-check-input" type="checkbox">Remember Me
@@ -48,6 +51,111 @@
             </form>
         </div>
     </div>
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/moment.js"></script>
+    <script src="~/Scripts/Chart.min.js"></script>
+    <script src="~/Scripts/select2.full.min.js"></script>
+    <script src="~/Scripts/jquery.barrating.min.js"></script>
+    <script src="~/Scripts/ckeditor.js"></script>
+    <script src="~/Scripts/validator.min.js"></script>
+    <script src="~/Scripts/daterangepicker.js"></script>
+    <script src="~/Scripts/ion.rangeSlider.min.js"></script>
+    <script src="~/Scripts/dropzone.js"></script>
+    <script src="~/Scripts/mindmup-editabletable.js"></script>
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/fullcalendar.min.js"></script>
+    <script src="~/Scripts/perfect-scrollbar.jquery.min.js"></script>
+    <script src="~/Scripts/tether.min.js"></script>
+    <script src="~/Scripts/slick.min.js"></script>
+    <script src="~/Scripts/util.js"></script>
+    <script src="~/Scripts/alert.js"></script>
+    <script src="~/Scripts/button.js"></script>
+    <script src="~/Scripts/carousel.js"></script>
+    <script src="~/Scripts/collapse.js"></script>
+    <script src="~/Scripts/dropdown.js"></script>
+    <script src="~/Scripts/modal.js"></script>
+    <script src="~/Scripts/tab.js"></script>
+    <script src="~/Scripts/tooltip.js"></script>
+    <script src="~/Scripts/popover.js"></script>
+    <script src="~/Scripts/main5f48.js?version=4.0.0"></script>
+    <script src="~/Scripts/toastr.js"></script>
+    <script>
+        function login() {
+
+            $("#btnLogin").hide();
+            $("#btnLoginDisabled").show();
+            $("#loading").show();
+
+            var username = $("#username").val();
+            var password = $("#password").val();
+
+            if (!username || !password) {
+                toastMessage("Please enter your username and password.", "Attention!");
+                $("#btnLogin").show();
+                $("#btnLoginDisabled").hide();
+                $("#loading").hide();
+                return;
+            }
+
+            $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Login", "Account")', // we are calling json method
+                dataType: 'json',
+                data: { username: username, password: password },
+                    success: function (result) {
+                        if (result === "success") {
+
+                            toastMessage("Lgin was successful.", "Success!");
+
+                            $("#btnLogin").show();
+                            $("#btnLoginDisabled").hide();
+                            $("#loading").hide();
+
+                            setTimeout(function () {
+                                window.location.href = "@Url.Action("Home", "Account", new { area = "Security"})";
+                            }, 2000);
+
+                        } else {
+                            toastMessage(result, "Error!");
+                            $("#btnLogin").show();
+                            $("#btnLoginDisabled").hide();
+                            $("#loading").hide();
+                        }
+                    },
+                    error: function (ex) {
+                        toastMessage(ex, "Error!");
+
+                        $("#btnLogin").show();
+                        $("#btnLoginDisabled").hide();
+                        $("#loading").hide();
+                    }
+            });
+        }
+
+        function toastMessage(msg, title) {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut",
+                "tapToDismiss": false
+            }
+
+            var $toast = toastr["success"](msg, title);
+        }
+    </script>
 </body>
 </html>
 

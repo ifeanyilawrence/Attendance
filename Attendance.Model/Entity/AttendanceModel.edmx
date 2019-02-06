@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="AttendanceModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="AttendanceModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ABSENCE_TYPE">
           <Key>
             <PropertyRef Name="Id" />
@@ -134,6 +134,35 @@
           <Property Name="Longitude" Type="decimal" Precision="5" Scale="4" Nullable="false" />
           <Property Name="Latitude" Type="decimal" Precision="5" Scale="4" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MENU">
+          <Key>
+            <PropertyRef Name="Menu_Id" />
+          </Key>
+          <Property Name="Menu_Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Controller" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Action" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Area" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Display_Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Activated" Type="bit" Nullable="false" />
+          <Property Name="Menu_Group_Id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MENU_GROUP">
+          <Key>
+            <PropertyRef Name="Menu_Group_Id" />
+          </Key>
+          <Property Name="Menu_Group_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Activated" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MENU_IN_ROLE">
+          <Key>
+            <PropertyRef Name="Menu_In_Role_Id" />
+          </Key>
+          <Property Name="Menu_In_Role_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Menu_Id" Type="bigint" Nullable="false" />
+          <Property Name="Activated" Type="bit" Nullable="false" />
+          <Property Name="Role_Id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="PERSON">
           <Key>
@@ -436,6 +465,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MENU_IN_ROLE_MENU">
+          <End Role="MENU" Type="Self.MENU" Multiplicity="1" />
+          <End Role="MENU_IN_ROLE" Type="Self.MENU_IN_ROLE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MENU">
+              <PropertyRef Name="Menu_Id" />
+            </Principal>
+            <Dependent Role="MENU_IN_ROLE">
+              <PropertyRef Name="Menu_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MENU_IN_ROLE_ROLE">
+          <End Role="ROLE" Type="Self.ROLE" Multiplicity="1" />
+          <End Role="MENU_IN_ROLE" Type="Self.MENU_IN_ROLE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ROLE">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MENU_IN_ROLE">
+              <PropertyRef Name="Role_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PERSON_GENDER">
           <End Role="GENDER" Type="Self.GENDER" Multiplicity="1" />
           <End Role="PERSON" Type="Self.PERSON" Multiplicity="*" />
@@ -445,6 +498,18 @@
             </Principal>
             <Dependent Role="PERSON">
               <PropertyRef Name="Gender_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ROLE_MENU_MENU_GROUP">
+          <End Role="MENU_GROUP" Type="Self.MENU_GROUP" Multiplicity="1" />
+          <End Role="MENU" Type="Self.MENU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MENU_GROUP">
+              <PropertyRef Name="Menu_Group_Id" />
+            </Principal>
+            <Dependent Role="MENU">
+              <PropertyRef Name="Menu_Group_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -617,6 +682,9 @@
           <EntitySet Name="HALL" EntityType="Self.HALL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LEVEL" EntityType="Self.LEVEL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LOCATION" EntityType="Self.LOCATION" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MENU" EntityType="Self.MENU" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MENU_GROUP" EntityType="Self.MENU_GROUP" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MENU_IN_ROLE" EntityType="Self.MENU_IN_ROLE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PERSON" EntityType="Self.PERSON" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PROGRAMME" EntityType="Self.PROGRAMME" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ROLE" EntityType="Self.ROLE" Schema="dbo" store:Type="Tables" />
@@ -694,9 +762,21 @@
             <End Role="USER" EntitySet="USER" />
             <End Role="EVENT" EntitySet="EVENT" />
           </AssociationSet>
+          <AssociationSet Name="FK_MENU_IN_ROLE_MENU" Association="Self.FK_MENU_IN_ROLE_MENU">
+            <End Role="MENU" EntitySet="MENU" />
+            <End Role="MENU_IN_ROLE" EntitySet="MENU_IN_ROLE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MENU_IN_ROLE_ROLE" Association="Self.FK_MENU_IN_ROLE_ROLE">
+            <End Role="ROLE" EntitySet="ROLE" />
+            <End Role="MENU_IN_ROLE" EntitySet="MENU_IN_ROLE" />
+          </AssociationSet>
           <AssociationSet Name="FK_PERSON_GENDER" Association="Self.FK_PERSON_GENDER">
             <End Role="GENDER" EntitySet="GENDER" />
             <End Role="PERSON" EntitySet="PERSON" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ROLE_MENU_MENU_GROUP" Association="Self.FK_ROLE_MENU_MENU_GROUP">
+            <End Role="MENU_GROUP" EntitySet="MENU_GROUP" />
+            <End Role="MENU" EntitySet="MENU" />
           </AssociationSet>
           <AssociationSet Name="FK_STAFF_DEPARTMENT" Association="Self.FK_STAFF_DEPARTMENT">
             <End Role="DEPARTMENT" EntitySet="DEPARTMENT" />
@@ -751,8 +831,7 @@
             <End Role="USER" EntitySet="USER" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AttendanceModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -957,6 +1036,7 @@
           <Property Name="Description" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="USER" Relationship="Self.FK_USER_ROLE" FromRole="ROLE" ToRole="USER" />
+          <NavigationProperty Name="MENU_IN_ROLE" Relationship="AttendanceModel.FK_MENU_IN_ROLE_ROLE" FromRole="ROLE" ToRole="MENU_IN_ROLE" />
         </EntityType>
         <EntityType Name="SESSION">
           <Key>
@@ -1563,7 +1643,92 @@
             <End Role="STUDENT" EntitySet="STUDENT" />
             <End Role="STUDENT_LEVEL" EntitySet="STUDENT_LEVEL" />
           </AssociationSet>
+          <EntitySet Name="MENU" EntityType="AttendanceModel.MENU" />
+          <EntitySet Name="MENU_GROUP" EntityType="AttendanceModel.MENU_GROUP" />
+          <EntitySet Name="MENU_IN_ROLE" EntityType="AttendanceModel.MENU_IN_ROLE" />
+          <AssociationSet Name="FK_MENU_IN_ROLE_MENU" Association="AttendanceModel.FK_MENU_IN_ROLE_MENU">
+            <End Role="MENU" EntitySet="MENU" />
+            <End Role="MENU_IN_ROLE" EntitySet="MENU_IN_ROLE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ROLE_MENU_MENU_GROUP" Association="AttendanceModel.FK_ROLE_MENU_MENU_GROUP">
+            <End Role="MENU_GROUP" EntitySet="MENU_GROUP" />
+            <End Role="MENU" EntitySet="MENU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MENU_IN_ROLE_ROLE" Association="AttendanceModel.FK_MENU_IN_ROLE_ROLE">
+            <End Role="ROLE" EntitySet="ROLE" />
+            <End Role="MENU_IN_ROLE" EntitySet="MENU_IN_ROLE" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="MENU">
+          <Key>
+            <PropertyRef Name="Menu_Id" />
+          </Key>
+          <Property Name="Menu_Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Controller" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Action" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Area" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Display_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Activated" Type="Boolean" Nullable="false" />
+          <Property Name="Menu_Group_Id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="MENU_IN_ROLE" Relationship="AttendanceModel.FK_MENU_IN_ROLE_MENU" FromRole="MENU" ToRole="MENU_IN_ROLE" />
+          <NavigationProperty Name="MENU_GROUP" Relationship="AttendanceModel.FK_ROLE_MENU_MENU_GROUP" FromRole="MENU" ToRole="MENU_GROUP" />
+        </EntityType>
+        <EntityType Name="MENU_GROUP">
+          <Key>
+            <PropertyRef Name="Menu_Group_Id" />
+          </Key>
+          <Property Name="Menu_Group_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Activated" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="MENU" Relationship="AttendanceModel.FK_ROLE_MENU_MENU_GROUP" FromRole="MENU_GROUP" ToRole="MENU" />
+        </EntityType>
+        <EntityType Name="MENU_IN_ROLE">
+          <Key>
+            <PropertyRef Name="Menu_In_Role_Id" />
+          </Key>
+          <Property Name="Menu_In_Role_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Menu_Id" Type="Int64" Nullable="false" />
+          <Property Name="Activated" Type="Boolean" Nullable="false" />
+          <Property Name="Role_Id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="MENU" Relationship="AttendanceModel.FK_MENU_IN_ROLE_MENU" FromRole="MENU_IN_ROLE" ToRole="MENU" />
+          <NavigationProperty Name="ROLE" Relationship="AttendanceModel.FK_MENU_IN_ROLE_ROLE" FromRole="MENU_IN_ROLE" ToRole="ROLE" />
+        </EntityType>
+        <Association Name="FK_MENU_IN_ROLE_MENU">
+          <End Type="AttendanceModel.MENU" Role="MENU" Multiplicity="1" />
+          <End Type="AttendanceModel.MENU_IN_ROLE" Role="MENU_IN_ROLE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MENU">
+              <PropertyRef Name="Menu_Id" />
+            </Principal>
+            <Dependent Role="MENU_IN_ROLE">
+              <PropertyRef Name="Menu_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ROLE_MENU_MENU_GROUP">
+          <End Type="AttendanceModel.MENU_GROUP" Role="MENU_GROUP" Multiplicity="1" />
+          <End Type="AttendanceModel.MENU" Role="MENU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MENU_GROUP">
+              <PropertyRef Name="Menu_Group_Id" />
+            </Principal>
+            <Dependent Role="MENU">
+              <PropertyRef Name="Menu_Group_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MENU_IN_ROLE_ROLE">
+          <End Type="AttendanceModel.ROLE" Role="ROLE" Multiplicity="1" />
+          <End Type="AttendanceModel.MENU_IN_ROLE" Role="MENU_IN_ROLE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ROLE">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MENU_IN_ROLE">
+              <PropertyRef Name="Role_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1815,6 +1980,38 @@
                 <ScalarProperty Name="Password_Recovery" ColumnName="Password_Recovery" />
                 <ScalarProperty Name="Role_Id" ColumnName="Role_Id" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MENU">
+            <EntityTypeMapping TypeName="AttendanceModel.MENU">
+              <MappingFragment StoreEntitySet="MENU">
+                <ScalarProperty Name="Menu_Group_Id" ColumnName="Menu_Group_Id" />
+                <ScalarProperty Name="Activated" ColumnName="Activated" />
+                <ScalarProperty Name="Display_Name" ColumnName="Display_Name" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="Action" ColumnName="Action" />
+                <ScalarProperty Name="Controller" ColumnName="Controller" />
+                <ScalarProperty Name="Menu_Id" ColumnName="Menu_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MENU_GROUP">
+            <EntityTypeMapping TypeName="AttendanceModel.MENU_GROUP">
+              <MappingFragment StoreEntitySet="MENU_GROUP">
+                <ScalarProperty Name="Activated" ColumnName="Activated" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Menu_Group_Id" ColumnName="Menu_Group_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MENU_IN_ROLE">
+            <EntityTypeMapping TypeName="AttendanceModel.MENU_IN_ROLE">
+              <MappingFragment StoreEntitySet="MENU_IN_ROLE">
+                <ScalarProperty Name="Role_Id" ColumnName="Role_Id" />
+                <ScalarProperty Name="Activated" ColumnName="Activated" />
+                <ScalarProperty Name="Menu_Id" ColumnName="Menu_Id" />
+                <ScalarProperty Name="Menu_In_Role_Id" ColumnName="Menu_In_Role_Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

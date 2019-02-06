@@ -1,4 +1,4 @@
-﻿@{ 
+﻿@{
     Layout = null;
 }
 
@@ -23,34 +23,252 @@
     <link href="~/Content/perfect-scrollbar.min.css" rel="stylesheet">
     <link href="~/Content/slick.css" rel="stylesheet">
     <link href="~/Content/main5f48.css?version=4.0.0" rel="stylesheet">
+    <link href="~/Content/toastr.css" rel="stylesheet" />
 </head>
 
 <body>
     <div class="all-wrapper menu-side with-pattern">
         <div class="auth-box-w wider">
             <div class="logo-w"><a href="index-2.html"><img alt="" src="~/Content/images/logo-big.png"></a></div>
-            <h4 class="auth-header">Create new account</h4>
+            <h4 class="auth-header">Student Registration</h4>
             <form action="#">
-                <div class="form-group">
-                    <label for=""> Email address</label><input class="form-control" placeholder="Enter email" type="email">
-                    <div class="pre-icon os-icon os-icon-email-2-at2"></div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for=""> Surname</label>
+                            <input id="surname" class="form-control" placeholder="surname" type="text" required="required" data-error="Please input your Surname">
+                            <div class="help-block form-text with-errors form-control-feedback"></div>
+                            <div class="pre-icon os-icon os-icon-user-male-circle"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for=""> First Name</label>
+                            <input id="firstname" class="form-control" placeholder="first name" type="text" required="required" data-error="Please input your first name">
+                            <div class="help-block form-text with-errors form-control-feedback"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label for=""> Password</label><input class="form-control" placeholder="Password" type="password">
-                            <div class="pre-icon os-icon os-icon-fingerprint"></div>
+                            <label for=""> Other Names</label>
+                            <input id="othernames" class="form-control" placeholder="other names" type="text">
+                            <div class="pre-icon os-icon os-icon-user-male-circle"></div>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label for="">Confirm Password</label><input class="form-control" placeholder="Password" type="password">
+                            <label for=""> Gender</label>
+                            <select id="gender" class="form-control" required="required" data-error="Please select your gender">
+                                @foreach (var item in ViewBag.Gender)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                            <div class="help-block form-text with-errors form-control-feedback"></div>
                         </div>
                     </div>
                 </div>
-                <div class="buttons-w"><button class="btn btn-primary">Register Now</button></div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for=""> Email address</label>
+                            <input id="email" class="form-control" placeholder="Enter email" type="email">
+                            <div class="pre-icon os-icon os-icon-email-2-at2"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for=""> Phone number</label>
+                            <input id="phoneNumber" class="form-control" placeholder="phone number" type="number">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for=""> Matric Number</label>
+                            <input id="matricNumber" class="form-control" placeholder="matric number" required="required" type="text" data-error="Please input your matric number">
+                            <div class="help-block form-text with-errors form-control-feedback"></div>
+                            <div class="pre-icon os-icon os-icon-database-remove"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for=""> Department</label>
+                            <select id="department" class="form-control" required="required" data-error="Please select your department">
+                                @foreach (var item in ViewBag.Department)
+                                {
+                                    <option selected="selected" value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                            <div class="help-block form-text with-errors form-control-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for=""> Level</label>
+                            <select id="level" class="form-control" required="required" data-error="Please select your level">
+                                @foreach (var item in ViewBag.Level)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                            <div class="help-block form-text with-errors form-control-feedback"></div>
+                            <div class="pre-icon os-icon os-icon-database-remove"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for=""> Hall</label>
+                            <select id="hall" class="form-control">
+                                @foreach (var item in ViewBag.Hall)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for=""> Password</label>
+                            <input id="password" class="form-control" placeholder="password" type="password" required="required" data-error="Please input your password">
+                            <div class="help-block form-text with-errors form-control-feedback"></div>
+                            <div class="pre-icon os-icon os-icon-fingerprint"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="buttons-w">
+                    <a class="btn btn-primary" onclick="register()" id="btnRegister" style="color:white;">Register Now</a>
+                    <button class="btn btn-primary" disabled="disabled" id="btnRegDisabled" style="display:none">Register Now</button>
+                    <span id="loading" style="display:none"><img src="~/Content/images/bx_loader.gif" width="20px" /></span>
+                </div>
             </form>
         </div>
     </div>
+
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/moment.js"></script>
+    <script src="~/Scripts/Chart.min.js"></script>
+    <script src="~/Scripts/select2.full.min.js"></script>
+    <script src="~/Scripts/jquery.barrating.min.js"></script>
+    <script src="~/Scripts/ckeditor.js"></script>
+    <script src="~/Scripts/validator.min.js"></script>
+    <script src="~/Scripts/daterangepicker.js"></script>
+    <script src="~/Scripts/ion.rangeSlider.min.js"></script>
+    <script src="~/Scripts/dropzone.js"></script>
+    <script src="~/Scripts/mindmup-editabletable.js"></script>
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/fullcalendar.min.js"></script>
+    <script src="~/Scripts/perfect-scrollbar.jquery.min.js"></script>
+    <script src="~/Scripts/tether.min.js"></script>
+    <script src="~/Scripts/slick.min.js"></script>
+    <script src="~/Scripts/util.js"></script>
+    <script src="~/Scripts/alert.js"></script>
+    <script src="~/Scripts/button.js"></script>
+    <script src="~/Scripts/carousel.js"></script>
+    <script src="~/Scripts/collapse.js"></script>
+    <script src="~/Scripts/dropdown.js"></script>
+    <script src="~/Scripts/modal.js"></script>
+    <script src="~/Scripts/tab.js"></script>
+    <script src="~/Scripts/tooltip.js"></script>
+    <script src="~/Scripts/popover.js"></script>
+    <script src="~/Scripts/main5f48.js?version=4.0.0"></script>
+    <script src="~/Scripts/toastr.js"></script>
+    <script>
+        function register() {
+
+            $("#btnRegister").hide();
+            $("#btnRegDisabled").show();
+            $("#loading").show();
+
+            var surname = $("#surname").val();
+            var firstname = $("#firstname").val();
+            var othernames = $("#othernames").val();
+            var email = $("#email").val();
+            var phoneNumber = $("#phoneNumber").val();
+            var matricNumber = $("#matricNumber").val();
+            var password = $("#password").val();
+            var dept = $("#department option:selected").val();
+            var level = $("#level option:selected").val();
+            var hall = $("#hall option:selected").val();
+            var gender = $("#gender option:selected").val();
+
+            if (!surname || !firstname || !matricNumber || !password || !dept || !level || !hall || !gender) {
+                toastMessage("Fill all neccessary fields before proceeding.", "Attention!");
+                $("#btnRegister").show();
+                $("#btnRegDisabled").hide();
+                $("#loading").hide();
+                return;
+            }
+
+            var studentData_ = new Array(surname, firstname, othernames, email, phoneNumber, matricNumber, password, dept, level, hall, gender);
+
+            $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("RegisterStudent", "Account")', // we are calling json method
+                    dataType: 'json',
+                    data: {
+                        studentData: studentData_
+                    },
+                    success: function (result) {
+                        if (result.IsError === false) {
+
+                            toastMessage("Registration was successful! You can now login with your matric number and password.", "Success!");
+
+                            $("#btnRegister").show();
+                            $("#btnRegDisabled").hide();
+                            $("#loading").hide();
+
+                            setTimeout(function () {
+                                window.location.href = "@Url.Action("Login", "Account", new { area = "Security"})";
+                            }, 5000);
+                            
+                        } else {
+                            toastMessage(result.Message, "Error!");
+                            $("#btnRegister").show();
+                            $("#btnRegDisabled").hide();
+                            $("#loading").hide();
+                        }
+                    },
+                    error: function (ex) {
+                        toastMessage(ex, "Error!");
+
+                        $("#btnRegister").show();
+                        $("#btnRegDisabled").hide();
+                        $("#loading").hide();
+                    }
+            });
+        }
+
+        function toastMessage(msg, title) {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut",
+                "tapToDismiss": false
+            }
+
+            var $toast = toastr["success"](msg, title);
+        }
+    </script>
 </body>
 </html>

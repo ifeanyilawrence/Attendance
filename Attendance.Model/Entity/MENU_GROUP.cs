@@ -12,20 +12,17 @@ namespace Attendance.Model.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class ROLE
+    public partial class MENU_GROUP
     {
-        public ROLE()
+        public MENU_GROUP()
         {
-            this.USER = new HashSet<USER>();
-            this.MENU_IN_ROLE = new HashSet<MENU_IN_ROLE>();
+            this.MENU = new HashSet<MENU>();
         }
     
-        public int Id { get; set; }
+        public int Menu_Group_Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
-        public bool Active { get; set; }
+        public bool Activated { get; set; }
     
-        public virtual ICollection<USER> USER { get; set; }
-        public virtual ICollection<MENU_IN_ROLE> MENU_IN_ROLE { get; set; }
+        public virtual ICollection<MENU> MENU { get; set; }
     }
 }

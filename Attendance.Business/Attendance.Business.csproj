@@ -52,8 +52,20 @@
     <Compile Include="AttendanceMembershipProviderLogic.cs" />
     <Compile Include="AttendanceRoleProvider.cs" />
     <Compile Include="BusinessBaseLogic.cs" />
+    <Compile Include="DepartmentLogic.cs" />
+    <Compile Include="HallLogic.cs" />
+    <Compile Include="LevelLogic.cs" />
+    <Compile Include="MenuGroupLogic.cs" />
+    <Compile Include="MenuInRoleLogic.cs" />
+    <Compile Include="MenuLogic.cs" />
+    <Compile Include="PersonLogic.cs" />
+    <Compile Include="ProgrammeLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleLogic.cs" />
+    <Compile Include="GenderLogic.cs" />
+    <Compile Include="SessionLogic.cs" />
+    <Compile Include="StudentLevelLogic.cs" />
+    <Compile Include="StudentLogic.cs" />
     <Compile Include="UserLogic.cs" />
   </ItemGroup>
   <ItemGroup>

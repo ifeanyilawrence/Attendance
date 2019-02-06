@@ -54,10 +54,14 @@
     <Reference Include="EntityFramework">
       <HintPath>..\Attendance.Model\bin\Debug\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\Attendance.Model\bin\Debug\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -135,14 +139,21 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\MenuController.cs" />
+    <Compile Include="Areas\Admin\Models\MenuViewModel.cs" />
     <Compile Include="Areas\Security\Controllers\AccountController.cs" />
     <Compile Include="Areas\Security\SecurityAreaRegistration.cs" />
     <Compile Include="Areas\Student\Controllers\AccountController.cs" />
+    <Compile Include="Areas\Student\Models\AccountViewModel.cs" />
     <Compile Include="Areas\Student\StudentAreaRegistration.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Menu.cs" />
+    <Compile Include="Models\Utility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -156,13 +167,17 @@
     <Content Include="Content\fullcalendar.min.css" />
     <Content Include="Content\images\apple-touch-icon.png" />
     <Content Include="Content\images\avatar1.jpg" />
+    <Content Include="Content\images\bx_loader.gif" />
+    <Content Include="Content\images\default_avatar.png" />
     <Content Include="Content\images\favicon.png" />
+    <Content Include="Content\images\loading.gif" />
     <Content Include="Content\images\logo-big.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\main5f48.css" />
     <Content Include="Content\perfect-scrollbar.min.css" />
     <Content Include="Content\select2.min.css" />
     <Content Include="Content\slick.css" />
+    <Content Include="Content\toastr.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -174,6 +189,16 @@
     <Content Include="Areas\Security\Views\Account\Login.cshtml" />
     <Content Include="Areas\Student\Views\web.config" />
     <Content Include="Areas\Student\Views\Account\Signup.cshtml" />
+    <Content Include="Areas\Security\Views\Account\Home.cshtml" />
+    <Content Include="Areas\Admin\Views\web.config" />
+    <Content Include="Areas\Admin\Views\Menu\AddMenu.cshtml" />
+    <Content Include="Areas\Admin\Views\Menu\AddMenuInRole.cshtml" />
+    <Content Include="Areas\Admin\Views\Menu\ConfirmDeleteMenu.cshtml" />
+    <Content Include="Areas\Admin\Views\Menu\ConfirmDeleteMenuInRole.cshtml" />
+    <Content Include="Areas\Admin\Views\Menu\EditMenu.cshtml" />
+    <Content Include="Areas\Admin\Views\Menu\EditMenuInRole.cshtml" />
+    <Content Include="Areas\Admin\Views\Menu\ViewMenuByMenuGroup.cshtml" />
+    <Content Include="Areas\Admin\Views\Menu\ViewMenuInRole.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\button.js" />
     <Content Include="Scripts\carousel.js" />
@@ -209,6 +234,7 @@
     <Content Include="Scripts\slick.min.js" />
     <Content Include="Scripts\tab.js" />
     <Content Include="Scripts\tether.min.js" />
+    <Content Include="Scripts\toastr.js" />
     <Content Include="Scripts\tooltip.js" />
     <Content Include="Scripts\util.js" />
     <Content Include="Scripts\validator.min.js" />
@@ -227,14 +253,14 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_Layout2.cshtml" />
+    <Content Include="Views\Shared\_Message.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="Areas\Security\Models\" />
     <Folder Include="Areas\Security\Views\Shared\" />
-    <Folder Include="Areas\Student\Models\" />
     <Folder Include="Areas\Student\Views\Shared\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

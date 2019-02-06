@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Attendance.Web.Models
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <title>Home</title>
@@ -19,6 +23,8 @@
     <link href="~/Content/perfect-scrollbar.min.css" rel="stylesheet">
     <link href="~/Content/slick.css" rel="stylesheet">
     <link href="~/Content/main5f48.css?version=4.0.0" rel="stylesheet">
+    <link href="~/Content/toastr.css" rel="stylesheet" />
+
 </head>
 
 <body>
@@ -45,7 +51,12 @@
                             </div>
                             <div class="bg-icon"><i class="os-icon os-icon-wallet-loaded"></i></div>
                             <ul>
-                                <li><a href="@Url.Action("Login", "Account", new { area = "Security" })"><i class="os-icon os-icon-signs-11"></i><span>Logout</span></a></li>
+                                <li>
+                                    <a href="@Url.Action("LogOff", "Account", new { area = "Security" })" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <i class="os-icon os-icon-signs-11"></i><span>Logout</span>
+                                    </a>
+                                    <form id="logout-form" action="@Url.Action("LogOff", "Account", new{ area = "Security"})" method="POST" style="display: none;"></form>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -61,7 +72,7 @@
             -------------------->
             <div class="menu-mobile menu-activated-on-click color-scheme-dark">
                 <div class="mm-logo-buttons-w">
-                    <a class="mm-logo" href="@Url.Action("Index", "Home")"><img src="img/logo.png"><span>STAFF PORTAL</span></a>
+                    <a class="mm-logo" href="@Url.Action("Index", "Home")"><img src="img/logo.png"><span>Attendane System</span></a>
                     <div class="mm-buttons">
                         <div class="content-panel-open">
                             <div class="os-icon os-icon-grid-circles"></div>
@@ -75,20 +86,42 @@
                     <div class="logged-user-w">
                         <div class="avatar-w"><img alt="" src="~/Content/images/avatar1.jpg"></div>
                         <div class="logged-user-info-w">
-                            <div class="logged-user-name">STAFF</div>
+                            @if (User.Identity.IsAuthenticated)
+                            {<div class="logged-user-name">@User.Identity.Name</div>}
+                        else
+                        { <div class="logged-user-name">Anonymous</div>}
                         </div>
                     </div>
 
                     <ul class="main-menu">
                         <li class="has-sub-menu">
-                            <a href="@Url.Action("Index", "Home")">
-                                <div class="icon-w">
-                                    <div class="os-icon os-icon-window-content"></div>
-                                </div><span>Staff Menu</span>
-                            </a>
-                            <ul class="sub-menu">
-                                <li><a href="#">Activities</a></li>
-                            </ul>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                string role = Menu.GetUserRole(User.Identity.Name);
+                                List<Attendance.Model.Entity.MENU> menuList = Menu.GetMenuList(role);
+                                if (menuList != null && menuList.Count > 0)
+                                {
+                                    List<string> menuGroups = menuList.Select(m => m.MENU_GROUP.Name).Distinct().ToList();
+
+                                    for (int i = 0; i < menuGroups.Count; i++)
+                                    {
+                                        string currentMenuGroup = menuGroups[i];
+                                        List<Attendance.Model.Entity.MENU> menuListForGroup = menuList.Where(m => m.MENU_GROUP.Name == currentMenuGroup).OrderBy(s => s.Display_Name).ToList();
+                                        <a href="@Url.Action("Index", "Home")">
+                                            <div class="icon-w">
+                                                <div class="os-icon os-icon-window-content"></div>
+                                            </div><span>@currentMenuGroup</span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            @for (int j = 0; j < menuListForGroup.Count; j++)
+                                            {
+                                                Attendance.Model.Entity.MENU currentMenu = menuListForGroup[j];
+                                                <li><a href="@Url.Action(currentMenu.Action, currentMenu.Controller, new { Area = currentMenu.Area })">@currentMenu.Display_Name</a></li>
+                                            }
+                                        </ul>
+                                    }
+                                }
+                            }
                         </li>
                     </ul>
                 </div>
@@ -98,19 +131,38 @@
                 <ul class="main-menu">
                     <li class="menu-sub-header"><span>Menu</span></li>
                     <li class="has-sub-menu">
-                        <a href="@Url.Action("Index", "Home")">
-                            <div class="icon-w">
-                                <div class="os-icon os-icon-window-content"></div>
-                            </div><span>Staff Menu</span>
-                        </a>
-                        <div class="sub-menu-w">
-                            <div class="sub-menu-header">Staff Menu</div>
-                            <div class="sub-menu-i">
-                                <ul class="sub-menu">
-                                    <li><a href="#">Activities</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            string role = Menu.GetUserRole(User.Identity.Name);
+                            List<Attendance.Model.Entity.MENU> menuList = Menu.GetMenuList(role);
+                            if (menuList != null && menuList.Count > 0)
+                            {
+                                List<string> menuGroups = menuList.Select(m => m.MENU_GROUP.Name).Distinct().ToList();
+
+                                for (int i = 0; i < menuGroups.Count; i++)
+                                {
+                                    string currentMenuGroup = menuGroups[i];
+                                    List<Attendance.Model.Entity.MENU> menuListForGroup = menuList.Where(m => m.MENU_GROUP.Name == currentMenuGroup).OrderBy(s => s.Display_Name).ToList();
+                                    <a href="@Url.Action("Index", "Home")">
+                                        <div class="icon-w">
+                                            <div class="os-icon os-icon-window-content"></div>
+                                        </div><span>@currentMenuGroup</span>
+                                    </a>
+                                    <div class="sub-menu-w">
+                                        <div class="sub-menu-header">@currentMenuGroup</div>
+                                        <div class="sub-menu-i">
+                                            <ul class="sub-menu">
+                                                @for (int j = 0; j < menuListForGroup.Count; j++)
+                                                {
+                                                    Attendance.Model.Entity.MENU currentMenu = menuListForGroup[j];
+                                                    <li><a href="@Url.Action(currentMenu.Action, currentMenu.Controller, new { Area = currentMenu.Area })">@currentMenu.Display_Name</a></li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        }
                     </li>
                 </ul>
 
@@ -184,13 +236,9 @@
     <script src="~/Scripts/tooltip.js"></script>
     <script src="~/Scripts/popover.js"></script>
     <script src="~/Scripts/main5f48.js?version=4.0.0"></script>
+    <script src="~/Scripts/toastr.js"></script>
     <script>
-        function showResult() {
-            $("#result").show();
-        }
-        function showSuccess() {
-            alert('Operation Succesful!');
-        }
+
     </script>
 </body>
 

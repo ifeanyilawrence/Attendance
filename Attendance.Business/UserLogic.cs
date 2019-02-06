@@ -18,7 +18,7 @@ namespace Attendance.Business
                 USER UserDetails = GetEntityBy(selector);
                if (UserDetails != null && UserDetails.Password != null)
                {
-                   UpdateLastLogin(UserDetails);
+                   //UpdateLastLogin(UserDetails);
                    return true;
                }
                else

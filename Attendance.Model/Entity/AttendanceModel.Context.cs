@@ -46,5 +46,8 @@ namespace Attendance.Model.Entity
         public virtual DbSet<STUDENT> STUDENT { get; set; }
         public virtual DbSet<STUDENT_LEVEL> STUDENT_LEVEL { get; set; }
         public virtual DbSet<USER> USER { get; set; }
+        public virtual DbSet<MENU> MENU { get; set; }
+        public virtual DbSet<MENU_GROUP> MENU_GROUP { get; set; }
+        public virtual DbSet<MENU_IN_ROLE> MENU_IN_ROLE { get; set; }
     }
 }
