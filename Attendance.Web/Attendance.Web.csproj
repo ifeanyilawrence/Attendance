@@ -140,7 +140,9 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
     <Compile Include="Areas\Admin\Controllers\MenuController.cs" />
+    <Compile Include="Areas\Admin\Models\AccountViewModel.cs" />
     <Compile Include="Areas\Admin\Models\MenuViewModel.cs" />
     <Compile Include="Areas\Security\Controllers\AccountController.cs" />
     <Compile Include="Areas\Security\SecurityAreaRegistration.cs" />
@@ -199,6 +201,7 @@
     <Content Include="Areas\Admin\Views\Menu\EditMenuInRole.cshtml" />
     <Content Include="Areas\Admin\Views\Menu\ViewMenuByMenuGroup.cshtml" />
     <Content Include="Areas\Admin\Views\Menu\ViewMenuInRole.cshtml" />
+    <Content Include="Areas\Admin\Views\Account\Signup.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\button.js" />
     <Content Include="Scripts\carousel.js" />

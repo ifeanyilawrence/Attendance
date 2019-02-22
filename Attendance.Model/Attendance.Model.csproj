@@ -136,6 +136,7 @@
       <DependentUpon>AttendanceModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\Departments.cs" />
+    <Compile Include="Model\JsonResponseModel.cs" />
     <Compile Include="Model\Message.cs" />
     <Compile Include="Model\Programmes.cs" />
     <Compile Include="Model\Roles.cs" />

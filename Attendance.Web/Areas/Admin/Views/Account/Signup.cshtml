@@ -1,0 +1,251 @@
+﻿@{
+    ViewBag.Title = "Create User";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+@*<!DOCTYPE html>
+<html>
+<head>
+    <title>Attendance</title>
+    <meta charset="utf-8">
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
+    <meta content="template language" name="keywords">
+    <meta content="Tamerlan Soziev" name="author">
+    <meta content="Admin dashboard html template" name="description">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="~/Content/images/favicon.png" rel="shortcut icon">
+    <link href="~/Content/images/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="~/Content/select2.min.css" rel="stylesheet">
+    <link href="~/Content/daterangepicker.css" rel="stylesheet">
+    <link href="~/Content/dropzone.css" rel="stylesheet">
+    <link href="~/Content/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/fullcalendar.min.css" rel="stylesheet">
+    <link href="~/Content/perfect-scrollbar.min.css" rel="stylesheet">
+    <link href="~/Content/slick.css" rel="stylesheet">
+    <link href="~/Content/main5f48.css?version=4.0.0" rel="stylesheet">
+    <link href="~/Content/toastr.css" rel="stylesheet" />
+</head>
+<body>*@
+    @*<div class="all-wrapper menu-side with-pattern">
+        <div class="auth-box-w wider">
+            <div class="logo-w"><a href="index-2.html"><img alt="" src="~/Content/images/logo-big.png"></a></div>
+            <h4 class="auth-header">Create User</h4>*@
+            <form action="#">
+                <h6 class="element-header">Create User</h6>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for=""> Surname</label>
+                            <input id="surname" class="form-control" placeholder="surname" type="text" required="required" data-error="Please input your Surname">
+                            <div class="help-block form-text with-errors form-control-feedback"></div>
+                            @*<div class="pre-icon os-icon os-icon-user-male-circle"></div>*@
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for=""> First Name</label>
+                            <input id="firstname" class="form-control" placeholder="first name" type="text" required="required" data-error="Please input your first name">
+                            <div class="help-block form-text with-errors form-control-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for=""> Other Names</label>
+                            <input id="othernames" class="form-control" placeholder="other names" type="text">
+                            @*<div class="pre-icon os-icon os-icon-user-male-circle"></div>*@
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for=""> Gender</label>
+                            <select id="gender" class="form-control" required="required" data-error="Please select gender">
+                                @foreach (var item in ViewBag.Gender)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                            <div class="help-block form-text with-errors form-control-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for=""> Email address</label>
+                            <input id="email" class="form-control" placeholder="Enter email" type="email">
+                            @*<div class="pre-icon os-icon os-icon-email-2-at2"></div>*@
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for=""> Phone number</label>
+                            <input id="phoneNumber" class="form-control" placeholder="phone number" type="number">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Username</label>
+                            <input id="username" class="form-control" placeholder="Username" type="text" required="required" data-error="Please enter your userName">
+                            <div class="help-block form-text with-errors form-control-feedback"></div>
+                            @*<div class="pre-icon os-icon os-icon-username"></div>*@
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Role</label>
+                            <select id="role" class="form-control" required="required" data-error="Please select role">
+                                @foreach (var item in ViewBag.Role)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                            <div class="help-block form-text with-errors form-control-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for=""> Password</label>
+                            <input id="password" class="form-control" placeholder="password" type="password" required="required" data-error="Please input your password">
+                            <div class="help-block form-text with-errors form-control-feedback"></div>
+                            @*<div class="pre-icon os-icon os-icon-fingerprint"></div>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="buttons-w">
+                    <a class="btn btn-primary" onclick="Create()" id="btnRegister" style="color:white;">Create User</a>
+                    <button class="btn btn-primary" disabled="disabled" id="btnRegDisabled" style="display:none">Create User</button>
+                    <span id="loading" style="display:none"><img src="~/Content/images/bx_loader.gif" width="20px" /></span>
+                </div>
+            </form>
+        @*</div>
+    </div>*@
+    @*<script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/moment.js"></script>
+    <script src="~/Scripts/Chart.min.js"></script>
+    <script src="~/Scripts/select2.full.min.js"></script>
+    <script src="~/Scripts/jquery.barrating.min.js"></script>
+    <script src="~/Scripts/ckeditor.js"></script>
+    <script src="~/Scripts/validator.min.js"></script>
+    <script src="~/Scripts/daterangepicker.js"></script>
+    <script src="~/Scripts/ion.rangeSlider.min.js"></script>
+    <script src="~/Scripts/dropzone.js"></script>
+    <script src="~/Scripts/mindmup-editabletable.js"></script>
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/fullcalendar.min.js"></script>
+    <script src="~/Scripts/perfect-scrollbar.jquery.min.js"></script>
+    <script src="~/Scripts/tether.min.js"></script>
+    <script src="~/Scripts/slick.min.js"></script>
+    <script src="~/Scripts/util.js"></script>
+    <script src="~/Scripts/alert.js"></script>
+    <script src="~/Scripts/button.js"></script>
+    <script src="~/Scripts/carousel.js"></script>
+    <script src="~/Scripts/collapse.js"></script>
+    <script src="~/Scripts/dropdown.js"></script>
+    <script src="~/Scripts/modal.js"></script>
+    <script src="~/Scripts/tab.js"></script>
+    <script src="~/Scripts/tooltip.js"></script>
+    <script src="~/Scripts/popover.js"></script>
+    <script src="~/Scripts/main5f48.js?version=4.0.0"></script>
+    <script src="~/Scripts/toastr.js"></script>*@
+    <script>
+        function Create() {
+
+            $("#btnRegister").hide();
+            $("#btnRegDisabled").show();
+            $("#loading").show();
+
+            var surname = $("#surname").val();
+            var firstname = $("#firstname").val();
+            var othernames = $("#othernames").val();
+            var email = $("#email").val();
+            var phoneNumber = $("#phoneNumber").val();
+            var password = $("#password").val();
+            var gender = $("#gender option:selected").val();
+            var role = $("#role option:selected").val();
+            var userName = $("#username").val();
+
+            if (!surname || !firstname || !phoneNumber || !password || !gender || !userName || !role) {
+                toastMessage("Fill all neccessary fields before proceeding.", "Attention!");
+                $("#btnRegister").show();
+                $("#btnRegDisabled").hide();
+                $("#loading").hide();
+                return;
+            }
+
+            var userData = {
+
+                surname: surname,
+                firstname: firstname,
+                othernames: othernames,
+                email: email,
+                phoneNumber: phoneNumber,
+                userName: userName,
+                password: password,
+                gender: gender,
+                role: role
+            };
+
+            var stringfiedData = JSON.stringify(userData);
+            $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CreateUser", "Account")', // we are calling json method
+                    dataType: 'json',
+                    data: { userData: stringfiedData },
+                    success: function (result) {
+                        if (result.IsError === false) {
+
+                            toastMessage("User Created successfully!", "Success!");
+
+                            $("#btnRegister").show();
+                            $("#btnRegDisabled").hide();
+                            $("#loading").hide();
+
+                            window.location.reload();
+                        } else {
+                            toastMessage(result.Message, "Error!");
+                            $("#btnRegister").show();
+                            $("#btnRegDisabled").hide();
+                            $("#loading").hide();
+                        }
+                    },
+                    error: function (ex) {
+                        toastMessage(ex, "Error!");
+                        console.log(ex);
+                        $("#btnRegister").show();
+                        $("#btnRegDisabled").hide();
+                        $("#loading").hide();
+                    }
+            });
+        }
+
+        function toastMessage(msg, title) {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut",
+                "tapToDismiss": false
+            }
+
+            var $toast = toastr["success"](msg, title);
+        }
+    </script>
+@*</body>
+</html>*@

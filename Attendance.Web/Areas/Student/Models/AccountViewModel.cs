@@ -25,9 +25,4 @@ namespace Attendance.Web.Areas.Student.Models
         public List<SelectListItem> GenderSelectList { get; set; }
         public List<SelectListItem> HallSelectList { get; set; }
     }
-    public class JsonResponseModel
-    {
-        public bool IsError { get; set; }
-        public string Message { get; set; }
-    }
 }
