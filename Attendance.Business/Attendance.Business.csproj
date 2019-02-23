@@ -55,6 +55,7 @@
     <Compile Include="AttendanceMembershipProviderLogic.cs" />
     <Compile Include="AttendanceRoleProvider.cs" />
     <Compile Include="BusinessBaseLogic.cs" />
+    <Compile Include="CourseLogic.cs" />
     <Compile Include="DepartmentLogic.cs" />
     <Compile Include="EventLogic.cs" />
     <Compile Include="HallLogic.cs" />

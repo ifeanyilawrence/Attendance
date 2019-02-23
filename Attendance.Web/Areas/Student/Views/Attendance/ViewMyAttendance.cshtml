@@ -1,0 +1,93 @@
+﻿@model Attendance.Web.Areas.Student.Models.AttendanceViewModel
+@{
+    ViewBag.Title = "Attendance";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<div class="element-wrapper">
+    @if (TempData["Message"] != null)
+    {
+        @Html.Partial("_Message", (Attendance.Model.Model.Message)TempData["Message"])
+    }
+
+   
+        <div class="element-box-tp">
+            <h5 class="form-header">View Attendance</h5>
+
+            <div class="element-box-tp">
+                <div class="controls-above-table">
+                    @using (Html.BeginForm("ViewMyAttendance", "Attendance", new { Area = "Student" }, FormMethod.Post))
+                    {
+                        <div class="form-group">
+                            <label for="Date"> Select Date</label>
+                            <div class="date-input">
+                                @Html.TextBoxFor(m => m.Date, new { @class="single-daterange form-control", placeholder="select date", type="text", autocomplete = "off" })
+                                @*<input class="single-daterange form-control" placeholder="select date" type="text" value="@DateTime.Now.Day/@DateTime.Now.Month/@DateTime.Now.Year">*@
+                            </div>
+                        </div>
+                        <div class="form-buttons-w col-md-2">
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                        </div>
+                    }
+                </div>
+                @if (Model.AttendanceList != null && Model.AttendanceList.Count > 0)
+                {
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-lg table-v2 table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        SN
+                                    </th>
+                                    <th>Activity</th>
+                                    <th>Location</th>
+                                    <th>Starts</th>
+                                    <th>Ends</th>
+                                    <th>Time Taken</th>
+                                    <th>Status</th>
+                                    <th>Cancelled/Active</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.AttendanceList.Count; i++)
+                                {
+                                    var sn = i + 1;
+                                    <tr>
+                                        <td class="text-center">
+                                            @sn
+                                        </td>
+                                        @if (Model.AttendanceList[i].EVENT.COURSE != null)
+                                        {
+                                            <td class="text-center">@Model.AttendanceList[i].EVENT.EVENT_TYPE.Name - @Model.AttendanceList[i].EVENT.COURSE.Code</td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center">@Model.AttendanceList[i].EVENT.EVENT_TYPE.Name</td>
+                                        }
+                                        <td class="text-center">@Model.AttendanceList[i].EVENT.LOCATION.Name</td>
+                                        <td class="text-center">@Model.AttendanceList[i].EVENT.Event_Start.ToLongTimeString()</td>
+                                        <td class="text-center">@Model.AttendanceList[i].EVENT.Event_End.ToLongTimeString()</td>
+                                        <td class="text-center">@Model.AttendanceList[i].Time_Taken.ToLongTimeString()</td>
+                                        <td class="text-center">@Model.AttendanceList[i].ATTENDANCE_STATUS.Name</td>
+                                        @if (Model.AttendanceList[i].Cancelled == false)
+                                        {
+                                            <td class="text-center">
+                                                <div class="status-pill green" data-title="Active" data-toggle="tooltip"></div>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center">
+                                                <div class="status-pill green" data-title="Cancelled" data-toggle="tooltip"></div>
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+
+            </div>
+        </div>
+</div>

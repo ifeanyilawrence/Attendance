@@ -21,6 +21,7 @@ namespace Attendance.Web.Areas.Student.Controllers
         private AbsentTypeLogic _absentTypeLogic;
         private AttendanceLogic _attendanceLogic;
         private AbsentLogLogic _absentLogLogic;
+        private CourseLogic _courseLogic;
         public AttendanceController()
         {
             _studentLogic = new StudentLogic();
@@ -28,6 +29,7 @@ namespace Attendance.Web.Areas.Student.Controllers
             _absentTypeLogic = new AbsentTypeLogic();
             _attendanceLogic = new AttendanceLogic();
             _absentLogLogic = new AbsentLogLogic();
+            _courseLogic = new CourseLogic();
         }
         public ActionResult ViewCurrentEvents()
         {
@@ -52,9 +54,9 @@ namespace Attendance.Web.Areas.Student.Controllers
 
                 _viewModel.Events = _viewModel.Events.OrderBy(e => e.Event_Type_Id).ThenBy(e => e.Event_Start).ToList();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                SetMessage("Error! " + ex.Message, Message.Category.Error);
             }
 
             return View(_viewModel);
@@ -155,6 +157,118 @@ namespace Attendance.Web.Areas.Student.Controllers
 
                     result.IsError = false;
                     result.Message = "Absence request modified.";
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsError = true;
+                result.Message = ex.Message;
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult ViewMyAttendance()
+        {
+            _viewModel = new AttendanceViewModel();
+            return View(_viewModel);
+        }
+        [HttpPost]
+        public ActionResult ViewMyAttendance(AttendanceViewModel viewModel)
+        {
+            try
+            {
+                _student = _studentLogic.GetEntityBy(s => s.Matric_Number == User.Identity.Name);
+
+                DateTime date = new DateTime();
+                if (!DateTime.TryParse(viewModel.Date, out date))
+                    date = DateTime.Now;
+
+                viewModel.AttendanceList = _attendanceLogic.GetAttendanceForStudent(_student, date);
+
+                if (viewModel.AttendanceList == null || viewModel.AttendanceList.Count <= 0)
+                {
+                    SetMessage("No attendance record found for today! ", Message.Category.Warning);
+                    return View(viewModel);
+                }
+
+                viewModel.AttendanceList = viewModel.AttendanceList.OrderBy(s => s.EVENT.Date).ThenBy(s => s.EVENT.Event_Type_Id).ToList();
+            }
+            catch (Exception ex)
+            {
+                SetMessage("Error! " + ex.Message, Message.Category.Error);
+            }
+
+            return View(viewModel);
+        }
+        public ActionResult ViewAbsenceRequest()
+        {
+            _viewModel = new AttendanceViewModel();
+            try
+            {
+                _student = _studentLogic.GetEntityBy(s => s.Matric_Number == User.Identity.Name);
+
+                _viewModel.AbsenceList = _absentLogLogic.GetEntitiesBy(a => a.Student_Id == _student.Person_Id);
+
+                if (_viewModel.AbsenceList == null || _viewModel.AbsenceList.Count <= 0)
+                {
+                    SetMessage("No absence requests found for! ", Message.Category.Warning);
+                    return View(_viewModel);
+                }
+
+                _viewModel.AbsenceList = _viewModel.AbsenceList.OrderBy(s => s.EVENT.Date).ThenBy(s => s.EVENT.Event_Type_Id).ToList();
+            }
+            catch (Exception ex)
+            {
+                SetMessage("Error! " + ex.Message, Message.Category.Error);
+            }
+
+            return View(_viewModel);
+        }
+        public ActionResult CheckExamEligibility()
+        {
+            try
+            {
+                _student = _studentLogic.GetEntityBy(s => s.Matric_Number == User.Identity.Name);
+
+                ViewBag.Courses = _courseLogic.GetCoursesForStudent(_student);
+            }
+            catch (Exception ex)
+            {
+                SetMessage("Error! " + ex.Message, Message.Category.Error);
+            }
+            return View();
+        }
+        public JsonResult GetCourseEligibility(long courseId)
+        {
+            JsonResponseModel result = new JsonResponseModel();
+            try
+            {
+                _student = _studentLogic.GetEntityBy(s => s.Matric_Number == User.Identity.Name);
+
+                int numberOfTimesPresent = _attendanceLogic.GetEntitiesBy(s => s.EVENT.Course_Id == courseId && s.Student_Id == _student.Person_Id &&
+                                            s.Attendance_Status_Id == (int)AttendanceStatuses.Present).Count();
+                int numberOfLectures = _eventLogic.GetEntitiesBy(s => s.Course_Id == courseId).Count();
+                int numberOfAbsence = _attendanceLogic.GetEntitiesBy(s => s.EVENT.Course_Id == courseId && s.Student_Id == _student.Person_Id &&
+                                            s.Attendance_Status_Id == (int)AttendanceStatuses.Excused).Count();
+                int numberOfLecturesHeld = numberOfLectures - numberOfAbsence;
+
+                double eligibilityPercentage = (numberOfTimesPresent / numberOfLecturesHeld) * 100;
+
+                result.ApproximateNumberOfLectures = numberOfLecturesHeld;
+                result.EligibilityPercentage = eligibilityPercentage;
+                result.NumberOfAbsent = numberOfAbsence;
+                result.NumberOfPresent = numberOfTimesPresent;
+                result.TotalNumberOfLectures = numberOfLectures;
+
+                if (eligibilityPercentage > 75)
+                {
+                    result.IsEligible = true;
+                    result.Message = "Congratulations! You are eligible.";
+                }
+                else
+                {
+                    result.IsEligible = false;
+                    result.Message = "Sorry! You are not eligible.";
                 }
             }
             catch (Exception ex)

@@ -207,6 +207,9 @@
     <Content Include="Areas\Admin\Views\Menu\ViewMenuInRole.cshtml" />
     <Content Include="Areas\Admin\Views\Account\Signup.cshtml" />
     <Content Include="Areas\Student\Views\Attendance\ViewCurrentEvents.cshtml" />
+    <Content Include="Areas\Student\Views\Attendance\ViewMyAttendance.cshtml" />
+    <Content Include="Areas\Student\Views\Attendance\ViewAbsenceRequest.cshtml" />
+    <Content Include="Areas\Student\Views\Attendance\CheckExamEligibility.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\button.js" />
     <Content Include="Scripts\carousel.js" />

@@ -1,0 +1,145 @@
+﻿@model Attendance.Web.Areas.Student.Models.AttendanceViewModel
+@{
+    ViewBag.Title = "Events";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<div class="element-wrapper">
+    @if (TempData["Message"] != null)
+    {
+        @Html.Partial("_Message", (Attendance.Model.Model.Message)TempData["Message"])
+    }
+
+    <div class="element-box-tp">
+        <h5 class="form-header">Exam Eligibility Status</h5>
+
+        <div class="element-box-tp">
+            <form>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="absentType"> Type</label>
+                        <select class="form-control" id="course" onchange="getCourseEligibility()" required="required">
+                            <option value="">Select Course</option>
+                            @{
+                                var courses = (List<Attendance.Model.Entity.COURSE>)ViewBag.Courses;
+                            }
+                            @for (int i = 0; i < courses.Count(); i++)
+                            {
+                                <option value="@courses[i].Id">@courses[i].Code - @courses[i].Name</option>
+                            }
+                        </select>
+                        <span id="postLoading" style="display:none"><img src="~/Content/images/bx_loader.gif" width="20px" /></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="element-box" style="display:none" id="eligibilityBreakdown">
+        <div class="element-info">
+            <div class="row align-items-center">
+                <div class="col-sm-8">
+                    <div class="element-info-with-icon">
+                        <div class="element-info-icon">
+                            <div class="os-icon os-icon-bar-chart-stats-up"></div>
+                        </div>
+                        <div class="element-info-text">
+                            <h5 class="element-inner-header">Course Eligibility Breakdown</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-xl-4">
+                <div class="row">
+                    <div class="col-sm-6 b-r b-b">
+                        <div class="el-tablo centered padded">
+                            <div class="value" id="noPresent"></div>
+                            <div class="label">Number of times present</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 b-b">
+                        <div class="el-tablo centered padded">
+                            <div class="value" id="totalNoLectures"></div>
+                            <div class="label">Total number of lectures</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 b-r">
+                        <div class="el-tablo centered padded">
+                            <div class="value" id="noAbsent"></div>
+                            <div class="label">Number of approved absence requests</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="el-tablo centered padded">
+                            <div class="value" id="approxNoLectures"></div>
+                            <div class="label">Approximate number of lectures</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden-lg-down col-xl-4">
+                <div class="padded">
+                    <div class="el-tablo bigger">
+                        <div class="value" id="eligibilityPercentage"></div>
+                        <div class="label">Eligibility Percentage</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+       
+    function getCourseEligibility() {
+        $("#postLoading").show();
+
+        $("#eligibilityBreakdown").hide('slow');
+
+        var courseId = $("#course option:selected").val();
+
+        if (!courseId) {
+            swal("Oops!", "Invalid Parameters", "error");
+            $("#postLoading").hide();
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetCourseEligibility", "Attendance")',
+            dataType: 'json',
+            data: { courseId: courseId },
+            success: function (result) {
+                if (result.IsError == false) {
+
+                    if (result.IsEligible) {
+                        swal("Congratulations!", result.Message, "success");
+                    }
+                    else {
+                        swal("Oops!", result.Message, "error");
+                    }
+                    
+                    $("#noPresent").text(result.NumberOfPresent);
+                    $("#totalNoLectures").text(result.TotalNumberOfLectures);
+                    $("#approxNoLectures").text(result.ApproximateNumberOfLectures);
+                    $("#noAbsent").text(result.NumberOfAbsent);
+                    $("#eligibilityPercentage").text(result.EligibilityPercentage + "%");
+
+                    $("#eligibilityBreakdown").show('slow');
+                    $("#postLoading").hide();
+                } else {
+                    swal("Oops!", result.Message, "error");
+                    $("#postLoading").hide();
+                }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#postLoading").hide();
+            }
+        });
+    }
+</script>

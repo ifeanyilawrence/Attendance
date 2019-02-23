@@ -48,6 +48,7 @@ namespace Attendance.Business
                 if (attendance != null)
                 {
                     attendance.Attendance_Status_Id = (int)status;
+                    attendance.Time_Taken = DateTime.Now;
 
                     Modify(attendance);
                 }
@@ -86,6 +87,21 @@ namespace Attendance.Business
             {
                 throw;
             }
+        }
+
+        public List<ATTENDANCE> GetAttendanceForStudent(STUDENT student, DateTime date)
+        {
+            List<ATTENDANCE> attendanceList = null;
+            try
+            {
+                attendanceList = base.GetEntitiesBy(a => a.Student_Id == student.Person_Id && a.EVENT.Date == date);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return attendanceList;
         }
     }
 }

@@ -1,0 +1,90 @@
+﻿@model Attendance.Web.Areas.Student.Models.AttendanceViewModel
+@{
+    ViewBag.Title = "Attendance";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<div class="element-wrapper">
+    @if (TempData["Message"] != null)
+    {
+        @Html.Partial("_Message", (Attendance.Model.Model.Message)TempData["Message"])
+    }
+
+
+
+    @if (Model.AbsenceList != null && Model.AbsenceList.Count > 0)
+    {
+        <div class="element-box-tp">
+            <div class="element-box-tp">
+                <h5 class="form-header">Absence Requests</h5>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-lg table-v2 table-striped">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    SN
+                                </th>
+                                <th>Activity</th>
+                                <th>Date</th>
+                                <th>Absence Type</th>
+                                <th>Absence Details</th>
+                                <th>Start</th>
+                                <th>End</th>
+                                <th>Approved</th>
+                                <th>Reject Reason</th>
+                                <th>Approved/Rejected By</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.AbsenceList.Count; i++)
+                            {
+                                var sn = i + 1;
+                                <tr>
+                                    <td class="text-center">
+                                        @sn
+                                    </td>
+                                    @if (Model.AbsenceList[i].EVENT.COURSE != null)
+                                    {
+                                        <td class="text-center">@Model.AbsenceList[i].EVENT.EVENT_TYPE.Name - @Model.AbsenceList[i].EVENT.COURSE.Code</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center">@Model.AbsenceList[i].EVENT.EVENT_TYPE.Name</td>
+                                    }
+                                    <td class="text-center">@Model.AbsenceList[i].EVENT.Date.ToShortDateString()</td>
+                                    <td class="text-center">@Model.AbsenceList[i].ABSENT_TYPE.Name</td>
+                                    <td class="text-center">@Model.AbsenceList[i].Remark</td>
+                                    <td class="text-center">@Model.AbsenceList[i].Start_Date.ToShortDateString()</td>
+                                    <td class="text-center">@Model.AbsenceList[i].End_Date.ToShortDateString()</td>
+                                    @if (Model.AbsenceList[i].Approved == true)
+                                    {
+                                        <td class="text-center">
+                                            <div class="status-pill green" data-title="Approved" data-toggle="tooltip"></div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center">
+                                            <div class="status-pill red" data-title="Yet to be approved" data-toggle="tooltip"></div>
+                                        </td>
+                                    }
+                                    <td class="text-center">@Model.AbsenceList[i].Reject_Reason</td>
+                                    @if (Model.AbsenceList[i].USER != null && Model.AbsenceList[i].User_Id > 0)
+                                    {
+                                        <td class="text-center">@Model.AbsenceList[i].USER.PERSON.Last_Name @Model.AbsenceList[i].USER.PERSON.First_Name @Model.AbsenceList[i].USER.PERSON.Other_Name</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center"></td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

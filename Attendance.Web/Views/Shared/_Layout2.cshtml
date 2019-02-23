@@ -100,43 +100,7 @@
                     </div>
 
                     <ul class="main-menu">
-                        <li class="has-sub-menu">
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                string role = Menu.GetUserRole(User.Identity.Name);
-                                List<Attendance.Model.Entity.MENU> menuList = Menu.GetMenuList(role);
-                                if (menuList != null && menuList.Count > 0)
-                                {
-                                    List<string> menuGroups = menuList.Select(m => m.MENU_GROUP.Name).Distinct().ToList();
 
-                                    for (int i = 0; i < menuGroups.Count; i++)
-                                    {
-                                        string currentMenuGroup = menuGroups[i];
-                                        List<Attendance.Model.Entity.MENU> menuListForGroup = menuList.Where(m => m.MENU_GROUP.Name == currentMenuGroup).OrderBy(s => s.Display_Name).ToList();
-                                        <a href="#">
-                                            <div class="icon-w">
-                                                <div class="os-icon os-icon-window-content"></div>
-                                            </div><span>@currentMenuGroup</span>
-                                        </a>
-                                        <ul class="sub-menu">
-                                            @for (int j = 0; j < menuListForGroup.Count; j++)
-                                            {
-                                                Attendance.Model.Entity.MENU currentMenu = menuListForGroup[j];
-                                                <li><a href="@Url.Action(currentMenu.Action, currentMenu.Controller, new { Area = currentMenu.Area })">@currentMenu.Display_Name</a></li>
-                                            }
-                                        </ul>
-                                    }
-                                }
-                            }
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="desktop-menu menu-side-v2-w menu-activated-on-hover flying-menu">
-                <ul class="main-menu">
-                    <li class="menu-sub-header"><span>Menu</span></li>
-                    <li class="has-sub-menu">
                         @if (User.Identity.IsAuthenticated)
                         {
                             string role = Menu.GetUserRole(User.Identity.Name);
@@ -149,6 +113,44 @@
                                 {
                                     string currentMenuGroup = menuGroups[i];
                                     List<Attendance.Model.Entity.MENU> menuListForGroup = menuList.Where(m => m.MENU_GROUP.Name == currentMenuGroup).OrderBy(s => s.Display_Name).ToList();
+                                    <li class="has-sub-menu">
+                                        <a href="#">
+                                            <div class="icon-w">
+                                                <div class="os-icon os-icon-window-content"></div>
+                                            </div><span>@currentMenuGroup</span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            @for (int j = 0; j < menuListForGroup.Count; j++)
+                                            {
+                                                Attendance.Model.Entity.MENU currentMenu = menuListForGroup[j];
+                                                <li><a href="@Url.Action(currentMenu.Action, currentMenu.Controller, new { Area = currentMenu.Area })">@currentMenu.Display_Name</a></li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <div class="desktop-menu menu-side-v2-w menu-activated-on-hover flying-menu">
+                <ul class="main-menu">
+                    <li class="menu-sub-header"><span>Menu</span></li>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        string role = Menu.GetUserRole(User.Identity.Name);
+                        List<Attendance.Model.Entity.MENU> menuList = Menu.GetMenuList(role);
+                        if (menuList != null && menuList.Count > 0)
+                        {
+                            List<string> menuGroups = menuList.Select(m => m.MENU_GROUP.Name).Distinct().ToList();
+
+                            for (int i = 0; i < menuGroups.Count; i++)
+                            {
+                                string currentMenuGroup = menuGroups[i];
+                                List<Attendance.Model.Entity.MENU> menuListForGroup = menuList.Where(m => m.MENU_GROUP.Name == currentMenuGroup).OrderBy(s => s.Display_Name).ToList();
+                                <li class="has-sub-menu">
                                     <a href="#">
                                         <div class="icon-w">
                                             <div class="os-icon os-icon-window-content"></div>
@@ -166,10 +168,10 @@
                                             </ul>
                                         </div>
                                     </div>
-                                }
+                                </li>
                             }
                         }
-                    </li>
+                    }
                 </ul>
 
             </div>
@@ -189,7 +191,7 @@
                                             </select>
                                         </form>
                                     </div>
-                                    <h6 class="element-header">Staff Dashboard</h6>
+                                    <h6 class="element-header">Dashboard</h6>
                                     <div class="element-content">
                                         <div class="element-box">
                                             @RenderBody()
@@ -244,7 +246,7 @@
     <script src="~/Scripts/main5f48.js?version=4.0.0"></script>
     <script src="~/Scripts/toastr.js"></script>
     <script src="~/Scripts/sweetalert.min.js"></script>
-    
+
 </body>
 
 </html>
