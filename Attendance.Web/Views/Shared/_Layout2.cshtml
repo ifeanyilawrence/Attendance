@@ -24,6 +24,7 @@
     <link href="~/Content/slick.css" rel="stylesheet">
     <link href="~/Content/main5f48.css?version=4.0.0" rel="stylesheet">
     <link href="~/Content/toastr.css" rel="stylesheet" />
+    <link href="~/Content/sweetalert.css" rel="stylesheet" />
     <style>
         #map {
             height: 400px;
@@ -148,7 +149,7 @@
                                 {
                                     string currentMenuGroup = menuGroups[i];
                                     List<Attendance.Model.Entity.MENU> menuListForGroup = menuList.Where(m => m.MENU_GROUP.Name == currentMenuGroup).OrderBy(s => s.Display_Name).ToList();
-                                    <a href="@Url.Action("Index", "Home")">
+                                    <a href="#">
                                         <div class="icon-w">
                                             <div class="os-icon os-icon-window-content"></div>
                                         </div><span>@currentMenuGroup</span>
@@ -242,55 +243,8 @@
     <script src="~/Scripts/popover.js"></script>
     <script src="~/Scripts/main5f48.js?version=4.0.0"></script>
     <script src="~/Scripts/toastr.js"></script>
-    <script>
-        function myMap() {
-            //map options
-            var options = {
-                center: { lat: 6.4413, lng: 7.4988 },
-                zoom: 12
-            }
-
-            //new map
-            var map = new google.maps.Map(document.getElementById('map'), options);
-
-            infoWindow = new google.maps.InfoWindow;
-            var pos = null;
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    pos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
-
-                    var marker = new google.maps.Marker({
-                        position: pos,
-                        map: map
-                    });
-
-                    infoWindow.setPosition(pos);
-                    infoWindow.setContent('Current Location');
-                    infoWindow.open(map, marker);
-                    map.setCenter(pos);
-
-                }, function () {
-                    handleLocationError(true, infoWindow, map.getCenter());
-                });
-            } else {
-                // Browser doesn't support Geolocation
-                handleLocationError(false, infoWindow, map.getCenter());
-            }
-        }
-
-        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-            infoWindow.setPosition(pos);
-            infoWindow.setContent(browserHasGeolocation ?
-                'Error: The Geolocation service failed.' :
-                'Error: Your browser doesn\'t support geolocation.');
-            infoWindow.open(map);
-        }
-    </script>
-
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6d2j5N9TNBOT1u6enuBTJ_8v32ch2SL8&callback=myMap"></script>
+    <script src="~/Scripts/sweetalert.min.js"></script>
+    
 </body>
 
 </html>

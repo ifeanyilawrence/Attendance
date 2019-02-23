@@ -25,7 +25,6 @@ namespace Attendance.Model.Entity
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<ABSENCE_TYPE> ABSENCE_TYPE { get; set; }
         public virtual DbSet<ABSENT_LOG> ABSENT_LOG { get; set; }
         public virtual DbSet<ABSENT_TYPE> ABSENT_TYPE { get; set; }
         public virtual DbSet<ATTENDANCE> ATTENDANCE { get; set; }
@@ -37,6 +36,9 @@ namespace Attendance.Model.Entity
         public virtual DbSet<HALL> HALL { get; set; }
         public virtual DbSet<LEVEL> LEVEL { get; set; }
         public virtual DbSet<LOCATION> LOCATION { get; set; }
+        public virtual DbSet<MENU> MENU { get; set; }
+        public virtual DbSet<MENU_GROUP> MENU_GROUP { get; set; }
+        public virtual DbSet<MENU_IN_ROLE> MENU_IN_ROLE { get; set; }
         public virtual DbSet<PERSON> PERSON { get; set; }
         public virtual DbSet<PROGRAMME> PROGRAMME { get; set; }
         public virtual DbSet<ROLE> ROLE { get; set; }
@@ -46,8 +48,6 @@ namespace Attendance.Model.Entity
         public virtual DbSet<STUDENT> STUDENT { get; set; }
         public virtual DbSet<STUDENT_LEVEL> STUDENT_LEVEL { get; set; }
         public virtual DbSet<USER> USER { get; set; }
-        public virtual DbSet<MENU> MENU { get; set; }
-        public virtual DbSet<MENU_GROUP> MENU_GROUP { get; set; }
-        public virtual DbSet<MENU_IN_ROLE> MENU_IN_ROLE { get; set; }
+        public virtual DbSet<ATTENDANCE_STATUS> ATTENDANCE_STATUS { get; set; }
     }
 }

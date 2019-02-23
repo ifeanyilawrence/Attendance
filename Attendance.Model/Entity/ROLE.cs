@@ -16,8 +16,8 @@ namespace Attendance.Model.Entity
     {
         public ROLE()
         {
-            this.USER = new HashSet<USER>();
             this.MENU_IN_ROLE = new HashSet<MENU_IN_ROLE>();
+            this.USER = new HashSet<USER>();
         }
     
         public int Id { get; set; }
@@ -25,7 +25,7 @@ namespace Attendance.Model.Entity
         public string Description { get; set; }
         public bool Active { get; set; }
     
-        public virtual ICollection<USER> USER { get; set; }
         public virtual ICollection<MENU_IN_ROLE> MENU_IN_ROLE { get; set; }
+        public virtual ICollection<USER> USER { get; set; }
     }
 }

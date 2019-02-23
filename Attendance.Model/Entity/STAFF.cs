@@ -14,6 +14,11 @@ namespace Attendance.Model.Entity
     
     public partial class STAFF
     {
+        public STAFF()
+        {
+            this.COURSE = new HashSet<COURSE>();
+        }
+    
         public long Person_Id { get; set; }
         public int Staff_Type_Id { get; set; }
         public string Registration_Number { get; set; }
@@ -25,6 +30,7 @@ namespace Attendance.Model.Entity
         public bool Is_Student_Affairs { get; set; }
         public bool Is_Hall_Officer { get; set; }
     
+        public virtual ICollection<COURSE> COURSE { get; set; }
         public virtual DEPARTMENT DEPARTMENT { get; set; }
         public virtual HALL HALL { get; set; }
         public virtual PERSON PERSON { get; set; }

@@ -24,9 +24,11 @@ namespace Attendance.Model.Entity
         public string Reject_Reason { get; set; }
         public string Remark { get; set; }
         public Nullable<long> User_Id { get; set; }
+        public long Event_Id { get; set; }
     
         public virtual ABSENT_TYPE ABSENT_TYPE { get; set; }
         public virtual STUDENT STUDENT { get; set; }
         public virtual USER USER { get; set; }
+        public virtual EVENT EVENT { get; set; }
     }
 }

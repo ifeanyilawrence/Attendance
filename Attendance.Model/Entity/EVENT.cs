@@ -17,6 +17,7 @@ namespace Attendance.Model.Entity
         public EVENT()
         {
             this.ATTENDANCE = new HashSet<ATTENDANCE>();
+            this.ABSENT_LOG = new HashSet<ABSENT_LOG>();
         }
     
         public long Id { get; set; }
@@ -43,5 +44,6 @@ namespace Attendance.Model.Entity
         public virtual PROGRAMME PROGRAMME { get; set; }
         public virtual SESSION SESSION { get; set; }
         public virtual USER USER { get; set; }
+        public virtual ICollection<ABSENT_LOG> ABSENT_LOG { get; set; }
     }
 }

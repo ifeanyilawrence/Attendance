@@ -1,0 +1,266 @@
+﻿@model Attendance.Web.Areas.Student.Models.AttendanceViewModel
+@{
+    ViewBag.Title = "Events";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<div class="element-wrapper">
+    @if (TempData["Message"] != null)
+    {
+        @Html.Partial("_Message", (Attendance.Model.Model.Message)TempData["Message"])
+    }
+
+    @if (Model.Events != null && Model.Events.Count > 0)
+    {
+        <div class="element-box-tp">
+            <h5 class="form-header">Today's Activities</h5>
+
+            <div class="element-box-tp">
+                <div class="controls-above-table">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <a class="btn btn-sm btn-secondary" href="#">Download CSV</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <span id="loading" style="display:none"><img src="~/Content/images/loading.gif" width="40px" /></span>
+                    <table class="table table-bordered table-lg table-v2 table-striped">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    SN
+                                </th>
+                                <th>Activity</th>
+                                <th>Location</th>
+                                <th>Starts</th>
+                                <th>Ends</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Events.Count; i++)
+                            {
+                                var sn = i + 1;
+                                <tr>
+                                    <td class="text-center">
+                                        @sn
+                                    </td>
+                                    @if (Model.Events[i].COURSE != null)
+                                    {
+                                        <td class="text-center">@Model.Events[i].EVENT_TYPE.Name - @Model.Events[i].COURSE.Code</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center">@Model.Events[i].EVENT_TYPE.Name</td>
+                                    }
+                                    <td class="text-center">@Model.Events[i].LOCATION.Name</td>
+                                    <td class="text-center">@Model.Events[i].Event_Start.ToLongTimeString()</td>
+                                    <td class="text-center">@Model.Events[i].Event_End.ToLongTimeString()</td>
+                                    @if (Model.Events[i].Status)
+                                    {
+                                        <td class="text-center">
+                                            <div class="status-pill green" data-title="Ongoing" data-toggle="tooltip"></div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center">
+                                            <div class="status-pill red" data-title="Not Active" data-toggle="tooltip"></div>
+                                        </td>
+                                    }
+                                    <td class="row-actions">
+                                        <a class="success" href="#" data-title="Mark Attendance" data-toggle="tooltip">
+                                            <i class="os-icon os-icon-ui-49" onclick="markAttendance(@Model.Events[i].Id)"></i>
+                                        </a>
+                                        <a class="danger" href="#" data-title="Request Absence" data-toggle="tooltip">
+                                            <i class="os-icon os-icon-close" onclick="takeExcuse(@Model.Events[i].Id)"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+<div class="row">
+    <div id="map"> </div>
+</div>
+
+<div aria-hidden="true" aria-labelledby="mySmallModalLabel" class="modal fade bd-example-modal-sm" role="dialog" tabindex="-1" id="absenceModal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Request Absence</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="absentType"> Type</label>
+                        <select class="form-control" id="absentType" required="required">
+                            <option value="">Select</option>
+                            @{
+                                var types = (List<Attendance.Model.Entity.ABSENT_TYPE>)ViewBag.AbsentType;
+                            }
+                            @for (int i = 0; i < types.Count(); i++)
+                            {
+                                <option value="@types[i].Id">@types[i].Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="dateRange">Duration</label>
+                        <input class="multi-daterange form-control" required="required" type="text" id="dateRange" value="@DateTime.Now.ToShortDateString() - @DateTime.Now.ToShortDateString()">
+                    </div>
+                    <div class="form-group">
+                        <label for="remark"> More Info</label>
+                        <input class="form-control" placeholder="more info" type="text" id="remark">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                <a class="btn btn-primary" onclick="postExcuse()" style="color:white">Save</a>
+                <span id="postLoading" style="display:none"><img src="~/Content/images/bx_loader.gif" width="20px" /></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    var myEventId = null;
+    var latitude = null;
+    var longitude = null;
+
+    function myMap() {
+        //map options
+        var options = {
+            center: { lat: 6.4413, lng: 7.4988 },
+            zoom: 12
+        }
+
+        //new map
+        var map = new google.maps.Map(document.getElementById('map'), options);
+
+        infoWindow = new google.maps.InfoWindow;
+        var pos = null;
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+
+                latitude = position.coords.latitude;
+                longitude = position.coords.longitude;
+
+                var marker = new google.maps.Marker({
+                    position: pos,
+                    map: map
+                });
+
+                infoWindow.setPosition(pos);
+                infoWindow.setContent('Current Location');
+                infoWindow.open(map, marker);
+                map.setCenter(pos);
+
+            }, function () {
+                handleLocationError(true, infoWindow, map.getCenter());
+            });
+        } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter());
+        }
+    }
+
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+            'Error: The Geolocation service failed.' :
+            'Error: Your browser doesn\'t support geolocation.');
+        infoWindow.open(map);
+    }
+
+    function markAttendance(eventId) {
+
+        $("#loading").show();
+        
+        if (!eventId || !latitude || !longitude) {
+            swal("Oops!", "Missing parameter", "error");
+            $("#loading").hide();
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("MarkAttendance", "Attendance")',
+            dataType: 'json',
+            data: { eventId: eventId, latitude: latitude, longitude: longitude },
+            success: function (result) {
+                    if (result.IsError == false) {
+                        swal("Success!", result.Message, "success");
+                        $("#loading").hide();
+                    } else {
+                        swal("Attention!", result.Message, "error");
+                        $("#loading").hide();
+                    }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#loading").hide();
+            }
+        });
+    }
+
+    function takeExcuse(eventId) {
+
+        myEventId = eventId;
+
+        $('#absenceModal').modal('show');
+    }
+
+    function postExcuse() {
+        $("#postLoading").show();
+
+        var absentType = $("#absentType option:selected").val();
+        var dateRange = $("#dateRange").val();
+        var remark = $("#remark").val()
+
+        if (!myEventId || !absentType || !dateRange) {
+            swal("Oops!", "Invalid Parameters", "error");
+            $("#postLoading").hide();
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("SaveAbsenceRequest", "Attendance")',
+            dataType: 'json',
+            data: { eventId: myEventId, absentType: absentType, dateRange: dateRange, remark: remark },
+            success: function (result) {
+                    if (result.IsError == false) {
+                        swal("Success!", result.Message, "success");
+                        $("#postLoading").hide();
+                    } else {
+                        swal("Attention!", result.Message, "error");
+                        $("#postLoading").hide();
+                    }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#postLoading").hide();
+            }
+        });
+    }
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6d2j5N9TNBOT1u6enuBTJ_8v32ch2SL8&callback=myMap"></script>

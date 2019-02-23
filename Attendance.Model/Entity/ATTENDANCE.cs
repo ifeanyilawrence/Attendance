@@ -18,9 +18,11 @@ namespace Attendance.Model.Entity
         public long Event_Id { get; set; }
         public long Student_Id { get; set; }
         public System.DateTime Time_Taken { get; set; }
-        public bool Status { get; set; }
+        public int Attendance_Status_Id { get; set; }
+        public bool Cancelled { get; set; }
     
         public virtual EVENT EVENT { get; set; }
         public virtual STUDENT STUDENT { get; set; }
+        public virtual ATTENDANCE_STATUS ATTENDANCE_STATUS { get; set; }
     }
 }

@@ -147,7 +147,9 @@
     <Compile Include="Areas\Security\Controllers\AccountController.cs" />
     <Compile Include="Areas\Security\SecurityAreaRegistration.cs" />
     <Compile Include="Areas\Student\Controllers\AccountController.cs" />
+    <Compile Include="Areas\Student\Controllers\AttendanceController.cs" />
     <Compile Include="Areas\Student\Models\AccountViewModel.cs" />
+    <Compile Include="Areas\Student\Models\AttendanceViewModel.cs" />
     <Compile Include="Areas\Student\StudentAreaRegistration.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -179,6 +181,8 @@
     <Content Include="Content\perfect-scrollbar.min.css" />
     <Content Include="Content\select2.min.css" />
     <Content Include="Content\slick.css" />
+    <Content Include="Content\sweetalert.css" />
+    <Content Include="Scripts\sweetalert.min.js" />
     <Content Include="Content\toastr.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -202,6 +206,7 @@
     <Content Include="Areas\Admin\Views\Menu\ViewMenuByMenuGroup.cshtml" />
     <Content Include="Areas\Admin\Views\Menu\ViewMenuInRole.cshtml" />
     <Content Include="Areas\Admin\Views\Account\Signup.cshtml" />
+    <Content Include="Areas\Student\Views\Attendance\ViewCurrentEvents.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\button.js" />
     <Content Include="Scripts\carousel.js" />

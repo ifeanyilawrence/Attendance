@@ -12,11 +12,17 @@ namespace Attendance.Model.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class ABSENCE_TYPE
+    public partial class ATTENDANCE_STATUS
     {
+        public ATTENDANCE_STATUS()
+        {
+            this.ATTENDANCE = new HashSet<ATTENDANCE>();
+        }
+    
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
         public bool Active { get; set; }
+    
+        public virtual ICollection<ATTENDANCE> ATTENDANCE { get; set; }
     }
 }

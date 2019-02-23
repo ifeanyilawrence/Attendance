@@ -5,64 +5,67 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="09d10c002cf64bb4a204b7c48339217b" Name="Diagram1">
-        <EntityTypeShape EntityType="AttendanceModel.ABSENCE_TYPE" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.ABSENT_LOG" Width="1.5" PointX="8.25" PointY="17.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.ABSENT_TYPE" Width="1.5" PointX="6" PointY="19.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.ATTENDANCE" Width="1.5" PointX="10.5" PointY="7.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.COURSE" Width="1.5" PointX="3" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.DEPARTMENT" Width="1.5" PointX="0.75" PointY="7.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.EVENT" Width="1.5" PointX="8.25" PointY="5.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.EVENT_TYPE" Width="1.5" PointX="6" PointY="2.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.GENDER" Width="1.5" PointX="1.5" PointY="33.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.HALL" Width="1.5" PointX="1.5" PointY="25.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.LEVEL" Width="1.5" PointX="0.75" PointY="10.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.LOCATION" Width="1.5" PointX="6" PointY="11.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.PERSON" Width="1.5" PointX="1.5" PointY="29" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.PROGRAMME" Width="1.5" PointX="0.75" PointY="13.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.ROLE" Width="1.5" PointX="3.75" PointY="15.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.SESSION" Width="1.5" PointX="0.75" PointY="16.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.STAFF" Width="1.5" PointX="6" PointY="6.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.STAFF_TYPE" Width="1.5" PointX="3.75" PointY="11.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.STUDENT" Width="1.5" PointX="0.75" PointY="21.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.STUDENT_LEVEL" Width="1.5" PointX="3" PointY="2.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="AttendanceModel.USER" Width="1.5" PointX="6" PointY="14.75" IsExpanded="true" />
-        <AssociationConnector Association="AttendanceModel.FK_ABSENT_LOG_ABSENT_TYPE" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_ABSENT_LOG_STUDENT" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_ABSENT_LOG_USER" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_ATTENDANCE_EVENT" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_ATTENDANCE_STUDENT" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_COURSE_DEPARTMENT" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_COURSE_LEVEL" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_COURSE_PROGRAMME" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_EVENT_COURSE" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_EVENT_DEPARTMENT" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_STAFF_DEPARTMENT" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_STUDENT_LEVEL_DEPARTMENT" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_EVENT_EVENT_TYPE" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_EVENT_HALL" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_EVENT_LEVEL" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_EVENT_LOCATION" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_EVENT_PROGRAMME" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_EVENT_SESSION" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_EVENT_USER" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_PERSON_GENDER" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_STAFF_HALL" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_STUDENT_HALL" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_STUDENT_LEVEL_LEVEL" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_STAFF_PERSON" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_STUDENT_PERSON" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_USER_PERSON" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_STUDENT_LEVEL_PROGRAMME" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_USER_ROLE" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_STUDENT_LEVEL_SESSION" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_STAFF_STAFF_TYPE" ManuallyRouted="false" />
-        <AssociationConnector Association="AttendanceModel.FK_STUDENT_LEVEL_STUDENT" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="AttendanceModel.MENU" Width="1.5" PointX="6.75" PointY="23.125" />
-        <EntityTypeShape EntityType="AttendanceModel.MENU_GROUP" Width="1.5" PointX="4.5" PointY="23.625" />
-        <EntityTypeShape EntityType="AttendanceModel.MENU_IN_ROLE" Width="1.5" PointX="9" PointY="14.375" />
+        <EntityTypeShape EntityType="AttendanceModel.ABSENT_LOG" Width="1.5" PointX="12.75" PointY="11.75" />
+        <EntityTypeShape EntityType="AttendanceModel.ABSENT_TYPE" Width="1.5" PointX="10.5" PointY="13.5" />
+        <EntityTypeShape EntityType="AttendanceModel.ATTENDANCE" Width="1.5" PointX="12.75" PointY="8.5" />
+        <EntityTypeShape EntityType="AttendanceModel.COURSE" Width="1.5" PointX="8.25" PointY="7.875" />
+        <EntityTypeShape EntityType="AttendanceModel.DEPARTMENT" Width="1.5" PointX="0.75" PointY="8.375" />
+        <EntityTypeShape EntityType="AttendanceModel.EVENT" Width="1.5" PointX="10.5" PointY="7" />
+        <EntityTypeShape EntityType="AttendanceModel.EVENT_TYPE" Width="1.5" PointX="8.25" PointY="0.75" />
+        <EntityTypeShape EntityType="AttendanceModel.GENDER" Width="1.5" PointX="1.5" PointY="13.5" />
+        <EntityTypeShape EntityType="AttendanceModel.HALL" Width="1.5" PointX="3.75" PointY="16.875" />
+        <EntityTypeShape EntityType="AttendanceModel.LEVEL" Width="1.5" PointX="6" PointY="13.125" />
+        <EntityTypeShape EntityType="AttendanceModel.LOCATION" Width="1.5" PointX="8.25" PointY="3.625" />
+        <EntityTypeShape EntityType="AttendanceModel.MENU" Width="1.5" PointX="9" PointY="20.75" />
+        <EntityTypeShape EntityType="AttendanceModel.MENU_GROUP" Width="1.5" PointX="6.75" PointY="21.25" />
+        <EntityTypeShape EntityType="AttendanceModel.MENU_IN_ROLE" Width="1.5" PointX="11.25" PointY="17.125" />
+        <EntityTypeShape EntityType="AttendanceModel.PERSON" Width="1.5" PointX="3.75" PointY="12.875" />
+        <EntityTypeShape EntityType="AttendanceModel.PROGRAMME" Width="1.5" PointX="6" PointY="2" />
+        <EntityTypeShape EntityType="AttendanceModel.ROLE" Width="1.5" PointX="6" PointY="17.125" />
+        <EntityTypeShape EntityType="AttendanceModel.SESSION" Width="1.5" PointX="8.25" PointY="12.5" />
+        <EntityTypeShape EntityType="AttendanceModel.STAFF" Width="1.5" PointX="6" PointY="7.75" />
+        <EntityTypeShape EntityType="AttendanceModel.STAFF_TYPE" Width="1.5" PointX="3.75" PointY="5.125" />
+        <EntityTypeShape EntityType="AttendanceModel.STUDENT" Width="1.5" PointX="10.5" PointY="3.25" />
+        <EntityTypeShape EntityType="AttendanceModel.STUDENT_LEVEL" Width="1.5" PointX="3" PointY="8.125" />
+        <EntityTypeShape EntityType="AttendanceModel.USER" Width="1.5" PointX="8.25" PointY="16.625" />
+        <AssociationConnector Association="AttendanceModel.FK_ABSENT_LOG_ABSENT_TYPE" />
+        <AssociationConnector Association="AttendanceModel.FK_ABSENT_LOG_STUDENT" />
+        <AssociationConnector Association="AttendanceModel.FK_ABSENT_LOG_USER" />
+        <AssociationConnector Association="AttendanceModel.FK_ATTENDANCE_EVENT" />
+        <AssociationConnector Association="AttendanceModel.FK_ATTENDANCE_STUDENT" />
+        <AssociationConnector Association="AttendanceModel.FK_COURSE_DEPARTMENT" />
+        <AssociationConnector Association="AttendanceModel.FK_COURSE_LEVEL" />
+        <AssociationConnector Association="AttendanceModel.FK_COURSE_PROGRAMME" />
+        <AssociationConnector Association="AttendanceModel.FK_COURSE_STAFF" />
+        <AssociationConnector Association="AttendanceModel.FK_EVENT_COURSE" />
+        <AssociationConnector Association="AttendanceModel.FK_EVENT_DEPARTMENT" />
+        <AssociationConnector Association="AttendanceModel.FK_STAFF_DEPARTMENT" />
+        <AssociationConnector Association="AttendanceModel.FK_STUDENT_LEVEL_DEPARTMENT" />
+        <AssociationConnector Association="AttendanceModel.FK_EVENT_EVENT_TYPE" />
+        <AssociationConnector Association="AttendanceModel.FK_EVENT_HALL" />
+        <AssociationConnector Association="AttendanceModel.FK_EVENT_LEVEL" />
+        <AssociationConnector Association="AttendanceModel.FK_EVENT_LOCATION" />
+        <AssociationConnector Association="AttendanceModel.FK_EVENT_PROGRAMME" />
+        <AssociationConnector Association="AttendanceModel.FK_EVENT_SESSION" />
+        <AssociationConnector Association="AttendanceModel.FK_EVENT_USER" />
+        <AssociationConnector Association="AttendanceModel.FK_PERSON_GENDER" />
+        <AssociationConnector Association="AttendanceModel.FK_STAFF_HALL" />
+        <AssociationConnector Association="AttendanceModel.FK_STUDENT_HALL" />
+        <AssociationConnector Association="AttendanceModel.FK_STUDENT_LEVEL_LEVEL" />
         <AssociationConnector Association="AttendanceModel.FK_MENU_IN_ROLE_MENU" />
         <AssociationConnector Association="AttendanceModel.FK_ROLE_MENU_MENU_GROUP" />
         <AssociationConnector Association="AttendanceModel.FK_MENU_IN_ROLE_ROLE" />
+        <AssociationConnector Association="AttendanceModel.FK_STAFF_PERSON" />
+        <AssociationConnector Association="AttendanceModel.FK_STUDENT_PERSON" />
+        <AssociationConnector Association="AttendanceModel.FK_USER_PERSON" />
+        <AssociationConnector Association="AttendanceModel.FK_STUDENT_LEVEL_PROGRAMME" />
+        <AssociationConnector Association="AttendanceModel.FK_USER_ROLE" />
+        <AssociationConnector Association="AttendanceModel.FK_STUDENT_LEVEL_SESSION" />
+        <AssociationConnector Association="AttendanceModel.FK_STAFF_STAFF_TYPE" />
+        <AssociationConnector Association="AttendanceModel.FK_STUDENT_LEVEL_STUDENT" />
+        <EntityTypeShape EntityType="AttendanceModel.ATTENDANCE_STATUS" Width="1.5" PointX="0.75" PointY="4.875" />
+        <AssociationConnector Association="AttendanceModel.FK_ATTENDANCE_ATTENDANCE_STATUS" />
+        <AssociationConnector Association="AttendanceModel.FK_ABSENT_LOG_EVENT" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
