@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using Attendance.Model.Entity;
 using Attendance.Model.Model;
+using Microsoft.Ajax.Utilities;
 
 namespace Attendance.Web.Models
 {
@@ -830,7 +831,76 @@ namespace Attendance.Web.Models
                 throw;
             }
         }
+        public static List<SelectListItem> PopulateStaffTypeSelectListItem()
+        {
+            try
+            {
+                StaffTypeLogic staffTypeLogic = new StaffTypeLogic();
+                List<STAFF_TYPE> staffTypeList = staffTypeLogic.GetEntitiesBy(s => s.Active);
+                if (staffTypeList == null || staffTypeList.Count <= 0)
+                {
+                    return new List<SelectListItem>();
+                }
 
+                List<SelectListItem> staffTypeListItem = new List<SelectListItem>();
+
+                SelectListItem list = new SelectListItem();
+                list.Value = "";
+                list.Text = Select;
+                staffTypeListItem.Add(list);
+
+                foreach (STAFF_TYPE staffType in staffTypeList)
+                {
+                    SelectListItem selectList = new SelectListItem();
+                    selectList.Value = staffType.Id.ToString();
+                    selectList.Text = staffType.Name;
+
+                    staffTypeListItem.Add(selectList);
+                }
+
+                return staffTypeListItem.OrderBy(m => m.Text).ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public static List<SelectListItem> PopulateCourseSelectListItem()
+        {
+            try
+            {
+                CourseLogic courseLogic = new CourseLogic();
+                List<COURSE> courses = courseLogic.GetEntitiesBy(p => p.Active).DistinctBy(s => s.Code).ToList();
+
+                if (courses.Count <= 0)
+                {
+                    return new List<SelectListItem>();
+                }
+
+                List<SelectListItem> courselist = new List<SelectListItem>();
+                if (courses.Count > 0)
+                {
+                    SelectListItem list = new SelectListItem();
+                    list.Value = "";
+                    list.Text = Select;
+                    courselist.Add(list);
+
+                    foreach (COURSE course in courses)
+                    {
+                        SelectListItem selectList = new SelectListItem();
+                        selectList.Value = course.Id.ToString();
+                        selectList.Text = course.Name;
+                        courselist.Add(selectList);
+                    }
+                }
+
+                return courselist;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
     public class Value
     {

@@ -66,6 +66,7 @@
         <EntityTypeShape EntityType="AttendanceModel.ATTENDANCE_STATUS" Width="1.5" PointX="0.75" PointY="4.875" />
         <AssociationConnector Association="AttendanceModel.FK_ATTENDANCE_ATTENDANCE_STATUS" />
         <AssociationConnector Association="AttendanceModel.FK_ABSENT_LOG_EVENT" />
+        <EntityTypeShape EntityType="AttendanceModel.VW_ABSENT_LOG" Width="1.5" PointX="13.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -1,0 +1,329 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+
+
+<div class="col-md-12">
+    <div class=" logo-w"><a href="index-2.html"><img alt="" src="~/Content/images/logo-big.png"></a></div>
+    <h4 class="auth-header">Absent Report</h4>
+    <form action="#">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="">Level</label>
+                    <select id="level" class="form-control" required="required" data-error="Please select role" onchange="populateCourse()">
+                        @foreach (var item in ViewBag.Level)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                    <div class="help-block form-text with-errors form-control-feedback"></div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="">Course</label>
+                    <select id="course" class="form-control" required="required" data-error="Please select role">
+                        @foreach (var item in ViewBag.Course)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                    <div class="help-block form-text with-errors form-control-feedback"></div>
+                </div>
+            </div>
+        </div>
+        <div class="buttons-w">
+            <a class="btn btn-primary" id="btnSearch" style="color: white;" onclick="searchRecord()">Search</a>
+            <button class="btn btn-primary" disabled="disabled" id="btnSearchDisabled" style="display: none">Search</button>
+            <span id="loading" style="display: none"><img src="~/Content/images/bx_loader.gif" width="20px" /></span>
+        </div>
+    </form>
+    <br/>
+    <br/>
+    <br/>
+    <br />
+    <table class="table table-bordered table-hover table-striped" id="myTable">
+        <thead>
+        <tr>
+            <th>SN</th>
+            <th>Name </th>
+            <th>Programme</th>
+            <th>Deprtment</th>
+            <th>Level</th>
+            <th>Duration</th>
+            <th>Accept</th>
+            <th>Decline</th>
+            <th>Reject Reason</th>
+            <th>Remark</th>
+        </tr>
+        </thead>
+        <tbody id="table2Body"></tbody>
+    </table>
+    <br />
+    <br />
+    <div class="buttons-w" id="updateDiv">
+        <a class="btn btn-primary" id="btnUpdate" style="color: white;" onclick="UpdateRecord()">Update</a>
+        <button class="btn btn-primary" disabled="disabled" id="btnUpdatehDisabled" style="display: none">Update</button>
+        <span id="loading1" style="display: none"><img src="~/Content/images/bx_loader.gif" width="20px" /></span>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery.min.js"></script>
+<script src="~/Scripts/toastr.js"></script>
+<script src="~/Scripts/dataTables.js"></script>
+<script src="~/Scripts/dataTables.bootstrap.min.js"></script>
+
+
+<script>
+    var definedDataTable;
+    var $j = jQuery.noConflict(true);
+    $j(document).ready(function() {
+
+        $('#myTable').hide();
+        $('#updateDiv').hide();
+        $('#course').empty();
+    });
+
+    function populateCourse() {
+
+        $j('#course').empty();
+        var level = $("#level option:selected").val();
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetCourses", "Report")', // we are calling json method
+            dataType: 'json',
+            data: { level: level },
+            success: function(result) {
+
+                $("#course").append('<option value="' + 0 + '">' +
+                    '-- Select Course --' + '</option>');
+                $.each(result, function(i, course) {
+                    $("#course").append('<option value="' + course.Value + '">' +
+                        course.Text + '</option>');
+                });
+            },
+            error: function(ex) {
+                toastMessage(ex, "Error!", "error");
+            }
+        });
+    }
+
+    function searchRecord() {
+
+        $("#btnSearch").hide();
+        $("#btnSearchDisabled").show();
+        $("#loading").show();
+
+        var level = $("#level option:selected").val();
+        var course = $("#course option:selected").val();
+        $('#myTable').hide();
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetAbsentRecord", "Report")', // we are calling json method
+            dataType: 'json',
+            data: { level: level, course: course },
+            success: function(results) {
+
+                if (results.length > 0) {
+
+                    if (definedDataTable != undefined) {
+                        definedDataTable.destroy();
+                    }
+                    $('#myTable tbody > tr').remove();
+                    $('#myTable').show();
+
+                    for (var i = 0; i < results.length; i++) {
+                        var sn = i + 1;
+                        $('#table2Body').append('<tr Id="' + results[i].Id + '"><td>' + sn + '</td><td>' + results[i].Name + '</td><td>' + results[i].ProgrammeName + '</td><td>' + results[i].DepartmentName + '</td><td>' + results[i].LevelName + '</td><td>' + results[i].Duration + '</td><td><input type="checkbox"  id="accept' + i + '" onclick="checkboxStatus(' + sn + ',1)"></td><td><input type="checkbox" id="decline' + sn + '" onclick="checkboxStatus(' + i + ',2)"></td><td><input id="rejectReasonId' + sn + '" type="textbox" value="' + results[i].RejectReason + '"></td><td><input id="remarkId' + sn + '" type="textbox" value="' + results[i].Remark + '"></td></tr>');
+                    }
+                    definedDataTable = $j('#myTable').DataTable();
+
+                    $("#btnSearch").show();
+                    $("#btnSearchDisabled").hide();
+                    $("#loading").hide();
+                    $('#updateDiv').show();
+
+                } else {
+                    //toastMessage(ex, "Error!", "error");
+                    alert("No record found");
+
+                    $("#btnSearch").show();
+                    $("#btnSearchDisabled").hide();
+                    $("#loading").hide();
+                    $('#updateDiv').hide();
+                }
+
+                
+
+            },
+            error: function(ex) {
+                toastMessage(ex, "Error!", "error");
+            }
+        });
+    }
+
+    function UpdateRecord() {
+        var name, programme, department, level, duration, rejectReason, remark, id;
+        var accept = false;
+        var decline = false;
+
+        var tableDataArray = [];
+        $("#btnSearch").hide();
+        $("#btnSearchDisabled").hide();
+        $("#loading").show();
+
+        $("#btnUpdate").hide();
+        $("#btnUpdatehDisabled").hide();
+        $("#loading1").show();
+
+        $('table tr').each(function(index) {
+
+            id = this.id;
+            $(this).closest('tr').find('td').each(function(i, cmp) {
+                console.log();
+                var tdtext = $(this).text();
+                switch (i) {
+                case 1:
+                    name = tdtext;
+                    break;
+                case 2:
+                    programme = tdtext;
+                    break;
+                case 3:
+                    department = tdtext;
+                    break;
+                case 4:
+                    level = tdtext;
+                    break;
+                case 5:
+                    duration = tdtext;
+                    break;
+                case 8:
+                    rejectReason = $('#rejectReasonId' + index).val();
+                    break;
+                case 9:
+                    remark = $('#remarkId' + index).val();
+                    break;
+                default:
+                    break;
+                }
+
+            });
+
+            if ($('#accept' + index).is(':checked')) {
+                accept = true;
+            }
+            if ($('#decline' + index).is(':checked')) {
+                decline = true;
+            }
+            if (index !== 0) {
+
+                var tableData = {
+                    Id: id,
+                    name: name,
+                    programme: programme,
+                    department: department,
+                    level: level,
+                    duration: duration,
+                    decline: decline,
+                    accept: accept,
+                    rejectReason: rejectReason,
+                    remark: remark
+                };
+                tableDataArray.push(tableData);
+            }
+        });
+        var stringfiedData = JSON.stringify(tableDataArray);
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("UpdateAbsentlog", "Report")', // we are calling json method
+            dataType: 'json',
+            data: { updateArray: stringfiedData },
+            success: function(result) {
+
+                $("#btnSearch").show();
+                $("#btnSearchDisabled").hide();
+                $("#loading").hide();
+
+                $("#btnUpdate").show();
+                $("#btnUpdatehDisabled").hide();
+                $("#loading1").hide();
+
+                if (result.IsError === false) {
+                    //toastMessage(result.Message, "Error!", "sucess");
+                    alert(result.Message);
+                    location.reload(true);
+                } else {
+                    //toastMessage(result.Message, "Error!", "error");
+                    alert(result.Message);
+                }
+            },
+            error: function(ex) {
+
+                $("#btnSearch").show();
+                $("#btnSearchDisabled").hide();
+                $("#loading").hide();
+
+                $("#btnUpdate").show();
+                $("#btnUpdatehDisabled").hide();
+                $("#loading1").hide();
+
+                //toastMessage(ex, "Error!", "error");
+
+                alert(ex);
+            }
+        });
+    }
+
+    function checkboxStatus(id, clickId) {
+
+        if (clickId === 1) {
+
+            if ($('#accept' + id).is(':checked')) {
+                $('#decline' + id).prop('checked', false);
+            } else {
+                $('#accept' + id).prop('checked', true);
+                $('#decline' + id).prop('checked', false);
+            }
+        }
+        if (clickId === 2) {
+
+            if ($('#decline' + id).is(':checked')) {
+                $('#accept' + id).prop('checked', false);
+            } else {
+                $('#decline' + id).prop('checked', true);
+                $('#accept' + id).prop('checked', false);
+            }
+        }
+    }
+
+    function toastMessage(msg, title, messagetype) {
+
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut",
+            "tapToDismiss": false
+        }
+
+        var $toast = toastr[messagetype](msg, title);
+    }
+</script>
+
+

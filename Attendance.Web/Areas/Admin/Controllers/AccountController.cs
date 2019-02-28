@@ -15,23 +15,31 @@ namespace Attendance.Web.Areas.Admin.Controllers
     public class AccountController : Controller
     {
         // GET: Admin/Account
-        
+
         public ActionResult Signup()
         {
-            AccountViewModel viewModel = new AccountViewModel();
-            
-            ViewBag.Gender = viewModel.GenderSelectList;
-            ViewBag.Role = viewModel.RoleSelectList;
+            try
+            {
+                AccountViewModel viewModel = new AccountViewModel();
+
+                ViewBag.Gender = viewModel.GenderSelectList;
+                ViewBag.Role = viewModel.RoleSelectList;
+                ViewBag.StaffType = viewModel.StaffTypeSelectList;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
 
             return View();
         }
-         [AllowAnonymous]
+        [AllowAnonymous]
         public JsonResult CreateUser(string userData)
         {
             JsonResponseModel result = new JsonResponseModel();
             try
             {
-                
                 if (userData == null)
                 {
                     result.IsError = true;
@@ -56,14 +64,22 @@ namespace Attendance.Web.Areas.Admin.Controllers
                     person.Gender_Id = Convert.ToInt32(signupJsonModel.gender);
 
                     PERSON createdPerson = personLogic.Create(person);
-                    
 
+                    STAFF staff = new STAFF();
+                    staff.PERSON = createdPerson;
+                    staff.Registration_Number = !string.IsNullOrEmpty(signupJsonModel.regnumber) ? signupJsonModel.regnumber.Trim() : null;
+                    staff.Active = true;
+                    staff.Is_Hall_Officer = Convert.ToInt32(signupJsonModel.role) == (int)Roles.HallStaff;
+                    staff.Is_Lecturer = Convert.ToInt32(signupJsonModel.role) == (int)Roles.Lecturer;
+                    staff.Is_Medical_Staff = Convert.ToInt32(signupJsonModel.role) == (int)Roles.MedicalSTaff;
+                    staff.Is_Student_Affairs = Convert.ToInt32(signupJsonModel.role) == (int)Roles.StudentAffairs;
+                    
                     USER user = new USER();
                     user.Active = true;
                     user.Password = signupJsonModel.password.Trim();
                     user.Person_Id = createdPerson.Id;
                     user.Role_Id = Convert.ToInt32(signupJsonModel.role);
-                    user.Username = signupJsonModel.userName.Trim();
+                    user.Username = !string.IsNullOrEmpty(signupJsonModel.userName) ? signupJsonModel.userName.Trim() : signupJsonModel.regnumber.Trim();
 
                     USER existingUser = userLogic.GetEntityBy(u => u.Username == signupJsonModel.userName);
                     if (existingUser != null)

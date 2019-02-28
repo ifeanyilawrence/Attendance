@@ -44,8 +44,8 @@
                     map.setCenter(pos);
 
                 }, function () {
-                    handleLocationError(true, infoWindow, map.getCenter());
-                });
+                        handleLocationError(true, infoWindow, map.getCenter());
+                    }, { maximumAge: 600000, timeout: 5000, enableHighAccuracy: true });
             } else {
                 // Browser doesn't support Geolocation
                 handleLocationError(false, infoWindow, map.getCenter());

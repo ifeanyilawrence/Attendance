@@ -142,6 +142,7 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
     <Compile Include="Areas\Admin\Controllers\MenuController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ReportController.cs" />
     <Compile Include="Areas\Admin\Models\AccountViewModel.cs" />
     <Compile Include="Areas\Admin\Models\MenuViewModel.cs" />
     <Compile Include="Areas\Security\Controllers\AccountController.cs" />
@@ -182,6 +183,8 @@
     <Content Include="Content\select2.min.css" />
     <Content Include="Content\slick.css" />
     <Content Include="Content\sweetalert.css" />
+    <Content Include="Scripts\dataTables.js" />
+    <Content Include="Scripts\jquery-2.1.3.min.js" />
     <Content Include="Scripts\sweetalert.min.js" />
     <Content Include="Content\toastr.css" />
     <Content Include="favicon.ico" />
@@ -210,6 +213,8 @@
     <Content Include="Areas\Student\Views\Attendance\ViewMyAttendance.cshtml" />
     <Content Include="Areas\Student\Views\Attendance\ViewAbsenceRequest.cshtml" />
     <Content Include="Areas\Student\Views\Attendance\CheckExamEligibility.cshtml" />
+    <Content Include="Areas\Admin\Views\Report\AbsenceRequestReport.cshtml" />
+    <Content Include="Scripts\jquery-2.1.3.min.map" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\button.js" />
     <Content Include="Scripts\carousel.js" />

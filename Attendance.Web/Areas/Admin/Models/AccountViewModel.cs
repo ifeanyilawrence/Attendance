@@ -13,9 +13,11 @@ namespace Attendance.Web.Areas.Admin.Models
         {
             GenderSelectList = Utility.PopulateGenderSelectListItem();
             RoleSelectList = Utility.PopulateRoleSelectListItem();
+            StaffTypeSelectList = Utility.PopulateStaffTypeSelectListItem();
         }
         public List<SelectListItem> GenderSelectList { get;  set; }
         public List<SelectListItem> RoleSelectList { get; set; }
+        public List<SelectListItem> StaffTypeSelectList { get; set; }
 
     }
     public class SignupJsonModel
@@ -30,6 +32,8 @@ namespace Attendance.Web.Areas.Admin.Models
         public string gender { get; set; }
         public string role { get; set; }
 
+        public string staffType { get; set; }
+        public string regnumber { get; set; }
     }
 
 }

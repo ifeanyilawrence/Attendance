@@ -262,6 +262,65 @@
           <Property Name="Role_Id" Type="int" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Attendance.dbo.VW_ABSENT_LOG' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VW_ABSENT_LOG">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Last_Name" />
+            <PropertyRef Name="First_Name" />
+            <PropertyRef Name="Other_Name" />
+            <PropertyRef Name="Absent_Type_Id" />
+            <PropertyRef Name="Student_Id" />
+            <PropertyRef Name="Start_Date" />
+            <PropertyRef Name="End_Date" />
+            <PropertyRef Name="Matric_Number" />
+            <PropertyRef Name="Active" />
+            <PropertyRef Name="Person_Id" />
+            <PropertyRef Name="Gender_Id" />
+            <PropertyRef Name="Department_Id" />
+            <PropertyRef Name="Department_Name" />
+            <PropertyRef Name="Programme_Id" />
+            <PropertyRef Name="Programme_Name" />
+            <PropertyRef Name="Level_Id" />
+            <PropertyRef Name="Level_Name" />
+            <PropertyRef Name="Session_Id" />
+            <PropertyRef Name="Course_Id" />
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="CourseName" />
+            <PropertyRef Name="Activated" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="Last_Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="First_Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Other_Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Absent_Type_Id" Type="int" Nullable="false" />
+          <Property Name="Student_Id" Type="bigint" Nullable="false" />
+          <Property Name="Duration_In_Days" Type="int" />
+          <Property Name="Start_Date" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="End_Date" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="Approved" Type="bit" />
+          <Property Name="Reject_Reason" Type="varchar" MaxLength="150" />
+          <Property Name="Remark" Type="varchar" MaxLength="150" />
+          <Property Name="User_Id" Type="bigint" />
+          <Property Name="Matric_Number" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="Hall_Id" Type="int" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="Person_Id" Type="bigint" Nullable="false" />
+          <Property Name="Gender_Id" Type="int" Nullable="false" />
+          <Property Name="Department_Id" Type="int" Nullable="false" />
+          <Property Name="Department_Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Programme_Id" Type="int" Nullable="false" />
+          <Property Name="Programme_Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Level_Id" Type="int" Nullable="false" />
+          <Property Name="Level_Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Session_Id" Type="int" Nullable="false" />
+          <Property Name="Course_Id" Type="bigint" Nullable="false" />
+          <Property Name="Code" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="CourseName" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="Staff_Id" Type="bigint" />
+          <Property Name="Activated" Type="bit" Nullable="false" />
+        </EntityType>
         <Association Name="FK_ABSENT_LOG_ABSENT_TYPE">
           <End Role="ABSENT_TYPE" Type="Self.ABSENT_TYPE" Multiplicity="1" />
           <End Role="ABSENT_LOG" Type="Self.ABSENT_LOG" Multiplicity="*" />
@@ -731,6 +790,40 @@
           <EntitySet Name="STUDENT" EntityType="Self.STUDENT" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="STUDENT_LEVEL" EntityType="Self.STUDENT_LEVEL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="USER" EntityType="Self.USER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VW_ABSENT_LOG" EntityType="Self.VW_ABSENT_LOG" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VW_ABSENT_LOG].[Id] AS [Id], 
+    [VW_ABSENT_LOG].[Last_Name] AS [Last_Name], 
+    [VW_ABSENT_LOG].[First_Name] AS [First_Name], 
+    [VW_ABSENT_LOG].[Other_Name] AS [Other_Name], 
+    [VW_ABSENT_LOG].[Absent_Type_Id] AS [Absent_Type_Id], 
+    [VW_ABSENT_LOG].[Student_Id] AS [Student_Id], 
+    [VW_ABSENT_LOG].[Duration_In_Days] AS [Duration_In_Days], 
+    [VW_ABSENT_LOG].[Start_Date] AS [Start_Date], 
+    [VW_ABSENT_LOG].[End_Date] AS [End_Date], 
+    [VW_ABSENT_LOG].[Approved] AS [Approved], 
+    [VW_ABSENT_LOG].[Reject_Reason] AS [Reject_Reason], 
+    [VW_ABSENT_LOG].[Remark] AS [Remark], 
+    [VW_ABSENT_LOG].[User_Id] AS [User_Id], 
+    [VW_ABSENT_LOG].[Matric_Number] AS [Matric_Number], 
+    [VW_ABSENT_LOG].[Hall_Id] AS [Hall_Id], 
+    [VW_ABSENT_LOG].[Active] AS [Active], 
+    [VW_ABSENT_LOG].[Person_Id] AS [Person_Id], 
+    [VW_ABSENT_LOG].[Gender_Id] AS [Gender_Id], 
+    [VW_ABSENT_LOG].[Department_Id] AS [Department_Id], 
+    [VW_ABSENT_LOG].[Department_Name] AS [Department_Name], 
+    [VW_ABSENT_LOG].[Programme_Id] AS [Programme_Id], 
+    [VW_ABSENT_LOG].[Programme_Name] AS [Programme_Name], 
+    [VW_ABSENT_LOG].[Level_Id] AS [Level_Id], 
+    [VW_ABSENT_LOG].[Level_Name] AS [Level_Name], 
+    [VW_ABSENT_LOG].[Session_Id] AS [Session_Id], 
+    [VW_ABSENT_LOG].[Course_Id] AS [Course_Id], 
+    [VW_ABSENT_LOG].[Code] AS [Code], 
+    [VW_ABSENT_LOG].[CourseName] AS [CourseName], 
+    [VW_ABSENT_LOG].[Staff_Id] AS [Staff_Id], 
+    [VW_ABSENT_LOG].[Activated] AS [Activated]
+    FROM [dbo].[VW_ABSENT_LOG] AS [VW_ABSENT_LOG]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_ABSENT_LOG_ABSENT_TYPE" Association="Self.FK_ABSENT_LOG_ABSENT_TYPE">
             <End Role="ABSENT_TYPE" EntitySet="ABSENT_TYPE" />
             <End Role="ABSENT_LOG" EntitySet="ABSENT_LOG" />
@@ -1057,6 +1150,7 @@
             <End Role="EVENT" EntitySet="EVENT" />
             <End Role="ABSENT_LOG" EntitySet="ABSENT_LOG" />
           </AssociationSet>
+          <EntitySet Name="VW_ABSENT_LOG" EntityType="AttendanceModel.VW_ABSENT_LOG" />
         </EntityContainer>
         <EntityType Name="ABSENT_LOG">
           <Key>
@@ -1833,6 +1927,63 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="VW_ABSENT_LOG">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Last_Name" />
+            <PropertyRef Name="First_Name" />
+            <PropertyRef Name="Other_Name" />
+            <PropertyRef Name="Absent_Type_Id" />
+            <PropertyRef Name="Student_Id" />
+            <PropertyRef Name="Start_Date" />
+            <PropertyRef Name="End_Date" />
+            <PropertyRef Name="Matric_Number" />
+            <PropertyRef Name="Active" />
+            <PropertyRef Name="Person_Id" />
+            <PropertyRef Name="Gender_Id" />
+            <PropertyRef Name="Department_Id" />
+            <PropertyRef Name="Department_Name" />
+            <PropertyRef Name="Programme_Id" />
+            <PropertyRef Name="Programme_Name" />
+            <PropertyRef Name="Level_Id" />
+            <PropertyRef Name="Level_Name" />
+            <PropertyRef Name="Session_Id" />
+            <PropertyRef Name="Course_Id" />
+            <PropertyRef Name="Code" />
+            <PropertyRef Name="CourseName" />
+            <PropertyRef Name="Activated" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="Last_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="First_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Other_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Absent_Type_Id" Type="Int32" Nullable="false" />
+          <Property Name="Student_Id" Type="Int64" Nullable="false" />
+          <Property Name="Duration_In_Days" Type="Int32" />
+          <Property Name="Start_Date" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="End_Date" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="Approved" Type="Boolean" />
+          <Property Name="Reject_Reason" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Remark" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="User_Id" Type="Int64" />
+          <Property Name="Matric_Number" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Hall_Id" Type="Int32" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="Person_Id" Type="Int64" Nullable="false" />
+          <Property Name="Gender_Id" Type="Int32" Nullable="false" />
+          <Property Name="Department_Id" Type="Int32" Nullable="false" />
+          <Property Name="Department_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Programme_Id" Type="Int32" Nullable="false" />
+          <Property Name="Programme_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Level_Id" Type="Int32" Nullable="false" />
+          <Property Name="Level_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Session_Id" Type="Int32" Nullable="false" />
+          <Property Name="Course_Id" Type="Int64" Nullable="false" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CourseName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Staff_Id" Type="Int64" />
+          <Property Name="Activated" Type="Boolean" Nullable="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2116,6 +2267,42 @@
               <MappingFragment StoreEntitySet="ATTENDANCE_STATUS">
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VW_ABSENT_LOG">
+            <EntityTypeMapping TypeName="AttendanceModel.VW_ABSENT_LOG">
+              <MappingFragment StoreEntitySet="VW_ABSENT_LOG">
+                <ScalarProperty Name="Activated" ColumnName="Activated" />
+                <ScalarProperty Name="Staff_Id" ColumnName="Staff_Id" />
+                <ScalarProperty Name="CourseName" ColumnName="CourseName" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Course_Id" ColumnName="Course_Id" />
+                <ScalarProperty Name="Session_Id" ColumnName="Session_Id" />
+                <ScalarProperty Name="Level_Name" ColumnName="Level_Name" />
+                <ScalarProperty Name="Level_Id" ColumnName="Level_Id" />
+                <ScalarProperty Name="Programme_Name" ColumnName="Programme_Name" />
+                <ScalarProperty Name="Programme_Id" ColumnName="Programme_Id" />
+                <ScalarProperty Name="Department_Name" ColumnName="Department_Name" />
+                <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
+                <ScalarProperty Name="Gender_Id" ColumnName="Gender_Id" />
+                <ScalarProperty Name="Person_Id" ColumnName="Person_Id" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Hall_Id" ColumnName="Hall_Id" />
+                <ScalarProperty Name="Matric_Number" ColumnName="Matric_Number" />
+                <ScalarProperty Name="User_Id" ColumnName="User_Id" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="Reject_Reason" ColumnName="Reject_Reason" />
+                <ScalarProperty Name="Approved" ColumnName="Approved" />
+                <ScalarProperty Name="End_Date" ColumnName="End_Date" />
+                <ScalarProperty Name="Start_Date" ColumnName="Start_Date" />
+                <ScalarProperty Name="Duration_In_Days" ColumnName="Duration_In_Days" />
+                <ScalarProperty Name="Student_Id" ColumnName="Student_Id" />
+                <ScalarProperty Name="Absent_Type_Id" ColumnName="Absent_Type_Id" />
+                <ScalarProperty Name="Other_Name" ColumnName="Other_Name" />
+                <ScalarProperty Name="First_Name" ColumnName="First_Name" />
+                <ScalarProperty Name="Last_Name" ColumnName="Last_Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

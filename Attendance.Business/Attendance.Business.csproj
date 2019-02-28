@@ -69,6 +69,7 @@
     <Compile Include="RoleLogic.cs" />
     <Compile Include="GenderLogic.cs" />
     <Compile Include="SessionLogic.cs" />
+    <Compile Include="StaffTypeLogic.cs" />
     <Compile Include="StudentLevelLogic.cs" />
     <Compile Include="StudentLogic.cs" />
     <Compile Include="UserLogic.cs" />

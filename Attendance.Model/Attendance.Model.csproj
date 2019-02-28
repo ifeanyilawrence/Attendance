@@ -135,6 +135,10 @@
     <Compile Include="Entity\USER.cs">
       <DependentUpon>AttendanceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Entity\VW_ABSENT_LOG.cs">
+      <DependentUpon>AttendanceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\AbsentLogModel.cs" />
     <Compile Include="Model\AttendanceStatuses.cs" />
     <Compile Include="Model\Departments.cs" />
     <Compile Include="Model\EVENT.cs" />

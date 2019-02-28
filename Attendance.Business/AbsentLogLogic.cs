@@ -1,4 +1,5 @@
 ﻿using Attendance.Model.Entity;
+using Attendance.Model.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,5 +50,38 @@ namespace Attendance.Business
                 throw;
             }
         }
+        public List<AbsentLogModel> GetBy(LEVEL levelentity, COURSE courseentity)
+        {
+            try
+            {
+                List<AbsentLogModel> logs =
+                    (from a in
+                         repository.GetBy<VW_ABSENT_LOG>(
+                             a =>
+                                 a.Course_Id == courseentity.Id && a.Level_Id == levelentity.Id && a.Activated)
+                     select new AbsentLogModel
+                     {
+                         Id = a.Id,
+                         Name = a.Last_Name + " " + a.First_Name + a.Other_Name,
+                         DepartmentId = a.Department_Id,
+                         ProgrammeId = a.Programme_Id,
+                         LevelId = a.Level_Id,
+                         Duration = a.Duration_In_Days,
+                         Accept = (bool)a.Approved,
+                         RejectReason = string.IsNullOrEmpty(a.Reject_Reason) ? " " : a.Reject_Reason,
+                         Remark = string.IsNullOrEmpty(a.Remark) ? " " : a.Remark,
+                         DepartmentName = a.Department_Name,
+                         ProgrammeName = a.Programme_Name,
+                         LevelName = a.Level_Name
+                     }).ToList();
+                return logs;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
     }
+   
 }

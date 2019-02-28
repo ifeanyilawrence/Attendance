@@ -29,99 +29,127 @@
         <div class="auth-box-w wider">
             <div class="logo-w"><a href="index-2.html"><img alt="" src="~/Content/images/logo-big.png"></a></div>
             <h4 class="auth-header">Create User</h4>*@
-            <form action="#">
-                <h6 class="element-header">Create User</h6>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for=""> Surname</label>
-                            <input id="surname" class="form-control" placeholder="surname" type="text" required="required" data-error="Please input your Surname">
-                            <div class="help-block form-text with-errors form-control-feedback"></div>
-                            @*<div class="pre-icon os-icon os-icon-user-male-circle"></div>*@
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for=""> First Name</label>
-                            <input id="firstname" class="form-control" placeholder="first name" type="text" required="required" data-error="Please input your first name">
-                            <div class="help-block form-text with-errors form-control-feedback"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for=""> Other Names</label>
-                            <input id="othernames" class="form-control" placeholder="other names" type="text">
-                            @*<div class="pre-icon os-icon os-icon-user-male-circle"></div>*@
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for=""> Gender</label>
-                            <select id="gender" class="form-control" required="required" data-error="Please select gender">
-                                @foreach (var item in ViewBag.Gender)
-                                {
-                                    <option value="@item.Value">@item.Text</option>
-                                }
-                            </select>
-                            <div class="help-block form-text with-errors form-control-feedback"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for=""> Email address</label>
-                            <input id="email" class="form-control" placeholder="Enter email" type="email">
-                            @*<div class="pre-icon os-icon os-icon-email-2-at2"></div>*@
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for=""> Phone number</label>
-                            <input id="phoneNumber" class="form-control" placeholder="phone number" type="number">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="">Username</label>
-                            <input id="username" class="form-control" placeholder="Username" type="text" required="required" data-error="Please enter your userName">
-                            <div class="help-block form-text with-errors form-control-feedback"></div>
-                            @*<div class="pre-icon os-icon os-icon-username"></div>*@
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="">Role</label>
-                            <select id="role" class="form-control" required="required" data-error="Please select role">
-                                @foreach (var item in ViewBag.Role)
-                                {
-                                    <option value="@item.Value">@item.Text</option>
-                                }
-                            </select>
-                            <div class="help-block form-text with-errors form-control-feedback"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for=""> Password</label>
-                            <input id="password" class="form-control" placeholder="password" type="password" required="required" data-error="Please input your password">
-                            <div class="help-block form-text with-errors form-control-feedback"></div>
-                            @*<div class="pre-icon os-icon os-icon-fingerprint"></div>*@
-                        </div>
-                    </div>
-                </div>
-                <div class="buttons-w">
-                    <a class="btn btn-primary" onclick="Create()" id="btnRegister" style="color:white;">Create User</a>
-                    <button class="btn btn-primary" disabled="disabled" id="btnRegDisabled" style="display:none">Create User</button>
-                    <span id="loading" style="display:none"><img src="~/Content/images/bx_loader.gif" width="20px" /></span>
-                </div>
-            </form>
+<form action="#">
+    <h6 class="element-header">Create User</h6>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for=""> Surname</label>
+                <input id="surname" class="form-control" placeholder="surname" type="text" required="required" data-error="Please input your Surname">
+                <div class="help-block form-text with-errors form-control-feedback"></div>
+                @*<div class="pre-icon os-icon os-icon-user-male-circle"></div>*@
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for=""> First Name</label>
+                <input id="firstname" class="form-control" placeholder="first name" type="text" required="required" data-error="Please input your first name">
+                <div class="help-block form-text with-errors form-control-feedback"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for=""> Other Names</label>
+                <input id="othernames" class="form-control" placeholder="other names" type="text">
+                @*<div class="pre-icon os-icon os-icon-user-male-circle"></div>*@
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for=""> Gender</label>
+                <select id="gender" class="form-control" required="required" data-error="Please select gender">
+                    @foreach (var item in ViewBag.Gender)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <div class="help-block form-text with-errors form-control-feedback"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for=""> Email address</label>
+                <input id="email" class="form-control" placeholder="Enter email" type="email">
+                @*<div class="pre-icon os-icon os-icon-email-2-at2"></div>*@
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for=""> Phone number</label>
+                <input id="phoneNumber" class="form-control" placeholder="phone number" type="number">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="">Role</label>
+                <select id="role" class="form-control" required="required" data-error="Please select role" onchange="showNextDiv()">
+                    @foreach (var item in ViewBag.Role)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <div class="help-block form-text with-errors form-control-feedback"></div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="">Staff Type</label>
+                <select id="staffType" class="form-control" required="required" data-error="Please select staffType">
+                    @foreach (var item in ViewBag.StaffType)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <div class="help-block form-text with-errors form-control-feedback"></div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-6" id="userNameDiv">
+            <div class="form-group">
+                <label for="">Username</label>
+                <input id="username" class="form-control" placeholder="Username" type="text" required="required" data-error="Please enter your userName">
+                <div class="help-block form-text with-errors form-control-feedback"></div>
+            </div>
+        </div>
+        <div class="col-sm-6" id="regNoDiv">
+            <div class="form-group">
+                <label for="">Rregistration Number</label>
+                <input id="regNoId" class="form-control" placeholder="Registration Number" type="text" required="required" data-error="Please enter your Registration Number">
+                <div class="help-block form-text with-errors form-control-feedback"></div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for=""> Password</label>
+                <input id="password" class="form-control" placeholder="password" type="password" required="required" data-error="Please input your password">
+                <div class="help-block form-text with-errors form-control-feedback"></div>
+            </div>
+        </div>
+    </div>
+    @*<div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for=""> Password</label>
+                <input id="password" class="form-control" placeholder="password" type="password" required="required" data-error="Please input your password">
+                <div class="help-block form-text with-errors form-control-feedback"></div>
+               
+            </div>
+        </div>
+    </div>*@
+    <div class="buttons-w">
+        <a class="btn btn-primary" onclick="Create()" id="btnRegister" style="color:white;">Create User</a>
+        <button class="btn btn-primary" disabled="disabled" id="btnRegDisabled" style="display:none">Create User</button>
+        <span id="loading" style="display:none"><img src="~/Content/images/bx_loader.gif" width="20px" /></span>
+    </div>
+</form>
         @*</div>
     </div>*@
     @*<script src="~/Scripts/jquery.min.js"></script>
@@ -154,6 +182,10 @@
     <script src="~/Scripts/main5f48.js?version=4.0.0"></script>
     <script src="~/Scripts/toastr.js"></script>*@
     <script>
+        $(document).ready(function () {
+            $('#userNameDiv').hide();
+            $('#regNoDiv').hide();
+        });
         function Create() {
 
             $("#btnRegister").hide();
@@ -169,9 +201,26 @@
             var gender = $("#gender option:selected").val();
             var role = $("#role option:selected").val();
             var userName = $("#username").val();
+            var regNumber = $("#regNoId").val();
+            var staffType = $("#staffType option:selected").val();
 
-            if (!surname || !firstname || !phoneNumber || !password || !gender || !userName || !role) {
+            if (!surname || !firstname || !phoneNumber || !password || !gender || !role || !staffType) {
                 toastMessage("Fill all neccessary fields before proceeding.", "Attention!");
+                $("#btnRegister").show();
+                $("#btnRegDisabled").hide();
+                $("#loading").hide();
+                return;
+            }
+
+            if (parseInt(role) === 3 && !regNumber) {
+                toastMessage("Fill all neccessary fields before proceeding.", "Attention!", "error");
+                $("#btnRegister").show();
+                $("#btnRegDisabled").hide();
+                $("#loading").hide();
+                return;
+            }
+            if (parseInt(role) !== 3 && !userName) {
+                toastMessage("Fill all neccessary fields before proceeding.", "Attention!", "error");
                 $("#btnRegister").show();
                 $("#btnRegDisabled").hide();
                 $("#loading").hide();
@@ -188,7 +237,9 @@
                 userName: userName,
                 password: password,
                 gender: gender,
-                role: role
+                role: role,
+                staffType: staffType,
+                regnumber: regNumber
             };
 
             var stringfiedData = JSON.stringify(userData);
@@ -222,6 +273,19 @@
                         $("#loading").hide();
                     }
             });
+        }
+
+        function showNextDiv() {
+
+            $('#userNameDiv').hide();
+            $('#regNoDiv').hide();
+            var role = $("#role option:selected").val();
+
+            if (parseInt(role) === 3) {
+                $('#regNoDiv').show();
+            } else {
+                $('#userNameDiv').show();
+            }
         }
 
         function toastMessage(msg, title) {
