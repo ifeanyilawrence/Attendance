@@ -112,14 +112,14 @@
 
     </div>
     <div class="row">
-        <div class="col-sm-6" id="userNameDiv">
+        <div class="col-sm-6" id="userNameDiv" style="display:none;">
             <div class="form-group">
                 <label for="">Username</label>
                 <input id="username" class="form-control" placeholder="Username" type="text" required="required" data-error="Please enter your userName">
                 <div class="help-block form-text with-errors form-control-feedback"></div>
             </div>
         </div>
-        <div class="col-sm-6" id="regNoDiv">
+        <div class="col-sm-6" id="regNoDiv" style="display:none;">
             <div class="form-group">
                 <label for="">Rregistration Number</label>
                 <input id="regNoId" class="form-control" placeholder="Registration Number" type="text" required="required" data-error="Please enter your Registration Number">
@@ -182,10 +182,10 @@
     <script src="~/Scripts/main5f48.js?version=4.0.0"></script>
     <script src="~/Scripts/toastr.js"></script>*@
     <script>
-        $(document).ready(function () {
-            $('#userNameDiv').hide();
-            $('#regNoDiv').hide();
-        });
+        //$(document).ready(function () {
+        //    $('#userNameDiv').hide();
+        //    $('#regNoDiv').hide();
+        //});
         function Create() {
 
             $("#btnRegister").hide();
@@ -205,21 +205,21 @@
             var staffType = $("#staffType option:selected").val();
 
             if (!surname || !firstname || !phoneNumber || !password || !gender || !role || !staffType) {
-                toastMessage("Fill all neccessary fields before proceeding.", "Attention!");
-                $("#btnRegister").show();
-                $("#btnRegDisabled").hide();
-                $("#loading").hide();
-                return;
-            }
-
-            if (parseInt(role) === 3 && !regNumber) {
                 toastMessage("Fill all neccessary fields before proceeding.", "Attention!", "error");
                 $("#btnRegister").show();
                 $("#btnRegDisabled").hide();
                 $("#loading").hide();
                 return;
             }
-            if (parseInt(role) !== 3 && !userName) {
+
+            if (parseInt(role) !== 1 && !regNumber) {
+                toastMessage("Fill all neccessary fields before proceeding.", "Attention!", "error");
+                $("#btnRegister").show();
+                $("#btnRegDisabled").hide();
+                $("#loading").hide();
+                return;
+            }
+            if (parseInt(role) === 3 && !userName) {
                 toastMessage("Fill all neccessary fields before proceeding.", "Attention!", "error");
                 $("#btnRegister").show();
                 $("#btnRegDisabled").hide();
@@ -281,7 +281,7 @@
             $('#regNoDiv').hide();
             var role = $("#role option:selected").val();
 
-            if (parseInt(role) === 3) {
+            if (parseInt(role) !== 1) {
                 $('#regNoDiv').show();
             } else {
                 $('#userNameDiv').show();

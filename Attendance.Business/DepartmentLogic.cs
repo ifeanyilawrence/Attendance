@@ -41,9 +41,5 @@ namespace Attendance.Business
                 throw;
             }
         }
-
-
-
     }
-
 }

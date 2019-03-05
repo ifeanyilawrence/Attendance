@@ -123,6 +123,12 @@
     <Compile Include="Entity\STAFF.cs">
       <DependentUpon>AttendanceModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Entity\STAFF_COURSE.cs">
+      <DependentUpon>AttendanceModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\STAFF_HALL.cs">
+      <DependentUpon>AttendanceModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Entity\STAFF_TYPE.cs">
       <DependentUpon>AttendanceModel.tt</DependentUpon>
     </Compile>

@@ -143,8 +143,10 @@
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
     <Compile Include="Areas\Admin\Controllers\MenuController.cs" />
     <Compile Include="Areas\Admin\Controllers\ReportController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SetupController.cs" />
     <Compile Include="Areas\Admin\Models\AccountViewModel.cs" />
     <Compile Include="Areas\Admin\Models\MenuViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\SetupViewModel.cs" />
     <Compile Include="Areas\Security\Controllers\AccountController.cs" />
     <Compile Include="Areas\Security\SecurityAreaRegistration.cs" />
     <Compile Include="Areas\Student\Controllers\AccountController.cs" />
@@ -215,6 +217,11 @@
     <Content Include="Areas\Student\Views\Attendance\CheckExamEligibility.cshtml" />
     <Content Include="Areas\Admin\Views\Report\AbsenceRequestReport.cshtml" />
     <Content Include="Scripts\jquery-2.1.3.min.map" />
+    <Content Include="Areas\Admin\Views\Setup\ManageCourse.cshtml" />
+    <Content Include="Areas\Admin\Views\Setup\ManageLocation.cshtml" />
+    <Content Include="Areas\Admin\Views\Setup\ManageHall.cshtml" />
+    <Content Include="Areas\Admin\Views\Setup\CourseAllocation.cshtml" />
+    <Content Include="Areas\Admin\Views\Setup\HallAllocation.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\button.js" />
     <Content Include="Scripts\carousel.js" />

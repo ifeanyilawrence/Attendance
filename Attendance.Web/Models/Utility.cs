@@ -27,14 +27,14 @@ namespace Attendance.Web.Models
         public const string SelectLevel = "-- Select Level --";
         public const string SelectProgramme = "-- Select Programme --";
         public const string SelectCourse = "-- Select Course --";
-        
+
         public static void BindDropdownItem<T>(DropDownList dropDownList, T items, string dataValueField, string dataTextField)
         {
             dropDownList.Items.Clear();
 
             dropDownList.DataValueField = dataValueField;
             dropDownList.DataTextField = dataTextField;
-           
+
 
             dropDownList.DataSource = items;
             dropDownList.DataBind();
@@ -173,7 +173,7 @@ namespace Attendance.Web.Models
                 throw;
             }
         }
-        
+
 
         public static List<SelectListItem> PopulateYearSelectListItem(int startYear, bool withSelect)
         {
@@ -520,7 +520,7 @@ namespace Attendance.Web.Models
                 months.Add(october);
                 months.Add(november);
                 months.Add(december);
-                              
+
                 List<SelectListItem> monthList = new List<SelectListItem>();
 
                 SelectListItem list = new SelectListItem();
@@ -642,7 +642,7 @@ namespace Attendance.Web.Models
                 throw;
             }
         }
-        
+
         public static string Encrypt(string encrypData)
         {
             string data = "";
@@ -694,7 +694,7 @@ namespace Attendance.Web.Models
 
 
         }
-        
+
         public static List<SelectListItem> PopulateStaffSelectListItem()
         {
             try
@@ -895,6 +895,74 @@ namespace Attendance.Web.Models
                 }
 
                 return courselist;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public static List<SelectListItem> PopulateLecturerSelectListItem()
+        {
+            try
+            {
+                StaffLogic staffLogic = new StaffLogic();
+                List<STAFF> users = staffLogic.GetEntitiesBy(p => p.Is_Lecturer);
+                if (users == null || users.Count <= 0)
+                {
+                    return new List<SelectListItem>();
+                }
+
+                List<SelectListItem> userList = new List<SelectListItem>();
+
+                SelectListItem list = new SelectListItem();
+                list.Value = "";
+                list.Text = Select;
+                userList.Add(list);
+
+                foreach (STAFF user in users)
+                {
+                    SelectListItem selectList = new SelectListItem();
+                    selectList.Value = user.Person_Id.ToString();
+                    selectList.Text = user.PERSON.Last_Name + " " + user.PERSON.First_Name + " " + user.PERSON.Other_Name;
+
+                    userList.Add(selectList);
+                }
+
+                return userList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public static List<SelectListItem> PopulateHallStaffSelectListItem()
+        {
+            try
+            {
+                StaffLogic staffLogic = new StaffLogic();
+                List<STAFF> users = staffLogic.GetEntitiesBy(p => p.Is_Hall_Officer);
+                if (users == null || users.Count <= 0)
+                {
+                    return new List<SelectListItem>();
+                }
+
+                List<SelectListItem> userList = new List<SelectListItem>();
+
+                SelectListItem list = new SelectListItem();
+                list.Value = "";
+                list.Text = Select;
+                userList.Add(list);
+
+                foreach (STAFF user in users)
+                {
+                    SelectListItem selectList = new SelectListItem();
+                    selectList.Value = user.Person_Id.ToString();
+                    selectList.Text = user.PERSON.Last_Name + " " + user.PERSON.First_Name + " " + user.PERSON.Other_Name;
+
+                    userList.Add(selectList);
+                }
+
+                return userList;
             }
             catch (Exception)
             {

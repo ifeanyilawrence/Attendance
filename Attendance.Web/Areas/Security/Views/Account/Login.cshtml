@@ -91,7 +91,7 @@
             var password = $("#password").val();
 
             if (!username || !password) {
-                toastMessage("Please enter your username and password.", "Attention!");
+                toastMessage("Please enter your username and password.", "Attention!", "error");
                 $("#btnLogin").show();
                 $("#btnLoginDisabled").hide();
                 $("#loading").hide();
@@ -106,7 +106,7 @@
                     success: function (result) {
                         if (result === "success") {
 
-                            toastMessage("Lgin was successful.", "Success!");
+                            toastMessage("Login was successful.", "Success!", "success");
 
                             $("#btnLogin").show();
                             $("#btnLoginDisabled").hide();
@@ -117,14 +117,14 @@
                             }, 2000);
 
                         } else {
-                            toastMessage(result, "Error!");
+                            toastMessage(result, "Attention!", "error");
                             $("#btnLogin").show();
                             $("#btnLoginDisabled").hide();
                             $("#loading").hide();
                         }
                     },
                     error: function (ex) {
-                        toastMessage(ex, "Error!");
+                        toastMessage(ex, "Attention!", "error");
 
                         $("#btnLogin").show();
                         $("#btnLoginDisabled").hide();
@@ -133,7 +133,30 @@
             });
         }
 
-        function toastMessage(msg, title) {
+        //function toastMessage(msg, title) {
+        //    toastr.options = {
+        //        "closeButton": false,
+        //        "debug": false,
+        //        "newestOnTop": true,
+        //        "progressBar": true,
+        //        "positionClass": "toast-top-right",
+        //        "preventDuplicates": false,
+        //        "onclick": null,
+        //        "showDuration": "300",
+        //        "hideDuration": "1000",
+        //        "timeOut": "5000",
+        //        "extendedTimeOut": "1000",
+        //        "showEasing": "swing",
+        //        "hideEasing": "linear",
+        //        "showMethod": "fadeIn",
+        //        "hideMethod": "fadeOut",
+        //        "tapToDismiss": false
+        //    }
+
+        //    var $toast = toastr["success"](msg, title);
+        //}
+        function toastMessage(msg, title, messagetype) {
+
             toastr.options = {
                 "closeButton": false,
                 "debug": false,
@@ -153,7 +176,7 @@
                 "tapToDismiss": false
             }
 
-            var $toast = toastr["success"](msg, title);
+            var $toast = toastr[messagetype](msg, title);
         }
     </script>
 </body>

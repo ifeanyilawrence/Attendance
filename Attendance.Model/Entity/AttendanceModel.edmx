@@ -221,6 +221,22 @@
           <Property Name="Is_Student_Affairs" Type="bit" Nullable="false" />
           <Property Name="Is_Hall_Officer" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="STAFF_COURSE">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Staff_Id" Type="bigint" Nullable="false" />
+          <Property Name="Course_Id" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="STAFF_HALL">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Staff_Id" Type="bigint" Nullable="false" />
+          <Property Name="Hall_Id" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="STAFF_TYPE">
           <Key>
             <PropertyRef Name="Id" />
@@ -272,8 +288,10 @@ warning 6002: The table/view 'Attendance.dbo.VW_ABSENT_LOG' does not have a prim
             <PropertyRef Name="Other_Name" />
             <PropertyRef Name="Absent_Type_Id" />
             <PropertyRef Name="Student_Id" />
+            
             <PropertyRef Name="Start_Date" />
             <PropertyRef Name="End_Date" />
+            
             <PropertyRef Name="Matric_Number" />
             <PropertyRef Name="Active" />
             <PropertyRef Name="Person_Id" />
@@ -296,10 +314,10 @@ warning 6002: The table/view 'Attendance.dbo.VW_ABSENT_LOG' does not have a prim
           <Property Name="Other_Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Absent_Type_Id" Type="int" Nullable="false" />
           <Property Name="Student_Id" Type="bigint" Nullable="false" />
-          <Property Name="Duration_In_Days" Type="int" />
+          <Property Name="Duration_In_Days" Type="int" Nullable="false" />
           <Property Name="Start_Date" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="End_Date" Type="datetime2" Precision="7" Nullable="false" />
-          <Property Name="Approved" Type="bit" />
+          <Property Name="Approved" Type="bit" Nullable="false" />
           <Property Name="Reject_Reason" Type="varchar" MaxLength="150" />
           <Property Name="Remark" Type="varchar" MaxLength="150" />
           <Property Name="User_Id" Type="bigint" />
@@ -609,6 +627,30 @@ warning 6002: The table/view 'Attendance.dbo.VW_ABSENT_LOG' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_STAFF_COURSE_COURSE">
+          <End Role="COURSE" Type="Self.COURSE" Multiplicity="1" />
+          <End Role="STAFF_COURSE" Type="Self.STAFF_COURSE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COURSE">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="STAFF_COURSE">
+              <PropertyRef Name="Course_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STAFF_COURSE_STAFF">
+          <End Role="STAFF" Type="Self.STAFF" Multiplicity="1" />
+          <End Role="STAFF_COURSE" Type="Self.STAFF_COURSE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="STAFF">
+              <PropertyRef Name="Person_Id" />
+            </Principal>
+            <Dependent Role="STAFF_COURSE">
+              <PropertyRef Name="Staff_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_STAFF_DEPARTMENT">
           <End Role="DEPARTMENT" Type="Self.DEPARTMENT" Multiplicity="0..1" />
           <End Role="STAFF" Type="Self.STAFF" Multiplicity="*" />
@@ -630,6 +672,30 @@ warning 6002: The table/view 'Attendance.dbo.VW_ABSENT_LOG' does not have a prim
             </Principal>
             <Dependent Role="STAFF">
               <PropertyRef Name="Hall_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STAFF_HALL_HALL">
+          <End Role="HALL" Type="Self.HALL" Multiplicity="1" />
+          <End Role="STAFF_HALL" Type="Self.STAFF_HALL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HALL">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="STAFF_HALL">
+              <PropertyRef Name="Hall_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STAFF_HALL_STAFF">
+          <End Role="STAFF" Type="Self.STAFF" Multiplicity="1" />
+          <End Role="STAFF_HALL" Type="Self.STAFF_HALL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="STAFF">
+              <PropertyRef Name="Person_Id" />
+            </Principal>
+            <Dependent Role="STAFF_HALL">
+              <PropertyRef Name="Staff_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -786,6 +852,8 @@ warning 6002: The table/view 'Attendance.dbo.VW_ABSENT_LOG' does not have a prim
           <EntitySet Name="ROLE" EntityType="Self.ROLE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SESSION" EntityType="Self.SESSION" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="STAFF" EntityType="Self.STAFF" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="STAFF_COURSE" EntityType="Self.STAFF_COURSE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="STAFF_HALL" EntityType="Self.STAFF_HALL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="STAFF_TYPE" EntityType="Self.STAFF_TYPE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="STUDENT" EntityType="Self.STUDENT" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="STUDENT_LEVEL" EntityType="Self.STUDENT_LEVEL" Schema="dbo" store:Type="Tables" />
@@ -920,6 +988,14 @@ warning 6002: The table/view 'Attendance.dbo.VW_ABSENT_LOG' does not have a prim
             <End Role="MENU_GROUP" EntitySet="MENU_GROUP" />
             <End Role="MENU" EntitySet="MENU" />
           </AssociationSet>
+          <AssociationSet Name="FK_STAFF_COURSE_COURSE" Association="Self.FK_STAFF_COURSE_COURSE">
+            <End Role="COURSE" EntitySet="COURSE" />
+            <End Role="STAFF_COURSE" EntitySet="STAFF_COURSE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STAFF_COURSE_STAFF" Association="Self.FK_STAFF_COURSE_STAFF">
+            <End Role="STAFF" EntitySet="STAFF" />
+            <End Role="STAFF_COURSE" EntitySet="STAFF_COURSE" />
+          </AssociationSet>
           <AssociationSet Name="FK_STAFF_DEPARTMENT" Association="Self.FK_STAFF_DEPARTMENT">
             <End Role="DEPARTMENT" EntitySet="DEPARTMENT" />
             <End Role="STAFF" EntitySet="STAFF" />
@@ -927,6 +1003,14 @@ warning 6002: The table/view 'Attendance.dbo.VW_ABSENT_LOG' does not have a prim
           <AssociationSet Name="FK_STAFF_HALL" Association="Self.FK_STAFF_HALL">
             <End Role="HALL" EntitySet="HALL" />
             <End Role="STAFF" EntitySet="STAFF" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STAFF_HALL_HALL" Association="Self.FK_STAFF_HALL_HALL">
+            <End Role="HALL" EntitySet="HALL" />
+            <End Role="STAFF_HALL" EntitySet="STAFF_HALL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STAFF_HALL_STAFF" Association="Self.FK_STAFF_HALL_STAFF">
+            <End Role="STAFF" EntitySet="STAFF" />
+            <End Role="STAFF_HALL" EntitySet="STAFF_HALL" />
           </AssociationSet>
           <AssociationSet Name="FK_STAFF_PERSON" Association="Self.FK_STAFF_PERSON">
             <End Role="PERSON" EntitySet="PERSON" />
@@ -1151,6 +1235,24 @@ warning 6002: The table/view 'Attendance.dbo.VW_ABSENT_LOG' does not have a prim
             <End Role="ABSENT_LOG" EntitySet="ABSENT_LOG" />
           </AssociationSet>
           <EntitySet Name="VW_ABSENT_LOG" EntityType="AttendanceModel.VW_ABSENT_LOG" />
+          <EntitySet Name="STAFF_COURSE" EntityType="AttendanceModel.STAFF_COURSE" />
+          <EntitySet Name="STAFF_HALL" EntityType="AttendanceModel.STAFF_HALL" />
+          <AssociationSet Name="FK_STAFF_COURSE_COURSE" Association="AttendanceModel.FK_STAFF_COURSE_COURSE">
+            <End Role="COURSE" EntitySet="COURSE" />
+            <End Role="STAFF_COURSE" EntitySet="STAFF_COURSE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STAFF_HALL_HALL" Association="AttendanceModel.FK_STAFF_HALL_HALL">
+            <End Role="HALL" EntitySet="HALL" />
+            <End Role="STAFF_HALL" EntitySet="STAFF_HALL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STAFF_COURSE_STAFF" Association="AttendanceModel.FK_STAFF_COURSE_STAFF">
+            <End Role="STAFF" EntitySet="STAFF" />
+            <End Role="STAFF_COURSE" EntitySet="STAFF_COURSE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STAFF_HALL_STAFF" Association="AttendanceModel.FK_STAFF_HALL_STAFF">
+            <End Role="STAFF" EntitySet="STAFF" />
+            <End Role="STAFF_HALL" EntitySet="STAFF_HALL" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="ABSENT_LOG">
           <Key>
@@ -1213,6 +1315,7 @@ warning 6002: The table/view 'Attendance.dbo.VW_ABSENT_LOG' does not have a prim
           <NavigationProperty Name="PROGRAMME" Relationship="AttendanceModel.FK_COURSE_PROGRAMME" FromRole="COURSE" ToRole="PROGRAMME" />
           <NavigationProperty Name="STAFF" Relationship="AttendanceModel.FK_COURSE_STAFF" FromRole="COURSE" ToRole="STAFF" />
           <NavigationProperty Name="EVENT" Relationship="AttendanceModel.FK_EVENT_COURSE" FromRole="COURSE" ToRole="EVENT" />
+          <NavigationProperty Name="STAFF_COURSE" Relationship="AttendanceModel.FK_STAFF_COURSE_COURSE" FromRole="COURSE" ToRole="STAFF_COURSE" />
         </EntityType>
         <EntityType Name="DEPARTMENT">
           <Key>
@@ -1287,6 +1390,7 @@ warning 6002: The table/view 'Attendance.dbo.VW_ABSENT_LOG' does not have a prim
           <NavigationProperty Name="EVENT" Relationship="AttendanceModel.FK_EVENT_HALL" FromRole="HALL" ToRole="EVENT" />
           <NavigationProperty Name="STAFF" Relationship="AttendanceModel.FK_STAFF_HALL" FromRole="HALL" ToRole="STAFF" />
           <NavigationProperty Name="STUDENT" Relationship="AttendanceModel.FK_STUDENT_HALL" FromRole="HALL" ToRole="STUDENT" />
+          <NavigationProperty Name="STAFF_HALL" Relationship="AttendanceModel.FK_STAFF_HALL_HALL" FromRole="HALL" ToRole="STAFF_HALL" />
         </EntityType>
         <EntityType Name="LEVEL">
           <Key>
@@ -1417,6 +1521,8 @@ warning 6002: The table/view 'Attendance.dbo.VW_ABSENT_LOG' does not have a prim
           <NavigationProperty Name="HALL" Relationship="AttendanceModel.FK_STAFF_HALL" FromRole="STAFF" ToRole="HALL" />
           <NavigationProperty Name="PERSON" Relationship="AttendanceModel.FK_STAFF_PERSON" FromRole="STAFF" ToRole="PERSON" />
           <NavigationProperty Name="STAFF_TYPE" Relationship="AttendanceModel.FK_STAFF_STAFF_TYPE" FromRole="STAFF" ToRole="STAFF_TYPE" />
+          <NavigationProperty Name="STAFF_COURSE" Relationship="AttendanceModel.FK_STAFF_COURSE_STAFF" FromRole="STAFF" ToRole="STAFF_COURSE" />
+          <NavigationProperty Name="STAFF_HALL" Relationship="AttendanceModel.FK_STAFF_HALL_STAFF" FromRole="STAFF" ToRole="STAFF_HALL" />
         </EntityType>
         <EntityType Name="STAFF_TYPE">
           <Key>
@@ -1959,10 +2065,10 @@ warning 6002: The table/view 'Attendance.dbo.VW_ABSENT_LOG' does not have a prim
           <Property Name="Other_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Absent_Type_Id" Type="Int32" Nullable="false" />
           <Property Name="Student_Id" Type="Int64" Nullable="false" />
-          <Property Name="Duration_In_Days" Type="Int32" />
+          <Property Name="Duration_In_Days" Type="Int32" Nullable="false" />
           <Property Name="Start_Date" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="End_Date" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="Approved" Type="Boolean" />
+          <Property Name="Approved" Type="Boolean" Nullable="false" />
           <Property Name="Reject_Reason" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="Remark" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="User_Id" Type="Int64" />
@@ -1984,6 +2090,74 @@ warning 6002: The table/view 'Attendance.dbo.VW_ABSENT_LOG' does not have a prim
           <Property Name="Staff_Id" Type="Int64" />
           <Property Name="Activated" Type="Boolean" Nullable="false" />
         </EntityType>
+        <EntityType Name="STAFF_COURSE">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Staff_Id" Type="Int64" Nullable="false" />
+          <Property Name="Course_Id" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="COURSE" Relationship="AttendanceModel.FK_STAFF_COURSE_COURSE" FromRole="STAFF_COURSE" ToRole="COURSE" />
+          <NavigationProperty Name="STAFF" Relationship="AttendanceModel.FK_STAFF_COURSE_STAFF" FromRole="STAFF_COURSE" ToRole="STAFF" />
+        </EntityType>
+        <EntityType Name="STAFF_HALL">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Staff_Id" Type="Int64" Nullable="false" />
+          <Property Name="Hall_Id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="HALL" Relationship="AttendanceModel.FK_STAFF_HALL_HALL" FromRole="STAFF_HALL" ToRole="HALL" />
+          <NavigationProperty Name="STAFF" Relationship="AttendanceModel.FK_STAFF_HALL_STAFF" FromRole="STAFF_HALL" ToRole="STAFF" />
+        </EntityType>
+        <Association Name="FK_STAFF_COURSE_COURSE">
+          <End Type="AttendanceModel.COURSE" Role="COURSE" Multiplicity="1" />
+          <End Type="AttendanceModel.STAFF_COURSE" Role="STAFF_COURSE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COURSE">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="STAFF_COURSE">
+              <PropertyRef Name="Course_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STAFF_HALL_HALL">
+          <End Type="AttendanceModel.HALL" Role="HALL" Multiplicity="1" />
+          <End Type="AttendanceModel.STAFF_HALL" Role="STAFF_HALL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HALL">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="STAFF_HALL">
+              <PropertyRef Name="Hall_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STAFF_COURSE_STAFF">
+          <End Type="AttendanceModel.STAFF" Role="STAFF" Multiplicity="1" />
+          <End Type="AttendanceModel.STAFF_COURSE" Role="STAFF_COURSE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="STAFF">
+              <PropertyRef Name="Person_Id" />
+            </Principal>
+            <Dependent Role="STAFF_COURSE">
+              <PropertyRef Name="Staff_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STAFF_HALL_STAFF">
+          <End Type="AttendanceModel.STAFF" Role="STAFF" Multiplicity="1" />
+          <End Type="AttendanceModel.STAFF_HALL" Role="STAFF_HALL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="STAFF">
+              <PropertyRef Name="Person_Id" />
+            </Principal>
+            <Dependent Role="STAFF_HALL">
+              <PropertyRef Name="Staff_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2303,6 +2477,24 @@ warning 6002: The table/view 'Attendance.dbo.VW_ABSENT_LOG' does not have a prim
                 <ScalarProperty Name="Other_Name" ColumnName="Other_Name" />
                 <ScalarProperty Name="First_Name" ColumnName="First_Name" />
                 <ScalarProperty Name="Last_Name" ColumnName="Last_Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="STAFF_COURSE">
+            <EntityTypeMapping TypeName="AttendanceModel.STAFF_COURSE">
+              <MappingFragment StoreEntitySet="STAFF_COURSE">
+                <ScalarProperty Name="Course_Id" ColumnName="Course_Id" />
+                <ScalarProperty Name="Staff_Id" ColumnName="Staff_Id" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="STAFF_HALL">
+            <EntityTypeMapping TypeName="AttendanceModel.STAFF_HALL">
+              <MappingFragment StoreEntitySet="STAFF_HALL">
+                <ScalarProperty Name="Hall_Id" ColumnName="Hall_Id" />
+                <ScalarProperty Name="Staff_Id" ColumnName="Staff_Id" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

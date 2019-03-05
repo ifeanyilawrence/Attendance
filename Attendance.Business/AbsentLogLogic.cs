@@ -67,6 +67,8 @@ namespace Attendance.Business
                          ProgrammeId = a.Programme_Id,
                          LevelId = a.Level_Id,
                          Duration = a.Duration_In_Days,
+                         StartDate = a.Start_Date.ToLongDateString(),
+                         EndDate = a.End_Date.ToLongDateString(),
                          Accept = (bool)a.Approved,
                          RejectReason = string.IsNullOrEmpty(a.Reject_Reason) ? " " : a.Reject_Reason,
                          Remark = string.IsNullOrEmpty(a.Remark) ? " " : a.Remark,

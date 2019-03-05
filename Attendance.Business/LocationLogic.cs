@@ -8,18 +8,20 @@ using System.Threading.Tasks;
 
 namespace Attendance.Business
 {
-    public class HallLogic : BusinessBaseLogic<HALL>
+    public class LocationLogic : BusinessBaseLogic<LOCATION>
     {
-        public bool Modify(HALL model)
+        public bool Modify(LOCATION model)
         {
             try
             {
-                Expression<Func<HALL, bool>> selector = a => a.Id == model.Id;
-                HALL entity = GetEntityBy(selector);
+                Expression<Func<LOCATION, bool>> selector = a => a.Id == model.Id;
+                LOCATION entity = GetEntityBy(selector);
                 if (entity != null && entity.Id > 0)
                 {
                     entity.Name = model.Name;
                     entity.Description = model.Description;
+                    entity.Latitude = model.Latitude;
+                    entity.Longitude = model.Longitude;
                     entity.Active = model.Active;
 
                     int modifiedRecordCount = Save();

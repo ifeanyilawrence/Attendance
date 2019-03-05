@@ -83,6 +83,9 @@ namespace Attendance.Web.Areas.Admin.Controllers
                 }
                 List<AbsentLogModel> absentLogModels = JsonConvert.DeserializeObject<List<AbsentLogModel>>(updateArray);
                 AbsentLogLogic absentLogLogic = new AbsentLogLogic();
+                UserLogic userLogic = new UserLogic();
+
+                USER user = userLogic.GetEntityBy(u => u.Username == User.Identity.Name);
 
                 for (int i = 0; i < absentLogModels.Count; i++)
                 {
@@ -101,6 +104,8 @@ namespace Attendance.Web.Areas.Admin.Controllers
                             absentLog.Reject_Reason = absentLogModels[i].RejectReason;
                             absentLog.Remark = absentLogModels[i].Remark;
                         }
+
+                        absentLog.User_Id = user.Id;
 
                         var modified = absentLogLogic.Modify(absentLog);
                         if (modified)

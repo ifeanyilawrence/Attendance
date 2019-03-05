@@ -39,7 +39,7 @@
                     });
 
                     infoWindow.setPosition(pos);
-                    infoWindow.setContent('Current Location');
+                    infoWindow.setContent('Current Location. Cordinates{ lat: ' + position.coords.latitude.toFixed(6) + ', lng: ' + position.coords.longitude.toFixed(6) + ' }');
                     infoWindow.open(map, marker);
                     map.setCenter(pos);
 

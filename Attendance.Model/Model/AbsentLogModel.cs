@@ -23,5 +23,7 @@ namespace Attendance.Model.Model
         public bool Decline { get; set; }
         public string Remark { get; set; }
         public string RejectReason { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
     }
 }

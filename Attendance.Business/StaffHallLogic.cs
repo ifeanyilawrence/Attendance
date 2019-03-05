@@ -8,19 +8,18 @@ using System.Threading.Tasks;
 
 namespace Attendance.Business
 {
-    public class HallLogic : BusinessBaseLogic<HALL>
+    public class StaffHallLogic : BusinessBaseLogic<STAFF_HALL>
     {
-        public bool Modify(HALL model)
+        public bool Modify(STAFF_HALL model)
         {
             try
             {
-                Expression<Func<HALL, bool>> selector = a => a.Id == model.Id;
-                HALL entity = GetEntityBy(selector);
+                Expression<Func<STAFF_HALL, bool>> selector = a => a.Id == model.Id;
+                STAFF_HALL entity = GetEntityBy(selector);
                 if (entity != null && entity.Id > 0)
                 {
-                    entity.Name = model.Name;
-                    entity.Description = model.Description;
-                    entity.Active = model.Active;
+                    entity.Staff_Id = model.Staff_Id;
+                    entity.Hall_Id = model.Hall_Id;
 
                     int modifiedRecordCount = Save();
 

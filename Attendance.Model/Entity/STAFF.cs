@@ -17,6 +17,8 @@ namespace Attendance.Model.Entity
         public STAFF()
         {
             this.COURSE = new HashSet<COURSE>();
+            this.STAFF_COURSE = new HashSet<STAFF_COURSE>();
+            this.STAFF_HALL = new HashSet<STAFF_HALL>();
         }
     
         public long Person_Id { get; set; }
@@ -35,5 +37,7 @@ namespace Attendance.Model.Entity
         public virtual HALL HALL { get; set; }
         public virtual PERSON PERSON { get; set; }
         public virtual STAFF_TYPE STAFF_TYPE { get; set; }
+        public virtual ICollection<STAFF_COURSE> STAFF_COURSE { get; set; }
+        public virtual ICollection<STAFF_HALL> STAFF_HALL { get; set; }
     }
 }

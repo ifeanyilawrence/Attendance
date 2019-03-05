@@ -19,6 +19,7 @@ namespace Attendance.Model.Entity
             this.EVENT = new HashSet<EVENT>();
             this.STAFF = new HashSet<STAFF>();
             this.STUDENT = new HashSet<STUDENT>();
+            this.STAFF_HALL = new HashSet<STAFF_HALL>();
         }
     
         public int Id { get; set; }
@@ -29,5 +30,6 @@ namespace Attendance.Model.Entity
         public virtual ICollection<EVENT> EVENT { get; set; }
         public virtual ICollection<STAFF> STAFF { get; set; }
         public virtual ICollection<STUDENT> STUDENT { get; set; }
+        public virtual ICollection<STAFF_HALL> STAFF_HALL { get; set; }
     }
 }

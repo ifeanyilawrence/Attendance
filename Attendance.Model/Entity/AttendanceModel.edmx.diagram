@@ -67,6 +67,12 @@
         <AssociationConnector Association="AttendanceModel.FK_ATTENDANCE_ATTENDANCE_STATUS" />
         <AssociationConnector Association="AttendanceModel.FK_ABSENT_LOG_EVENT" />
         <EntityTypeShape EntityType="AttendanceModel.VW_ABSENT_LOG" Width="1.5" PointX="13.375" PointY="0.75" />
+        <EntityTypeShape EntityType="AttendanceModel.STAFF_COURSE" Width="1.5" PointX="15.5" PointY="8.875" />
+        <EntityTypeShape EntityType="AttendanceModel.STAFF_HALL" Width="1.5" PointX="14.25" PointY="16.625" />
+        <AssociationConnector Association="AttendanceModel.FK_STAFF_COURSE_COURSE" />
+        <AssociationConnector Association="AttendanceModel.FK_STAFF_HALL_HALL" />
+        <AssociationConnector Association="AttendanceModel.FK_STAFF_COURSE_STAFF" />
+        <AssociationConnector Association="AttendanceModel.FK_STAFF_HALL_STAFF" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

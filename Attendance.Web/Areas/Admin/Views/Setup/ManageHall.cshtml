@@ -1,0 +1,313 @@
+﻿@model Attendance.Web.Areas.Admin.Models.SetupViewModel
+@{
+    ViewBag.Title = "Hall";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<div class="element-wrapper">
+    @if (TempData["Message"] != null)
+    {
+        @Html.Partial("_Message", (Attendance.Model.Model.Message)TempData["Message"])
+    }
+
+        <div class="element-box-tp">
+            <h5 class="form-header">Manage Halls</h5>
+
+            <div class="element-box-tp">
+                <div class="controls-above-table">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <a class="btn btn-sm btn-secondary" href="#" onclick="addHall();">Add Hall</a>
+                        </div>
+                    </div>
+                </div>
+                @if (Model != null && Model.HallList != null && Model.HallList.Count > 0)
+                {
+                    <div class="table-responsive">
+                        <span id="loading" style="display:none"><img src="~/Content/images/loading.gif" width="40px" /></span>
+                        <table class="table table-bordered table-lg table-v2 table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        SN
+                                    </th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.HallList.Count; i++)
+                                {
+                                    var sn = i + 1;
+                                    <tr>
+                                        <td class="text-center">
+                                            @sn
+                                        </td>
+                                        <td class="text-center">@Model.HallList[i].Name</td>
+                                        <td class="text-center">@Model.HallList[i].Description</td>
+                                        @if (Model.HallList[i].Active)
+                                        {
+                                            <td class="text-center">
+                                                <div class="status-pill green" data-title="Active" data-toggle="tooltip"></div>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center">
+                                                <div class="status-pill red" data-title="Not Active" data-toggle="tooltip"></div>
+                                            </td>
+                                        }
+                                        <td class="row-actions">
+                                            <a class="success" href="#" data-title="Edit Hall" data-toggle="tooltip">
+                                                <i class="os-icon os-icon-ui-49" onclick="editHall(@Model.HallList[i].Id)"></i>
+                                            </a>
+                                        </td>
+                                        <td class="row-actions">
+                                            <a class="danger" href="#" data-title="Delete Hall" data-toggle="tooltip">
+                                                <i class="os-icon os-icon-close" onclick="deleteHall(@Model.HallList[i].Id)"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+
+            </div>
+        </div>
+</div>
+
+<div aria-hidden="true" aria-labelledby="mySmallModalLabel" class="modal fade bd-example-modal-sm" role="dialog" tabindex="-1" id="addHallModal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Hall</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="hallNameAdd">Name</label>
+                        <input class="form-control" required="required" type="text" id="hallNameAdd">
+                    </div>
+                    <div class="form-group">
+                        <label for="hallDescriptionAdd">Description</label>
+                        <input class="form-control" type="text" id="hallDescriptionAdd">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                <a class="btn btn-primary" onclick="createHall()" style="color:white">Add</a>
+                <span id="postLoadingAdd" style="display:none"><img src="~/Content/images/bx_loader.gif" width="20px" /></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div aria-hidden="true" aria-labelledby="mySmallModalLabel" class="modal fade bd-example-modal-sm" role="dialog" tabindex="-1" id="editHallModal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Hall</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group" style="display:none;">
+                        <label for="hallIdEdit">Id</label>
+                        <input class="form-control" required="required" type="text" id="hallIdEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="hallNameEdit">Name</label>
+                        <input class="form-control" required="required" type="text" id="hallNameEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="hallDescriptionEdit">Description</label>
+                        <input class="form-control" type="text" id="hallDescriptionEdit">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                <a class="btn btn-primary" onclick="saveHall()" style="color:white">Save</a>
+                <span id="postLoadingEdit" style="display:none"><img src="~/Content/images/bx_loader.gif" width="20px" /></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    function editHall(hallId) {
+
+        $("#loading").show();
+        
+        if (!hallId) {
+            swal("Oops!", "Missing parameter", "error");
+            $("#loading").hide();
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetHall", "Setup")',
+            dataType: 'json',
+            data: { hallId: hallId },
+            success: function (result) {
+                    if (result.IsError == false) {
+
+                        $("#hallIdEdit").val(result.HallId);
+                        $("#hallNameEdit").val(result.HallName);
+                        $("#hallDescriptionEdit").val(result.HallDescription);
+
+                        $("#loading").hide();
+
+                        $('#editHallModal').modal('show');
+                    } else {
+                        swal("Attention!", result.Message, "error");
+                        $("#loading").hide();
+                    }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#loading").hide();
+            }
+        });
+    }
+
+    function saveHall() {
+
+        $("#postLoadingEdit").show();
+
+        var hallId = $("#hallIdEdit").val();
+        var hallName = $("#hallNameEdit").val();
+        var hallDescription = $("#hallDescriptionEdit").val();
+
+        if (!hallId || !hallName) {
+            swal("Oops!", "Missing parameter", "error");
+            $("#postLoadingEdit").hide();
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("SaveHall", "Setup")',
+            dataType: 'json',
+            data: { hallId: hallId, name: hallName, description: hallDescription },
+            success: function (result) {
+                    if (result.IsError == false) {
+                        swal("Success!", result.Message, "success");
+                        location.reload(true);
+                    } else {
+                        swal("Attention!", result.Message, "error");
+                        $("#postLoadingEdit").hide();
+                    }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#postLoadingEdit").hide();
+            }
+        });
+    }
+
+    function addHall() {
+        $('#addHallModal').modal('show');
+    }
+
+    function createHall() {
+
+        $("#postLoadingAdd").show();
+        
+        var hallName = $("#hallNameAdd").val();
+        var hallDescription = $("#hallDescriptionAdd").val();
+
+        if (!hallName) {
+            swal("Oops!", "Missing parameter", "error");
+            $("#postLoadingAdd").hide();
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("CreateHall", "Setup")',
+            dataType: 'json',
+            data: { name: hallName, description: hallDescription },
+            success: function (result) {
+                    if (result.IsError == false) {
+                        swal("Success!", result.Message, "success");
+                        location.reload(true);
+                    } else {
+                        swal("Attention!", result.Message, "error");
+                        $("#postLoadingAdd").hide();
+                    }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#postLoadingAdd").hide();
+            }
+        });
+    }
+
+    function deleteHall(hallId) {
+        swal({
+            title: "Are you sure?",
+            text: "This Hall will no longer be available!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#f2b701",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel plx!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+                confirmDelete(hallId);
+            } else {
+                swal("Cancelled", "The delete action was cancelled.", "error");
+            }
+        });
+        return false;
+    }
+
+    function confirmDelete(hallId) {
+
+        $("#loading").show();
+        
+        if (!hallId) {
+            swal("Oops!", "Missing parameter", "error");
+            $("#loading").hide();
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteHall", "Setup")',
+            dataType: 'json',
+            data: { hallId: hallId },
+            success: function (result) {
+                    if (result.IsError == false) {
+                        
+                        $("#loading").hide();
+
+                        location.reload(true);
+                    } else {
+                        swal("Attention!", result.Message, "error");
+                        $("#loading").hide();
+                    }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#loading").hide();
+            }
+        });
+
+    }
+</script>

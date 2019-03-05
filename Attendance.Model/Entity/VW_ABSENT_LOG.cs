@@ -20,10 +20,10 @@ namespace Attendance.Model.Entity
         public string Other_Name { get; set; }
         public int Absent_Type_Id { get; set; }
         public long Student_Id { get; set; }
-        public Nullable<int> Duration_In_Days { get; set; }
+        public int Duration_In_Days { get; set; }
         public System.DateTime Start_Date { get; set; }
         public System.DateTime End_Date { get; set; }
-        public Nullable<bool> Approved { get; set; }
+        public bool Approved { get; set; }
         public string Reject_Reason { get; set; }
         public string Remark { get; set; }
         public Nullable<long> User_Id { get; set; }

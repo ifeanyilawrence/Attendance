@@ -55,6 +55,7 @@
     <Compile Include="AttendanceMembershipProviderLogic.cs" />
     <Compile Include="AttendanceRoleProvider.cs" />
     <Compile Include="BusinessBaseLogic.cs" />
+    <Compile Include="LocationLogic.cs" />
     <Compile Include="CourseLogic.cs" />
     <Compile Include="DepartmentLogic.cs" />
     <Compile Include="EventLogic.cs" />
@@ -69,6 +70,9 @@
     <Compile Include="RoleLogic.cs" />
     <Compile Include="GenderLogic.cs" />
     <Compile Include="SessionLogic.cs" />
+    <Compile Include="StaffCourseLogic.cs" />
+    <Compile Include="StaffHallLogic.cs" />
+    <Compile Include="StaffLogic.cs" />
     <Compile Include="StaffTypeLogic.cs" />
     <Compile Include="StudentLevelLogic.cs" />
     <Compile Include="StudentLogic.cs" />

@@ -1,0 +1,400 @@
+﻿@model Attendance.Web.Areas.Admin.Models.SetupViewModel
+@{
+    ViewBag.Title = "Courses";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<div class="element-wrapper">
+    @if (TempData["Message"] != null)
+    {
+        @Html.Partial("_Message", (Attendance.Model.Model.Message)TempData["Message"])
+    }
+
+        <div class="element-box-tp">
+            <h5 class="form-header">Manage Courses</h5>
+
+            <div class="element-box-tp">
+                <div class="controls-above-table">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <a class="btn btn-sm btn-secondary" href="#" onclick="addCourse();">Add a Course</a>
+                        </div>
+                    </div>
+                </div>
+                @if (Model != null && Model.CourseList != null && Model.CourseList.Count > 0)
+                {
+                    <div class="table-responsive">
+                        <span id="loading" style="display:none"><img src="~/Content/images/loading.gif" width="40px" /></span>
+                        <table class="table table-bordered table-lg table-v2 table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        SN
+                                    </th>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                    <th>Programme</th>
+                                    <th>Level</th>
+                                    <th>Department</th>
+                                    <th>Status</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.CourseList.Count; i++)
+                                {
+                                    var sn = i + 1;
+                                    <tr>
+                                        <td class="text-center">
+                                            @sn
+                                        </td>
+                                        <td class="text-center">@Model.CourseList[i].Code</td>
+                                        <td class="text-center">@Model.CourseList[i].Name</td>
+                                        <td class="text-center">@Model.CourseList[i].PROGRAMME.Name</td>
+                                        <td class="text-center">@Model.CourseList[i].LEVEL.Name</td>
+                                        <td class="text-center">@Model.CourseList[i].DEPARTMENT.Name</td>
+                                        @if (Model.CourseList[i].Active)
+                                        {
+                                            <td class="text-center">
+                                                <div class="status-pill green" data-title="Active" data-toggle="tooltip"></div>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center">
+                                                <div class="status-pill red" data-title="Not Active" data-toggle="tooltip"></div>
+                                            </td>
+                                        }
+                                        <td class="row-actions">
+                                            <a class="success" href="#" data-title="Edit Course" data-toggle="tooltip">
+                                                <i class="os-icon os-icon-ui-49" onclick="editCourse(@Model.CourseList[i].Id)"></i>
+                                            </a>
+                                        </td>
+                                        <td class="row-actions">
+                                            <a class="danger" href="#" data-title="Delete Course" data-toggle="tooltip">
+                                                <i class="os-icon os-icon-close" onclick="deleteCourse(@Model.CourseList[i].Id)"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+
+            </div>
+        </div>
+</div>
+
+<div aria-hidden="true" aria-labelledby="mySmallModalLabel" class="modal fade bd-example-modal-sm" role="dialog" tabindex="-1" id="addCourseModal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add A Course</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="dateRange">Course Code</label>
+                        <input class="form-control" required="required" type="text" id="courseCodeAdd">
+                    </div>
+                    <div class="form-group">
+                        <label for="dateRange">Course Name</label>
+                        <input class="form-control" required="required" type="text" id="courseNameAdd">
+                    </div>
+                    <div class="form-group">
+                        <label for="absentType"> Programme</label>
+                        <select class="form-control" id="programmeAdd" required="required">
+                            @{
+                                var programmes = (List<SelectListItem>)ViewBag.Programmes;
+                            }
+                            @for (int i = 0; i < programmes.Count(); i++)
+                            {
+                                <option value="@programmes[i].Value">@programmes[i].Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="absentType"> Level</label>
+                        <select class="form-control" id="levelAdd" required="required">
+                            @{
+                                var levels = (List<SelectListItem>)ViewBag.Levels;
+                            }
+                            @for (int i = 0; i < levels.Count(); i++)
+                            {
+                                <option value="@levels[i].Value">@levels[i].Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="absentType"> Department</label>
+                        <select class="form-control" id="departmentAdd" required="required">
+                            @{
+                                var departments = (List<SelectListItem>)ViewBag.Departments;
+                            }
+                            @for (int i = 0; i < departments.Count(); i++)
+                            {
+                                <option value="@departments[i].Value">@departments[i].Text</option>
+                            }
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                <a class="btn btn-primary" onclick="createCourse()" style="color:white">Add</a>
+                <span id="postLoadingAdd" style="display:none"><img src="~/Content/images/bx_loader.gif" width="20px" /></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div aria-hidden="true" aria-labelledby="mySmallModalLabel" class="modal fade bd-example-modal-sm" role="dialog" tabindex="-1" id="editCourseModal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Course</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group" style="display:none;">
+                        <label for="dateRange">Id</label>
+                        <input class="form-control" required="required" type="text" id="courseIdEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="dateRange">Course Code</label>
+                        <input class="form-control" required="required" type="text" id="courseCodeEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="dateRange">Course Name</label>
+                        <input class="form-control" required="required" type="text" id="courseNameEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="absentType"> Programme</label>
+                        <select class="form-control" id="programmeEdit" required="required">
+                            @{
+                                var programmesEdit = (List<SelectListItem>)ViewBag.Programmes;
+                            }
+                            @for (int i = 0; i < programmesEdit.Count(); i++)
+                            {
+                                <option value="@programmesEdit[i].Value">@programmesEdit[i].Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="absentType"> Level</label>
+                        <select class="form-control" id="levelEdit" required="required">
+                            @{
+                                var levelsEdit = (List<SelectListItem>)ViewBag.Levels;
+                            }
+                            @for (int i = 0; i < levelsEdit.Count(); i++)
+                            {
+                                <option value="@levelsEdit[i].Value">@levelsEdit[i].Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="absentType"> Department</label>
+                        <select class="form-control" id="departmentEdit" required="required">
+                            @{
+                                var departmentsEdit = (List<SelectListItem>)ViewBag.Departments;
+                            }
+                            @for (int i = 0; i < departmentsEdit.Count(); i++)
+                            {
+                                <option value="@departmentsEdit[i].Value">@departmentsEdit[i].Text</option>
+                            }
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                <a class="btn btn-primary" onclick="saveCourse()" style="color:white">Save</a>
+                <span id="postLoadingEdit" style="display:none"><img src="~/Content/images/bx_loader.gif" width="20px" /></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    function editCourse(courseId) {
+
+        $("#loading").show();
+        
+        if (!courseId) {
+            swal("Oops!", "Missing parameter", "error");
+            $("#loading").hide();
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetCourse", "Setup")',
+            dataType: 'json',
+            data: { courseId: courseId },
+            success: function (result) {
+                    if (result.IsError == false) {
+
+                        $("#courseIdEdit").val(result.CourseId);
+                        $("#courseCodeEdit").val(result.CourseCode);
+                        $("#courseNameEdit").val(result.CourseName);
+                        $("#programmeEdit").val(result.ProgrammeId);
+                        $("#departmentEdit").val(result.DepartmentId);
+                        $("#levelEdit").val(result.LevelId);
+
+                        $("#loading").hide();
+
+                        $('#editCourseModal').modal('show');
+                    } else {
+                        swal("Attention!", result.Message, "error");
+                        $("#loading").hide();
+                    }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#loading").hide();
+            }
+        });
+    }
+
+    function saveCourse() {
+
+        $("#postLoadingEdit").show();
+
+        var courseId = $("#courseIdEdit").val();
+        var courseCode = $("#courseCodeEdit").val();
+        var courseName = $("#courseNameEdit").val();
+        var progId = $("#programmeEdit option:selected").val();
+        var deptId = $("#departmentEdit option:selected").val();
+        var levelId = $("#levelEdit option:selected").val();
+
+        if (!courseId || !courseCode || !courseName || !progId || !deptId || !levelId) {
+            swal("Oops!", "Missing parameter", "error");
+            $("#postLoadingEdit").hide();
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("SaveCourse", "Setup")',
+            dataType: 'json',
+            data: { courseId: courseId, code: courseCode, name: courseName, progId: progId, deptId: deptId, levelId: levelId },
+            success: function (result) {
+                    if (result.IsError == false) {
+                        swal("Success!", result.Message, "success");
+                        location.reload(true);
+                    } else {
+                        swal("Attention!", result.Message, "error");
+                        $("#postLoadingEdit").hide();
+                    }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#postLoadingEdit").hide();
+            }
+        });
+    }
+
+    function addCourse() {
+        $('#addCourseModal').modal('show');
+    }
+
+    function createCourse() {
+
+        $("#postLoadingAdd").show();
+        
+        var courseCode = $("#courseCodeAdd").val();
+        var courseName = $("#courseNameAdd").val();
+        var progId = $("#programmeAdd option:selected").val();
+        var deptId = $("#departmentAdd option:selected").val();
+        var levelId = $("#levelAdd option:selected").val();
+
+        if (!courseCode || !courseName || !progId || !deptId || !levelId) {
+            swal("Oops!", "Missing parameter", "error");
+            $("#postLoadingAdd").hide();
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("CreateCourse", "Setup")',
+            dataType: 'json',
+            data: { code: courseCode, name: courseName, progId: progId, deptId: deptId, levelId: levelId },
+            success: function (result) {
+                    if (result.IsError == false) {
+                        swal("Success!", result.Message, "success");
+                        location.reload(true);
+                    } else {
+                        swal("Attention!", result.Message, "error");
+                        $("#postLoadingAdd").hide();
+                    }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#postLoadingAdd").hide();
+            }
+        });
+    }
+
+    function deleteCourse(courseId) {
+        swal({
+            title: "Are you sure?",
+            text: "This course will no longer be available!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#f2b701",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel plx!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+                confirmDelete(courseId);
+            } else {
+                swal("Cancelled", "The delete action was cancelled.", "error");
+            }
+        });
+        return false;
+    }
+
+    function confirmDelete(courseId) {
+
+        $("#loading").show();
+        
+        if (!courseId) {
+            swal("Oops!", "Missing parameter", "error");
+            $("#loading").hide();
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteCourse", "Setup")',
+            dataType: 'json',
+            data: { courseId: courseId },
+            success: function (result) {
+                    if (result.IsError == false) {
+                        
+                        $("#loading").hide();
+
+                        location.reload(true);
+                    } else {
+                        swal("Attention!", result.Message, "error");
+                        $("#loading").hide();
+                    }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#loading").hide();
+            }
+        });
+
+    }
+</script>

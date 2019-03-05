@@ -17,6 +17,7 @@ namespace Attendance.Model.Entity
         public COURSE()
         {
             this.EVENT = new HashSet<EVENT>();
+            this.STAFF_COURSE = new HashSet<STAFF_COURSE>();
         }
     
         public long Id { get; set; }
@@ -33,5 +34,6 @@ namespace Attendance.Model.Entity
         public virtual PROGRAMME PROGRAMME { get; set; }
         public virtual STAFF STAFF { get; set; }
         public virtual ICollection<EVENT> EVENT { get; set; }
+        public virtual ICollection<STAFF_COURSE> STAFF_COURSE { get; set; }
     }
 }

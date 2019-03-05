@@ -1,0 +1,158 @@
+﻿@model Attendance.Web.Areas.Admin.Models.SetupViewModel
+@{
+    ViewBag.Title = "Hall Allocation";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<div class="element-wrapper">
+    @if (TempData["Message"] != null)
+    {
+        @Html.Partial("_Message", (Attendance.Model.Model.Message)TempData["Message"])
+    }
+
+    <div class="element-box-tp">
+            <h5 class="form-header">Allocate Hall</h5>
+
+            <div class="element-box-tp">
+                <div class="controls-above-table">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <a class="btn btn-sm btn-secondary" href="#" onclick="allocateHall();">Allocate Hall</a>
+                        </div>
+                    </div>
+                </div>
+                @if (Model != null && Model.StaffHallList != null && Model.StaffHallList.Count > 0)
+                {
+                    <div class="table-responsive">
+                        <span id="loading" style="display:none"><img src="~/Content/images/loading.gif" width="40px" /></span>
+                        <table class="table table-bordered table-lg table-v2 table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        SN
+                                    </th>
+                                    <th>Hall Name</th>
+                                    <th>Staff</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.StaffHallList.Count; i++)
+                                {
+                                    var sn = i + 1;
+                                    <tr>
+                                        <td class="text-center">
+                                            @sn
+                                        </td>
+                                        <td class="text-center">@Model.StaffHallList[i].HALL.Name</td>
+                                        <td class="text-center">@Model.StaffHallList[i].STAFF.PERSON.Last_Name @Model.StaffHallList[i].STAFF.PERSON.First_Name @Model.StaffHallList[i].STAFF.PERSON.Other_Name</td>
+                                        @if (Model.StaffHallList[i].HALL.Active)
+                                        {
+                                            <td class="text-center">
+                                                <div class="status-pill green" data-title="Active" data-toggle="tooltip"></div>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center">
+                                                <div class="status-pill red" data-title="Not Active" data-toggle="tooltip"></div>
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+
+            </div>
+        </div>
+</div>
+
+<div aria-hidden="true" aria-labelledby="mySmallModalLabel" class="modal fade bd-example-modal-sm" role="dialog" tabindex="-1" id="allocateHallModal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Allocate Hall</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="hall"> Hall</label>
+                        <select class="form-control" id="hall" required="required">
+                            @{
+                                var halls = (List<SelectListItem>)ViewBag.Halls;
+                            }
+                            @for (int i = 0; i < halls.Count(); i++)
+                            {
+                                <option value="@halls[i].Value">@halls[i].Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="staff"> Staff</label>
+                        <select class="form-control" id="staff" required="required">
+                            @{
+                                var staff = (List<SelectListItem>)ViewBag.Staff;
+                            }
+                            @for (int i = 0; i < staff.Count(); i++)
+                            {
+                                <option value="@staff[i].Value">@staff[i].Text</option>
+                            }
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                <a class="btn btn-primary" onclick="saveAllocation()" style="color:white">Allocate</a>
+                <span id="postLoadingAdd" style="display:none"><img src="~/Content/images/bx_loader.gif" width="20px" /></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    function allocateHall() {
+        $('#allocateHallModal').modal('show');
+    }
+
+    function saveAllocation() {
+
+        $("#postLoadingAdd").show();
+        
+        var hallId = $("#hall option:selected").val();
+        var staffId = $("#staff option:selected").val();
+
+        if (!hallId || !staffId) {
+            swal("Oops!", "Missing parameter", "error");
+            $("#postLoadingAdd").hide();
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("AllocateHall", "Setup")',
+            dataType: 'json',
+            data: { hallId: hallId, staffId: staffId },
+            success: function (result) {
+                    if (result.IsError == false) {
+                        swal("Success!", result.Message, "success");
+                        location.reload(true);
+                    } else {
+                        swal("Attention!", result.Message, "error");
+                        $("#postLoadingAdd").hide();
+                    }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#postLoadingAdd").hide();
+            }
+        });
+    }
+    
+</script>

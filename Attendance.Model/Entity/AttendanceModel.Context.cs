@@ -50,5 +50,7 @@ namespace Attendance.Model.Entity
         public virtual DbSet<USER> USER { get; set; }
         public virtual DbSet<ATTENDANCE_STATUS> ATTENDANCE_STATUS { get; set; }
         public virtual DbSet<VW_ABSENT_LOG> VW_ABSENT_LOG { get; set; }
+        public virtual DbSet<STAFF_COURSE> STAFF_COURSE { get; set; }
+        public virtual DbSet<STAFF_HALL> STAFF_HALL { get; set; }
     }
 }

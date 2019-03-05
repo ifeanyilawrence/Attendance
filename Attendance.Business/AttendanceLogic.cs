@@ -59,7 +59,7 @@ namespace Attendance.Business
             }
         }
 
-        private bool Modify(ATTENDANCE attendance)
+        public bool Modify(ATTENDANCE attendance)
         {
             try
             {

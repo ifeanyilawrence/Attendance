@@ -1,0 +1,339 @@
+﻿@model Attendance.Web.Areas.Admin.Models.SetupViewModel
+@{
+    ViewBag.Title = "Location";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<div class="element-wrapper">
+    @if (TempData["Message"] != null)
+    {
+        @Html.Partial("_Message", (Attendance.Model.Model.Message)TempData["Message"])
+    }
+
+        <div class="element-box-tp">
+            <h5 class="form-header">Manage Locations</h5>
+
+            <div class="element-box-tp">
+                <div class="controls-above-table">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <a class="btn btn-sm btn-secondary" href="#" onclick="addLocation();">Add Location</a>
+                        </div>
+                    </div>
+                </div>
+                @if (Model != null && Model.LocationList != null && Model.LocationList.Count > 0)
+                {
+                    <div class="table-responsive">
+                        <span id="loading" style="display:none"><img src="~/Content/images/loading.gif" width="40px" /></span>
+                        <table class="table table-bordered table-lg table-v2 table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        SN
+                                    </th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Longitude</th>
+                                    <th>Latitude</th>
+                                    <th>Status</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.LocationList.Count; i++)
+                                {
+                                    var sn = i + 1;
+                                    <tr>
+                                        <td class="text-center">
+                                            @sn
+                                        </td>
+                                        <td class="text-center">@Model.LocationList[i].Name</td>
+                                        <td class="text-center">@Model.LocationList[i].Description</td>
+                                        <td class="text-center">@Model.LocationList[i].Longitude</td>
+                                        <td class="text-center">@Model.LocationList[i].Latitude</td>
+                                        @if (Model.LocationList[i].Active)
+                                        {
+                                            <td class="text-center">
+                                                <div class="status-pill green" data-title="Active" data-toggle="tooltip"></div>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center">
+                                                <div class="status-pill red" data-title="Not Active" data-toggle="tooltip"></div>
+                                            </td>
+                                        }
+                                        <td class="row-actions">
+                                            <a class="success" href="#" data-title="Edit Location" data-toggle="tooltip">
+                                                <i class="os-icon os-icon-ui-49" onclick="editLocation(@Model.LocationList[i].Id)"></i>
+                                            </a>
+                                        </td>
+                                        <td class="row-actions">
+                                            <a class="danger" href="#" data-title="Delete Location" data-toggle="tooltip">
+                                                <i class="os-icon os-icon-close" onclick="deleteLocation(@Model.LocationList[i].Id)"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+
+            </div>
+        </div>
+</div>
+
+<div aria-hidden="true" aria-labelledby="mySmallModalLabel" class="modal fade bd-example-modal-sm" role="dialog" tabindex="-1" id="addLocationModal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Location</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="locationNameAdd">Name</label>
+                        <input class="form-control" required="required" type="text" id="locationNameAdd">
+                    </div>
+                    <div class="form-group">
+                        <label for="locationDescriptionAdd">Description</label>
+                        <input class="form-control" type="text" id="locationDescriptionAdd">
+                    </div>
+                    <div class="form-group">
+                        <label for="longitudeAdd">Longitude</label>
+                        <input class="form-control" required="required" type="number" id="longitudeAdd">
+                    </div>
+                    <div class="form-group">
+                        <label for="latitudeAdd">Latitude</label>
+                        <input class="form-control" required="required" type="number" id="latitudeAdd">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                <a class="btn btn-primary" onclick="createLocation()" style="color:white">Add</a>
+                <span id="postLoadingAdd" style="display:none"><img src="~/Content/images/bx_loader.gif" width="20px" /></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div aria-hidden="true" aria-labelledby="mySmallModalLabel" class="modal fade bd-example-modal-sm" role="dialog" tabindex="-1" id="editLocationModal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Location</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group" style="display:none;">
+                        <label for="locationIdEdit">Id</label>
+                        <input class="form-control" required="required" type="text" id="locationIdEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="locationNameEdit">Name</label>
+                        <input class="form-control" required="required" type="text" id="locationNameEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="locationDescriptionEdit">Description</label>
+                        <input class="form-control" type="text" id="locationDescriptionEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="longitudeEdit">Longitude</label>
+                        <input class="form-control" required="required" type="number" id="longitudeEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="latitudeEdit">Latitude</label>
+                        <input class="form-control" required="required" type="number" id="latitudeEdit">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                <a class="btn btn-primary" onclick="saveLocation()" style="color:white">Save</a>
+                <span id="postLoadingEdit" style="display:none"><img src="~/Content/images/bx_loader.gif" width="20px" /></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    function editLocation(locationId) {
+
+        $("#loading").show();
+        
+        if (!locationId) {
+            swal("Oops!", "Missing parameter", "error");
+            $("#loading").hide();
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetLocation", "Setup")',
+            dataType: 'json',
+            data: { locationId: locationId },
+            success: function (result) {
+                    if (result.IsError == false) {
+
+                        $("#locationIdEdit").val(result.LocationId);
+                        $("#locationNameEdit").val(result.LocationName);
+                        $("#locationDescriptionEdit").val(result.LocationDescription);
+                        $("#longitudeEdit").val(result.Longitude);
+                        $("#latitudeEdit").val(result.Latitude);
+
+                        $("#loading").hide();
+
+                        $('#editLocationModal').modal('show');
+                    } else {
+                        swal("Attention!", result.Message, "error");
+                        $("#loading").hide();
+                    }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#loading").hide();
+            }
+        });
+    }
+
+    function saveLocation() {
+
+        $("#postLoadingEdit").show();
+
+        var locationId = $("#locationIdEdit").val();
+        var locationName = $("#locationNameEdit").val();
+        var locationDescription = $("#locationDescriptionEdit").val();
+        var longitude = $("#longitudeEdit").val();
+        var latitude = $("#latitudeEdit").val();
+
+        if (!locationId || !locationName || !longitude || !latitude) {
+            swal("Oops!", "Missing parameter", "error");
+            $("#postLoadingEdit").hide();
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("SaveLocation", "Setup")',
+            dataType: 'json',
+            data: { locationId: locationId, name: locationName, description: locationDescription, longitude: longitude, latitude: latitude},
+            success: function (result) {
+                    if (result.IsError == false) {
+                        swal("Success!", result.Message, "success");
+                        location.reload(true);
+                    } else {
+                        swal("Attention!", result.Message, "error");
+                        $("#postLoadingEdit").hide();
+                    }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#postLoadingEdit").hide();
+            }
+        });
+    }
+
+    function addLocation() {
+        $('#addLocationModal').modal('show');
+    }
+
+    function createLocation() {
+
+        $("#postLoadingAdd").show();
+        
+        var locationName = $("#locationNameAdd").val();
+        var locationDescription = $("#locationDescriptionAdd").val();
+        var longitude = $("#longitudeAdd").val();
+        var latitude = $("#latitudeAdd").val();
+
+        if (!locationName || !longitude || !latitude) {
+            swal("Oops!", "Missing parameter", "error");
+            $("#postLoadingAdd").hide();
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("CreateLocation", "Setup")',
+            dataType: 'json',
+            data: { name: locationName, description: locationDescription, longitude: longitude, latitude: latitude },
+            success: function (result) {
+                    if (result.IsError == false) {
+                        swal("Success!", result.Message, "success");
+                        location.reload(true);
+                    } else {
+                        swal("Attention!", result.Message, "error");
+                        $("#postLoadingAdd").hide();
+                    }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#postLoadingAdd").hide();
+            }
+        });
+    }
+
+    function deleteLocation(locationId) {
+        swal({
+            title: "Are you sure?",
+            text: "This location will no longer be available!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#f2b701",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel plx!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+                confirmDelete(locationId);
+            } else {
+                swal("Cancelled", "The delete action was cancelled.", "error");
+            }
+        });
+        return false;
+    }
+
+    function confirmDelete(locationId) {
+
+        $("#loading").show();
+        
+        if (!locationId) {
+            swal("Oops!", "Missing parameter", "error");
+            $("#loading").hide();
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteLocation", "Setup")',
+            dataType: 'json',
+            data: { locationId: locationId },
+            success: function (result) {
+                    if (result.IsError == false) {
+                        
+                        $("#loading").hide();
+
+                        location.reload(true);
+                    } else {
+                        swal("Attention!", result.Message, "error");
+                        $("#loading").hide();
+                    }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#loading").hide();
+            }
+        });
+
+    }
+</script>

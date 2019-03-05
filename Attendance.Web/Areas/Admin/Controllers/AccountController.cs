@@ -22,8 +22,10 @@ namespace Attendance.Web.Areas.Admin.Controllers
             {
                 AccountViewModel viewModel = new AccountViewModel();
 
+                string[] rolesToSkip = { "1", "6" };
+
                 ViewBag.Gender = viewModel.GenderSelectList;
-                ViewBag.Role = viewModel.RoleSelectList;
+                ViewBag.Role = viewModel.RoleSelectList.Where(r => !rolesToSkip.Contains(r.Value)).ToList();
                 ViewBag.StaffType = viewModel.StaffTypeSelectList;
             }
             catch (Exception ex)
