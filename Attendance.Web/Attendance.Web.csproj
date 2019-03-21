@@ -141,11 +141,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
+    <Compile Include="Areas\Admin\Controllers\EventController.cs" />
     <Compile Include="Areas\Admin\Controllers\MenuController.cs" />
     <Compile Include="Areas\Admin\Controllers\ReportController.cs" />
     <Compile Include="Areas\Admin\Controllers\SetupController.cs" />
     <Compile Include="Areas\Admin\Models\AccountViewModel.cs" />
     <Compile Include="Areas\Admin\Models\MenuViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\EventViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SetupViewModel.cs" />
     <Compile Include="Areas\Security\Controllers\AccountController.cs" />
     <Compile Include="Areas\Security\SecurityAreaRegistration.cs" />
@@ -164,6 +166,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-material-datetimepicker.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -185,6 +188,7 @@
     <Content Include="Content\select2.min.css" />
     <Content Include="Content\slick.css" />
     <Content Include="Content\sweetalert.css" />
+    <Content Include="Scripts\bootstrap-material-datetimepicker.js" />
     <Content Include="Scripts\dataTables.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
     <Content Include="Scripts\sweetalert.min.js" />
@@ -222,6 +226,10 @@
     <Content Include="Areas\Admin\Views\Setup\ManageHall.cshtml" />
     <Content Include="Areas\Admin\Views\Setup\CourseAllocation.cshtml" />
     <Content Include="Areas\Admin\Views\Setup\HallAllocation.cshtml" />
+    <Content Include="Areas\Admin\Views\Event\ViewEventsByDate.cshtml" />
+    <Content Include="Areas\Admin\Views\Event\GetAttendance.cshtml" />
+    <Content Include="Areas\Admin\Views\Event\ViewAttendance.cshtml" />
+    <Content Include="Areas\Admin\Views\Event\SemesterAttendance.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\button.js" />
     <Content Include="Scripts\carousel.js" />
@@ -257,6 +265,7 @@
     <Content Include="Scripts\slick.min.js" />
     <Content Include="Scripts\tab.js" />
     <Content Include="Scripts\tether.min.js" />
+    <Content Include="Scripts\timepickerinitializer.js" />
     <Content Include="Scripts\toastr.js" />
     <Content Include="Scripts\tooltip.js" />
     <Content Include="Scripts\util.js" />

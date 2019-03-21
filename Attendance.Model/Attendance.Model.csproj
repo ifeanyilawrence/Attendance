@@ -147,7 +147,9 @@
     <Compile Include="Model\AbsentLogModel.cs" />
     <Compile Include="Model\AttendanceStatuses.cs" />
     <Compile Include="Model\Departments.cs" />
+    <Compile Include="Model\ATTENDANCE.cs" />
     <Compile Include="Model\EVENT.cs" />
+    <Compile Include="Model\EventTypes.cs" />
     <Compile Include="Model\JsonResponseModel.cs" />
     <Compile Include="Model\Message.cs" />
     <Compile Include="Model\Programmes.cs" />

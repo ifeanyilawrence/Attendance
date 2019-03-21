@@ -41,7 +41,9 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,6 +57,8 @@
     <Compile Include="AttendanceMembershipProviderLogic.cs" />
     <Compile Include="AttendanceRoleProvider.cs" />
     <Compile Include="BusinessBaseLogic.cs" />
+    <Compile Include="DownloadFileActionResult.cs" />
+    <Compile Include="EventTypeLogic.cs" />
     <Compile Include="LocationLogic.cs" />
     <Compile Include="CourseLogic.cs" />
     <Compile Include="DepartmentLogic.cs" />

@@ -30,5 +30,13 @@ namespace Attendance.Model.Model
         public int HallId { get; set; }
         public string HallName { get; set; }
         public string HallDescription { get; set; }
+        public long EventId { get; set; }
+        public int EventTypeId { get; set; }
+        public string EventStart { get; set; }
+        public string EventEnd { get; set; }
+        public string Date { get; set; }
+        public int SessionId { get; set; }
+        public bool EventActive { get; set; }
+        public bool IsWeekly { get; set; }
     }
 }

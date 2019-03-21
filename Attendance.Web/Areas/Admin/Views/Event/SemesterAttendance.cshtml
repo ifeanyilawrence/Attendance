@@ -1,0 +1,201 @@
+﻿@model Attendance.Web.Areas.Admin.Models.EventViewModel
+@{
+    ViewBag.Title = "Attendance";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<div class="element-wrapper">
+    @if (TempData["Message"] != null)
+    {
+        @Html.Partial("_Message", (Attendance.Model.Model.Message)TempData["Message"])
+    }
+    <div class="element-box-tp">
+        <h5 class="form-header">Attendance</h5>
+        <div class="controls-above-table">
+
+            @using (Html.BeginForm("SemesterAttendance", "Event", new { Area = "Admin" }, FormMethod.Post))
+            {
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="session"> Session</label>
+                            @Html.DropDownListFor(m => m.Session.Id, (IEnumerable<SelectListItem>)ViewBag.Sessions, new { @class = "form-control", id = "session", required = "required" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="programme"> Programme</label>
+                            @Html.DropDownListFor(m => m.Programme.Id, (IEnumerable<SelectListItem>)ViewBag.Programmes, new { @class = "form-control", id = "programme", required = "required" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="department"> Department</label>
+                            @Html.DropDownListFor(m => m.Department.Id, (IEnumerable<SelectListItem>)ViewBag.Departments, new { @class = "form-control", id = "department", required = "required" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="level"> Level</label>
+                            @Html.DropDownListFor(m => m.Level.Id, (IEnumerable<SelectListItem>)ViewBag.Levels, new { @class = "form-control", id = "level", required = "required" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="eventType"> Event Type</label>
+                            @Html.DropDownListFor(m => m.EventType.Id, (IEnumerable<SelectListItem>)ViewBag.EventTypes, new { @class = "form-control", id = "eventType", required = "required", onchange = "getCourses()" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="display:none" id="courseDiv">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="course"> Course</label>
+                            @Html.DropDownListFor(m => m.Course.Id, (IEnumerable<SelectListItem>)ViewBag.Courses, new { @class = "form-control", id = "course" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="display:none" id="hallDiv">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="hall"> Hall</label>
+                            @Html.DropDownListFor(m => m.Hall.Id, (IEnumerable<SelectListItem>)ViewBag.Halls, new { @class = "form-control", id = "hall" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-buttons-w col-md-2">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
+            }
+
+        </div>
+            </div>
+    <div class="element-box-tp">
+
+        @if (Model != null && Model.AttendanceList != null && Model.AttendanceList.Count > 0)
+        {
+            <div class="row">
+                <div class="col-sm-6">
+                    @Html.ActionLink("Donwload", "DownloadSemesterAttendance", "Event", new { Area = "Admin", attendanceId = Attendance.Web.Models.Utility.Encrypt(Model.AttendanceList[0].EVENT.Id.ToString()) }, new { @class = "btn btn-sm btn-secondary" })
+                </div>
+            </div>
+            <br />
+
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-v2 table-striped">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    SN
+                                </th>
+                                <th>Name</th>
+                                <th>Reg. Number</th>
+                                <th>Type</th>
+                                <th>Course / Hall</th>
+                                <th>Percentage</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.AttendanceList.Count; i++)
+                            {
+                                var sn = i + 1;
+                                <tr>
+                                    <td class="text-center">
+                                        @sn
+                                    </td>
+                                    <td class="text-center">@Model.AttendanceList[i].STUDENT.PERSON.Last_Name @Model.AttendanceList[i].STUDENT.PERSON.First_Name @Model.AttendanceList[i].STUDENT.PERSON.Other_Name</td>
+                                    <td class="text-center">@Model.AttendanceList[i].STUDENT.Matric_Number</td>
+                                    <td class="text-center">@Model.AttendanceList[i].EVENT.EVENT_TYPE.Name</td>
+                                    @if (Model.AttendanceList[i].EVENT.COURSE != null)
+                                    {
+                                        <td class="text-center">@Model.AttendanceList[i].EVENT.COURSE.Name</td>
+                                    }
+                                    else if (Model.AttendanceList[i].EVENT.HALL != null)
+                                    {
+                                        <td class="text-center">@Model.AttendanceList[i].EVENT.HALL.Name</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                    <td class="text-center">@Model.AttendanceList[i].Percentage %</td>
+                                    @if (Model.AttendanceList[i].IsEligible)
+                                    {
+                                        <td class="text-center">Eligible</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center">Not Eligible</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        }
+
+    </div>
+</div>
+<script>
+
+    function getCourses() {
+
+        var eventTypeId = $("#eventType").val();
+        if (!eventTypeId) {
+            return;
+        }
+
+        if (eventTypeId == 1 ) {
+            $("#courseDiv").show();
+            $("#hallDiv").hide();
+        }
+        if (eventTypeId == 2) {
+            $("#hallDiv").show();
+            $("#courseDiv").hide();
+            $("#course").empty();
+
+            return;
+        }
+
+        if (!$("#programme").val() || !$("#department").val() || !$("#level").val()) {
+            swal("Attention!", "Please select the programme, department and level.", "error");
+            return;
+        }
+
+        $("#course").empty();
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetCourses", "Event")',
+            dataType: 'json',
+            data: { progId: $("#programme").val(), deptId: $("#department").val(), levelId: $("#level").val() },
+            success: function (courses) {
+                $.each(courses, function (i, course) {
+                    $("#course").append('<option value="' + course.Value + '">' +
+                        course.Text + '</option>');
+                });
+            },
+            error: function (ex) {
+                swal("Oops!", "Failed to retreive courses " + ex.statusText, "error");
+            }
+        });
+    }
+
+   
+</script>

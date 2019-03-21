@@ -1,0 +1,81 @@
+﻿@model Attendance.Web.Areas.Admin.Models.EventViewModel
+@{
+    ViewBag.Title = "Attendance";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<div class="element-wrapper">
+    @if (TempData["Message"] != null)
+    {
+        @Html.Partial("_Message", (Attendance.Model.Model.Message)TempData["Message"])
+    }
+
+    <div class="element-box-tp">
+        <h5 class="form-header">Attendance</h5>
+
+        <div class="row">
+                <div class="col-sm-6">
+                    @Html.ActionLink("Donwload", "DownloadAttendance", "Event", new { Area = "Admin", eventId = Attendance.Web.Models.Utility.Encrypt(Model.EventId.ToString()) }, new { @class= "btn btn-sm btn-secondary" })
+                </div>
+        </div>
+        <br />
+
+        @Html.HiddenFor(m => m.EventId)
+
+        <div class="element-box-tp">
+            @if (Model != null && Model.AttendanceList != null && Model.AttendanceList.Count > 0)
+            {
+                <div class="table-responsive">
+                    <table class="table table-bordered table-lg table-v2 table-striped">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    SN
+                                </th>
+                                <th>Name</th>
+                                <th>Reg. Number</th>
+                                <th>Type</th>
+                                <th>Course / Hall</th>
+                                <th>Location</th>
+                                <th>Date</th>
+                                <th>Time Taken</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.AttendanceList.Count; i++)
+                            {
+                                var sn = i + 1;
+                                <tr>
+                                    <td class="text-center">
+                                        @sn
+                                    </td>
+                                    <td class="text-center">@Model.AttendanceList[i].STUDENT.PERSON.Last_Name @Model.AttendanceList[i].STUDENT.PERSON.First_Name @Model.AttendanceList[i].STUDENT.PERSON.Other_Name</td>
+                                    <td class="text-center">@Model.AttendanceList[i].STUDENT.Matric_Number</td>
+                                    <td class="text-center">@Model.AttendanceList[i].EVENT.EVENT_TYPE.Name</td>
+                                    @if (Model.AttendanceList[i].EVENT.COURSE != null)
+                                    {
+                                        <td class="text-center">@Model.AttendanceList[i].EVENT.COURSE.Name</td>
+                                    }
+                                    else if (Model.AttendanceList[i].EVENT.HALL != null)
+                                    {
+                                        <td class="text-center">@Model.AttendanceList[i].EVENT.HALL.Name</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                    <td class="text-center">@Model.AttendanceList[i].EVENT.LOCATION.Name</td>
+                                    <td class="text-center">@Model.AttendanceList[i].EVENT.Date.ToLongDateString()</td>
+                                    <td class="text-center">@Model.AttendanceList[i].Time_Taken.ToLongTimeString()</td>
+                                    <td class="text-center">@Model.AttendanceList[i].ATTENDANCE_STATUS.Name</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

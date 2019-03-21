@@ -1,0 +1,720 @@
+﻿@model Attendance.Web.Areas.Admin.Models.EventViewModel
+@{
+    ViewBag.Title = "Courses";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<div class="element-wrapper">
+    @if (TempData["Message"] != null)
+    {
+        @Html.Partial("_Message", (Attendance.Model.Model.Message)TempData["Message"])
+    }
+    <div class="element-box-tp">
+        <h5 class="form-header">Manage Events</h5>
+        <div class="controls-above-table">
+
+            @using (Html.BeginForm("ViewEventsByDate", "Event", new { Area = "Admin" }, FormMethod.Post))
+            {
+                <div class="form-group">
+                    <label for="Date"> Choose Date</label>
+                    <div class="date-input">
+                        @Html.TextBoxFor(m => m.DateString, new { @class = "single-daterange form-control", placeholder = "select date", type = "text", autocomplete = "off" })
+                        @*<input class="single-daterange form-control" placeholder="select date" type="text" value="@DateTime.Now.Day/@DateTime.Now.Month/@DateTime.Now.Year">*@
+                    </div>
+                </div>
+                <div class="form-buttons-w col-md-2">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
+            }
+
+            <br />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-sm-6">
+                        <a class="btn btn-sm btn-secondary" href="#" onclick="addEvent();">Add Event</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="element-box-tp">
+
+        @if (Model != null && Model.Events != null && Model.Events.Count > 0)
+        {
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <span id="loading" style="display:none"><img src="~/Content/images/loading.gif" width="40px" /></span>
+                    <table class="table table-bordered table-v2 table-striped">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    SN
+                                </th>
+                                <th>Name</th>
+                                <th>Course</th>
+                                <th>Hall</th>
+                                <th>Start</th>
+                                <th>End</th>
+                                <th>Location</th>
+                                <th>Date</th>
+                                @*<th>Session</th>*@
+                                <th>Programme</th>
+                                <th>Department</th>
+                                <th>Level</th>
+                                <th>Status</th>
+                                <th>Ongoing</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Events.Count; i++)
+                            {
+                                var sn = i + 1;
+                                <tr>
+                                    <td class="text-center">
+                                        @sn
+                                    </td>
+                                    <td class="text-center">@Model.Events[i].EVENT_TYPE.Name</td>
+                                    @if (Model.Events[i].COURSE != null)
+                                    {
+                                        <td class="text-center">@Model.Events[i].COURSE.Name</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                    @if (Model.Events[i].HALL != null)
+                                    {
+                                        <td class="text-center">@Model.Events[i].HALL.Name</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                    <td class="text-center">@Model.Events[i].Event_Start.ToLongTimeString()</td>
+                                    <td class="text-center">@Model.Events[i].Event_End.ToLongTimeString()</td>
+                                    <td class="text-center">@Model.Events[i].LOCATION.Name</td>
+                                    <td class="text-center">@Model.Events[i].Date.ToLongDateString()</td>
+                                    @*<td class="text-center">@Model.Events[i].SESSION.Name</td>*@
+                                    <td class="text-center">@Model.Events[i].PROGRAMME.Name</td>
+                                    <td class="text-center">@Model.Events[i].DEPARTMENT.Name</td>
+                                    <td class="text-center">@Model.Events[i].LEVEL.Name</td>
+                                    @if (Model.Events[i].Active != false)
+                                    {
+                                        <td class="text-center">
+                                            <div class="status-pill green" data-title="Active" data-toggle="tooltip"></div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center">
+                                            <div class="status-pill red" data-title="Not Active" data-toggle="tooltip"></div>
+                                        </td>
+                                    }
+                                    @if (Model.Events[i].Status)
+                                    {
+                                        <td class="text-center">
+                                            <div class="status-pill green" data-title="Ongoing" data-toggle="tooltip"></div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center">
+                                            <div class="status-pill red" data-title="" data-toggle="tooltip"></div>
+                                        </td>
+                                    }
+                                    <td class="row-actions">
+                                        <a class="success" href="#" data-title="Edit Course" data-toggle="tooltip">
+                                            <i class="os-icon os-icon-ui-49" onclick="editEvent(@Model.Events[i].Id)"></i>
+                                        </a>
+                                    </td>
+                                    <td class="row-actions">
+                                        <a class="danger" href="#" data-title="Delete Course" data-toggle="tooltip">
+                                            <i class="os-icon os-icon-close" onclick="deleteEvent(@Model.Events[i].Id)"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        }
+
+    </div>
+</div>
+
+<div aria-hidden="true" aria-labelledby="mySmallModalLabel" class="modal fade bd-example-modal-sm" role="dialog" tabindex="-1" id="addEventModal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Event</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="eventTypeAdd"> Type of Event</label>
+                        <select class="form-control" id="eventTypeAdd" required="required">
+                            @{
+                                var eventTypes = (List<SelectListItem>)ViewBag.EventTypes;
+                            }
+                            @for (int i = 0; i < eventTypes.Count(); i++)
+                            {
+                                <option value="@eventTypes[i].Value">@eventTypes[i].Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="courseAdd"> Course</label>
+                        <select class="form-control" id="courseAdd">
+                            @{
+                                var courses = (List<SelectListItem>)ViewBag.Courses;
+                            }
+                            @for (int i = 0; i < courses.Count(); i++)
+                            {
+                                <option value="@courses[i].Value">@courses[i].Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hallAdd"> Hall</label>
+                        <select class="form-control" id="hallAdd">
+                            @{
+                                var halls = (List<SelectListItem>)ViewBag.Halls;
+                            }
+                            @for (int i = 0; i < halls.Count(); i++)
+                            {
+                                <option value="@halls[i].Value">@halls[i].Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventStartAdd">Event Start</label>
+                        <input class="timepicker form-control" required="required" type="text" id="eventStartAdd" placeholder="Please choose a time...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventEndAdd">Event End</label>
+                        <input class="timepicker form-control" required="required" type="text" id="eventEndAdd" placeholder="Please choose a time...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="locationAdd"> Location</label>
+                        <select class="form-control" id="locationAdd">
+                            @{
+                                var locations = (List<SelectListItem>)ViewBag.Locations;
+                            }
+                            @for (int i = 0; i < locations.Count(); i++)
+                            {
+                                <option value="@locations[i].Value">@locations[i].Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dateAdd">Date</label>
+                        <input class="single-daterange form-control" required="required" id="dateAdd" placeholder="Date" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionAdd"> Session</label>
+                        <select class="form-control" id="sessionAdd" required="required">
+                            @{
+                                var sessions = (List<SelectListItem>)ViewBag.Sessions;
+                            }
+                            @for (int i = 0; i < sessions.Count(); i++)
+                            {
+                                <option value="@sessions[i].Value">@sessions[i].Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="programmeAdd"> Programme</label>
+                        <select class="form-control" id="programmeAdd" required="required">
+                            @{
+                                var programmes = (List<SelectListItem>)ViewBag.Programmes;
+                            }
+                            @for (int i = 0; i < programmes.Count(); i++)
+                            {
+                                <option value="@programmes[i].Value">@programmes[i].Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="levelAdd"> Level</label>
+                        <select class="form-control" id="levelAdd" required="required">
+                            @{
+                                var levels = (List<SelectListItem>)ViewBag.Levels;
+                            }
+                            @for (int i = 0; i < levels.Count(); i++)
+                            {
+                                <option value="@levels[i].Value">@levels[i].Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="departmentAdd"> Department</label>
+                        <select class="form-control" id="departmentAdd" required="required">
+                            @{
+                                var departments = (List<SelectListItem>)ViewBag.Departments;
+                            }
+                            @for (int i = 0; i < departments.Count(); i++)
+                            {
+                                <option value="@departments[i].Value">@departments[i].Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" id="activeAdd" type="checkbox">Active
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" id="isWeeklyAdd" type="checkbox">Is Weekly Event
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                <a class="btn btn-primary" onclick="createThisEvent();" style="color:white">Add</a>
+                <span id="postLoadingAdd" style="display:none"><img src="~/Content/images/bx_loader.gif" width="20px" /></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div aria-hidden="true" aria-labelledby="mySmallModalLabel" class="modal fade bd-example-modal-sm" role="dialog" tabindex="-1" id="editEventModal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Event</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group" style="display:none;">
+                        <label for="eventIdEdit">Id</label>
+                        <input class="form-control" required="required" type="text" id="eventIdEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="eventTypeEdit"> Type of Event</label>
+                        <select class="form-control" id="eventTypeEdit" required="required">
+                            @{
+                                var eventTypesEdit = (List<SelectListItem>)ViewBag.EventTypes;
+                            }
+                            @for (int i = 0; i < eventTypesEdit.Count(); i++)
+                            {
+                                <option value="@eventTypesEdit[i].Value">@eventTypesEdit[i].Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="courseEdit"> Course</label>
+                        <select class="form-control" id="courseEdit">
+                            @{
+                                var coursesEdit = (List<SelectListItem>)ViewBag.Courses;
+                            }
+                            @for (int i = 0; i < coursesEdit.Count(); i++)
+                            {
+                                <option value="@coursesEdit[i].Value">@coursesEdit[i].Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hallEdit"> Hall</label>
+                        <select class="form-control" id="hallEdit">
+                            @{
+                                var hallsEdit = (List<SelectListItem>)ViewBag.Halls;
+                            }
+                            @for (int i = 0; i < hallsEdit.Count(); i++)
+                            {
+                                <option value="@hallsEdit[i].Value">@hallsEdit[i].Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventStartEdit">Event Start</label>
+                        <input class="timepicker form-control" required="required" type="text" id="eventStartEdit" placeholder="Please choose a time...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventEndEdit">Event End</label>
+                        <input class="timepicker form-control" required="required" type="text" id="eventEndEdit" placeholder="Please choose a time...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="locationEdit"> Location</label>
+                        <select class="form-control" id="locationEdit">
+                            @{
+                                var locationsEdit = (List<SelectListItem>)ViewBag.Locations;
+                            }
+                            @for (int i = 0; i < locationsEdit.Count(); i++)
+                            {
+                                <option value="@locationsEdit[i].Value">@locationsEdit[i].Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dateEdit">Date</label>
+                        <input class="single-daterange form-control" required="required" id="dateEdit" placeholder="Date" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionEdit"> Session</label>
+                        <select class="form-control" id="sessionEdit" required="required">
+                            @{
+                                var sessionsEdit = (List<SelectListItem>)ViewBag.Sessions;
+                            }
+                            @for (int i = 0; i < sessionsEdit.Count(); i++)
+                            {
+                                <option value="@sessionsEdit[i].Value">@sessionsEdit[i].Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="programmeEdit"> Programme</label>
+                        <select class="form-control" id="programmeEdit" required="required">
+                            @{
+                                var programmesEdit = (List<SelectListItem>)ViewBag.Programmes;
+                            }
+                            @for (int i = 0; i < programmesEdit.Count(); i++)
+                            {
+                                <option value="@programmesEdit[i].Value">@programmesEdit[i].Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="levelEdit"> Level</label>
+                        <select class="form-control" id="levelEdit" required="required">
+                            @{
+                                var levelsEdit = (List<SelectListItem>)ViewBag.Levels;
+                            }
+                            @for (int i = 0; i < levelsEdit.Count(); i++)
+                            {
+                                <option value="@levelsEdit[i].Value">@levelsEdit[i].Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="departmentEdit"> Department</label>
+                        <select class="form-control" id="departmentEdit" required="required">
+                            @{
+                                var departmentsEdit = (List<SelectListItem>)ViewBag.Departments;
+                            }
+                            @for (int i = 0; i < departmentsEdit.Count(); i++)
+                            {
+                                <option value="@departmentsEdit[i].Value">@departmentsEdit[i].Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" id="activeEdit" type="checkbox">Active
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" id="isWeeklyEdit" type="checkbox">Is Weekly Event
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                <a class="btn btn-primary" onclick="saveEvent();" style="color:white">Save</a>
+                <span id="postLoadingEdit" style="display:none"><img src="~/Content/images/bx_loader.gif" width="20px" /></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-2.1.3.min.js"></script>
+<script src="~/Scripts/timepickerinitializer.js"></script>
+<script>
+
+    function editEvent(eventId) {
+
+        $("#loading").show();
+
+        if (!eventId) {
+            swal("Oops!", "Missing parameter", "error");
+            $("#loading").hide();
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetEvent", "Event")',
+            dataType: 'json',
+            data: { eventId: eventId },
+            success: function (result) {
+                    if (result.IsError == false) {
+
+                        $("#eventIdEdit").val(result.EventId);
+                        $("#eventTypeEdit").val(result.EventTypeId);
+                        $("#courseEdit").val(result.CourseId);
+                        $("#hallEdit").val(result.HallId);
+                        $("#eventStartEdit").val(result.EventStart);
+                        $("#eventEndEdit").val(result.EventEnd);
+                        $("#locationEdit").val(result.LocationId);
+                        $("#dateEdit").val(result.Date);
+                        $("#sessionEdit").val(result.SessionId);
+                        $("#programmeEdit").val(result.ProgrammeId);
+                        $("#departmentEdit").val(result.DepartmentId);
+                        $("#levelEdit").val(result.LevelId);
+
+                        if (result.EventActive) {
+                            $('#activeEdit').prop('checked', true);
+                        }
+                        else {
+                            $('#activeEdit').prop('checked', false);
+                        }
+                        if (result.IsWeekly) {
+                            $('#isWeeklyEdit').prop('checked', true);
+                        }
+                        else {
+                            $('#isWeeklyEdit').prop('checked', false);
+                        }
+
+                        $("#loading").hide();
+
+                        $('#editEventModal').modal('show');
+                    } else {
+                        swal("Attention!", result.Message, "error");
+                        $("#loading").hide();
+                    }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#loading").hide();
+            }
+        });
+    }
+
+    function saveEvent() {
+
+        $("#postLoadingEdit").show();
+
+        var eventId = $("#eventIdEdit").val();
+        var course = $("#courseEdit").val();
+        var hall = $("#hallEdit").val();
+        var eventStart = $("#eventStartEdit").val();
+        var eventEnd = $("#eventEndEdit").val();
+        var date = $("#dateEdit").val();
+        var eventTypeId = $("#eventTypeEdit option:selected").val();
+        var locationId = $("#locationEdit option:selected").val();
+        var sessionId = $("#sessionEdit option:selected").val();
+        var progId = $("#programmeEdit option:selected").val();
+        var deptId = $("#departmentEdit option:selected").val();
+        var levelId = $("#levelEdit option:selected").val();
+        var active = false;
+        var isWeekly = false;
+        if ($('#activeEdit').is(':checked')) {
+            active = true;
+        } else {
+            active = false;
+        }
+        if ($('#isWeeklyEdit').is(':checked')) {
+            isWeekly = true;
+        } else {
+            isWeekly = false;
+        }
+
+        if (!eventId || !eventStart || !eventEnd || !date || !eventTypeId || !locationId || !sessionId || !progId || !deptId || !levelId) {
+            swal("Oops!", "Missing parameter", "error");
+            $("#postLoadingEdit").hide();
+            return;
+        }
+
+        var eventData = {
+
+            eventId: eventId,
+            courseId: course,
+            hallId: hall,
+            eventStart: eventStart,
+            eventEnd: eventEnd,
+            date: date,
+            eventTypeId: eventTypeId,
+            locationId: locationId,
+            programmeId: progId,
+            sessionId: sessionId,
+            departmentId: deptId,
+            levelId: levelId,
+            eventActive: active,
+            isWeekly: isWeekly,
+        };
+
+        var stringfiedData = JSON.stringify(eventData);
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("SaveEvent", "Event")',
+            dataType: 'json',
+            data: { eventData: stringfiedData },
+            success: function (result) {
+                    if (result.IsError == false) {
+                        swal("Success!", result.Message, "success");
+                        location.reload(true);
+                    } else {
+                        swal("Attention!", result.Message, "error");
+                        $("#postLoadingEdit").hide();
+                    }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#postLoadingEdit").hide();
+            }
+        });
+    }
+
+    function addEvent() {
+        $('#addEventModal').modal('show');
+    }
+
+    function createThisEvent() {
+
+        $("#postLoadingAdd").show();
+
+        var course = $("#courseAdd").val();
+        var hall = $("#hallAdd").val();
+        var eventStart = $("#eventStartAdd").val();
+        var eventEnd = $("#eventEndAdd").val();
+        var date = $("#dateAdd").val();
+        var eventTypeId = $("#eventTypeAdd option:selected").val();
+        var locationId = $("#locationAdd option:selected").val();
+        var sessionId = $("#sessionAdd option:selected").val();
+        var progId = $("#programmeAdd option:selected").val();
+        var deptId = $("#departmentAdd option:selected").val();
+        var levelId = $("#levelAdd option:selected").val();
+        var active = false;
+        var isWeekly = false;
+        if ($('#activeAdd').is(':checked')) {
+            active = true;
+        } else {
+            active = false;
+        }
+        if ($('#isWeeklyAdd').is(':checked')) {
+            isWeekly = true;
+        } else {
+            isWeekly = false;
+        }
+
+        if (!eventStart || !eventEnd || !date || !eventTypeId || !locationId || !sessionId || !progId || !deptId || !levelId) {
+            swal("Oops!", "Missing parameter", "error");
+            $("#postLoadingAdd").hide();
+            return;
+        }
+
+        var eventData = {
+
+            courseId: course,
+            hallId: hall,
+            eventStart: eventStart,
+            eventEnd: eventEnd,
+            date: date,
+            eventTypeId: eventTypeId,
+            locationId: locationId,
+            programmeId: progId,
+            sessionId: sessionId,
+            departmentId: deptId,
+            levelId: levelId,
+            eventActive: active,
+            isWeekly: isWeekly,
+        };
+
+        var stringfiedData = JSON.stringify(eventData);
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("CreateEvent", "Event")',
+            dataType: 'json',
+            data: { eventData: stringfiedData },
+            success: function (result) {
+                    if (result.IsError == false) {
+                        swal("Success!", result.Message, "success");
+                        location.reload(true);
+                    } else {
+                        swal("Attention!", result.Message, "error");
+                        $("#postLoadingAdd").hide();
+                    }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#postLoadingAdd").hide();
+            }
+        });
+    }
+
+    function deleteEvent(eventId) {
+        swal({
+            title: "Are you sure?",
+            text: "This event will no longer be available!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#f2b701",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel plx!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+                confirmDelete(eventId);
+            } else {
+                swal("Cancelled", "The delete action was cancelled.", "error");
+            }
+        });
+        return false;
+    }
+
+    function confirmDelete(eventId) {
+
+        $("#loading").show();
+
+        if (!eventId) {
+            swal("Oops!", "Missing parameter", "error");
+            $("#loading").hide();
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteEvent", "Event")',
+            dataType: 'json',
+            data: { eventId: eventId },
+            success: function (result) {
+                    if (result.IsError == false) {
+
+                        $("#loading").hide();
+
+                        location.reload(true);
+                    } else {
+                        swal("Attention!", result.Message, "error");
+                        $("#loading").hide();
+                    }
+            },
+            error: function (ex) {
+                swal("Oops!", "Something went wrong " + ex.statusCode, "error");
+                $("#loading").hide();
+            }
+        });
+
+    }
+</script>

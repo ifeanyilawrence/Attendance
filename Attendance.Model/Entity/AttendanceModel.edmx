@@ -88,6 +88,8 @@
           <Property Name="Programme_Id" Type="int" Nullable="false" />
           <Property Name="Department_Id" Type="int" Nullable="false" />
           <Property Name="Level_Id" Type="int" Nullable="false" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="Is_Weekly" Type="bit" />
         </EntityType>
         <EntityType Name="EVENT_TYPE">
           <Key>
@@ -254,6 +256,7 @@
           <Property Name="Matric_Number" Type="varchar" MaxLength="25" Nullable="false" />
           <Property Name="Hall_Id" Type="int" />
           <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="Ip_Address" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="STUDENT_LEVEL">
           <Key>
@@ -1358,6 +1361,8 @@ warning 6002: The table/view 'Attendance.dbo.VW_ABSENT_LOG' does not have a prim
           <NavigationProperty Name="SESSION" Relationship="AttendanceModel.FK_EVENT_SESSION" FromRole="EVENT" ToRole="SESSION" />
           <NavigationProperty Name="USER" Relationship="AttendanceModel.FK_EVENT_USER" FromRole="EVENT" ToRole="USER" />
           <NavigationProperty Name="ABSENT_LOG" Relationship="AttendanceModel.FK_ABSENT_LOG_EVENT" FromRole="EVENT" ToRole="ABSENT_LOG" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="Is_Weekly" Type="Boolean" />
         </EntityType>
         <EntityType Name="EVENT_TYPE">
           <Key>
@@ -1547,6 +1552,7 @@ warning 6002: The table/view 'Attendance.dbo.VW_ABSENT_LOG' does not have a prim
           <NavigationProperty Name="HALL" Relationship="AttendanceModel.FK_STUDENT_HALL" FromRole="STUDENT" ToRole="HALL" />
           <NavigationProperty Name="PERSON" Relationship="AttendanceModel.FK_STUDENT_PERSON" FromRole="STUDENT" ToRole="PERSON" />
           <NavigationProperty Name="STUDENT_LEVEL" Relationship="AttendanceModel.FK_STUDENT_LEVEL_STUDENT" FromRole="STUDENT" ToRole="STUDENT_LEVEL" />
+          <Property Name="Ip_Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="STUDENT_LEVEL">
           <Key>
@@ -2230,6 +2236,8 @@ warning 6002: The table/view 'Attendance.dbo.VW_ABSENT_LOG' does not have a prim
           <EntitySetMapping Name="EVENT">
             <EntityTypeMapping TypeName="AttendanceModel.EVENT">
               <MappingFragment StoreEntitySet="EVENT">
+                <ScalarProperty Name="Is_Weekly" ColumnName="Is_Weekly" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Level_Id" ColumnName="Level_Id" />
                 <ScalarProperty Name="Department_Id" ColumnName="Department_Id" />
                 <ScalarProperty Name="Programme_Id" ColumnName="Programme_Id" />
@@ -2404,6 +2412,7 @@ warning 6002: The table/view 'Attendance.dbo.VW_ABSENT_LOG' does not have a prim
           <EntitySetMapping Name="STUDENT">
             <EntityTypeMapping TypeName="AttendanceModel.STUDENT">
               <MappingFragment StoreEntitySet="STUDENT">
+                <ScalarProperty Name="Ip_Address" ColumnName="Ip_Address" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Hall_Id" ColumnName="Hall_Id" />
                 <ScalarProperty Name="Matric_Number" ColumnName="Matric_Number" />

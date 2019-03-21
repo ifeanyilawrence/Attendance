@@ -84,6 +84,34 @@ namespace Attendance.Business
                 throw;
             }
         }
+
+        public string GetAbsenceRequestStatus(ATTENDANCE attendance)
+        {
+            string requestStatus = null;
+            try
+            {
+                if (attendance != null)
+                {
+                    requestStatus = attendance.ATTENDANCE_STATUS.Name;
+
+                    ABSENT_LOG absentLog = base.GetEntitiesBy(a => a.Event_Id == attendance.Event_Id && a.Student_Id == attendance.Student_Id).LastOrDefault();
+                    if (absentLog != null && absentLog.Approved == true)
+                        requestStatus += "(Request Approved)";
+                    else if(absentLog != null && absentLog.Approved == false)
+                        requestStatus += "(Request Reject)";
+                    else if (absentLog != null && absentLog.Approved == null)
+                        requestStatus += "(Pending)";
+                    else
+                        requestStatus += "(Pending)";
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return requestStatus;
+        }
     }
    
 }

@@ -33,6 +33,8 @@ namespace Attendance.Model.Entity
         public int Programme_Id { get; set; }
         public int Department_Id { get; set; }
         public int Level_Id { get; set; }
+        public Nullable<bool> Active { get; set; }
+        public Nullable<bool> Is_Weekly { get; set; }
     
         public virtual ICollection<ATTENDANCE> ATTENDANCE { get; set; }
         public virtual COURSE COURSE { get; set; }

@@ -213,11 +213,13 @@
             }
 
             if (parseInt(role) !== 1 && !regNumber) {
-                toastMessage("Fill all neccessary fields before proceeding.", "Attention!", "error");
-                $("#btnRegister").show();
-                $("#btnRegDisabled").hide();
-                $("#loading").hide();
-                return;
+                if (parseInt(role) !== 3 && !regNumber) {
+                    toastMessage("Fill all neccessary fields before proceeding.", "Attention!", "error");
+                    $("#btnRegister").show();
+                    $("#btnRegDisabled").hide();
+                    $("#loading").hide();
+                    return;
+                }
             }
             if (parseInt(role) === 3 && !userName) {
                 toastMessage("Fill all neccessary fields before proceeding.", "Attention!", "error");
@@ -281,10 +283,10 @@
             $('#regNoDiv').hide();
             var role = $("#role option:selected").val();
 
-            if (parseInt(role) !== 1) {
-                $('#regNoDiv').show();
-            } else {
+            if (parseInt(role) === 1 || parseInt(role) === 3) {
                 $('#userNameDiv').show();
+            } else {
+                $('#regNoDiv').show();
             }
         }
 

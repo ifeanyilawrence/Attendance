@@ -1,0 +1,136 @@
+﻿@model Attendance.Web.Areas.Admin.Models.EventViewModel
+@{
+    ViewBag.Title = "Attendance";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<div class="element-wrapper">
+    @if (TempData["Message"] != null)
+    {
+        @Html.Partial("_Message", (Attendance.Model.Model.Message)TempData["Message"])
+    }
+    <div class="element-box-tp">
+        <h5 class="form-header">Attendance</h5>
+        <div class="controls-above-table">
+
+            @using (Html.BeginForm("GetAttendance", "Event", new { Area = "Admin" }, FormMethod.Post))
+            {
+                <div class="form-group">
+                    <label for="eventType"> Type of Event</label>
+                    <div class="date-input">
+                        @Html.DropDownListFor(m => m.EventType.Id, (IEnumerable<SelectListItem>) ViewBag.EventTypes, new { @class = "form-control", id="eventType", required = "required"})
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Date"> Choose Date</label>
+                    <div class="date-input">
+                        @Html.TextBoxFor(m => m.DateString, new { @class = "single-daterange form-control", placeholder = "select date", type = "text", autocomplete = "off", required = "required" })
+                    </div>
+                </div>
+                <div class="form-buttons-w col-md-2">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
+            }
+
+        </div>
+    </div>
+    <div class="element-box-tp">
+
+        @if (Model != null && Model.Events != null && Model.Events.Count > 0)
+        {
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-v2 table-striped">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    SN
+                                </th>
+                                <th>Name</th>
+                                <th>Course</th>
+                                <th>Hall</th>
+                                <th>Start</th>
+                                <th>End</th>
+                                <th>Location</th>
+                                <th>Date</th>
+                                @*<th>Session</th>*@
+                                <th>Programme</th>
+                                <th>Department</th>
+                                <th>Level</th>
+                                <th>Status</th>
+                                <th>Ongoing</th>
+                                <th>View Attendance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Events.Count; i++)
+                            {
+                                var sn = i + 1;
+                                <tr>
+                                    <td class="text-center">
+                                        @sn
+                                    </td>
+                                    <td class="text-center">@Model.Events[i].EVENT_TYPE.Name</td>
+                                    @if (Model.Events[i].COURSE != null)
+                                    {
+                                        <td class="text-center">@Model.Events[i].COURSE.Name</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                    @if (Model.Events[i].HALL != null)
+                                    {
+                                        <td class="text-center">@Model.Events[i].HALL.Name</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                    <td class="text-center">@Model.Events[i].Event_Start.ToLongTimeString()</td>
+                                    <td class="text-center">@Model.Events[i].Event_End.ToLongTimeString()</td>
+                                    <td class="text-center">@Model.Events[i].LOCATION.Name</td>
+                                    <td class="text-center">@Model.Events[i].Date.ToLongDateString()</td>
+                                    @*<td class="text-center">@Model.Events[i].SESSION.Name</td>*@
+                                    <td class="text-center">@Model.Events[i].PROGRAMME.Name</td>
+                                    <td class="text-center">@Model.Events[i].DEPARTMENT.Name</td>
+                                    <td class="text-center">@Model.Events[i].LEVEL.Name</td>
+                                    @if (Model.Events[i].Active != false)
+                                    {
+                                        <td class="text-center">
+                                            <div class="status-pill green" data-title="Active" data-toggle="tooltip"></div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center">
+                                            <div class="status-pill red" data-title="Not Active" data-toggle="tooltip"></div>
+                                        </td>
+                                    }
+                                    @if (Model.Events[i].Status)
+                                    {
+                                        <td class="text-center">
+                                            <div class="status-pill green" data-title="Ongoing" data-toggle="tooltip"></div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center">
+                                            <div class="status-pill red" data-title="" data-toggle="tooltip"></div>
+                                        </td>
+                                    }
+                                    <td class="row-actions">
+                                        @Html.ActionLink("View", "ViewAttendance", "Event", new { area = "Admin", eventId = Attendance.Web.Models.Utility.Encrypt(Model.Events[i].Id.ToString()) },
+                                                            new { @class= "os-icon os-icon-ui-49 btn btn-sm" })
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        }
+
+    </div>
+</div>

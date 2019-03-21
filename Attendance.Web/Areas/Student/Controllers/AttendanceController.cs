@@ -6,6 +6,7 @@ using Attendance.Web.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -37,6 +38,7 @@ namespace Attendance.Web.Areas.Student.Controllers
             ViewBag.AbsentType = _absentTypeLogic.GetEntitiesBy(a => a.Active);
             try
             {
+
                 _student = _studentLogic.GetEntityBy(s => s.Matric_Number == User.Identity.Name);
 
                 _viewModel.Events = _eventLogic.GetEventsForStudent(_student);
@@ -77,15 +79,23 @@ namespace Attendance.Web.Areas.Student.Controllers
                     {
                         _student = _studentLogic.GetEntityBy(s => s.Matric_Number == User.Identity.Name);
 
-                        //check if attendance record exist
-                        ATTENDANCE attendance = _attendanceLogic.GetEntitiesBy(a => a.Event_Id == eventId && a.Student_Id == _student.Person_Id).LastOrDefault();
-                        if (attendance == null)
-                            _attendanceLogic.PopulateAttendanceForEvent(currentEvent);
+                        if (IsCorrectDevice(_student))
+                        {
+                            //check if attendance record exist
+                            ATTENDANCE attendance = _attendanceLogic.GetEntitiesBy(a => a.Event_Id == eventId && a.Student_Id == _student.Person_Id).LastOrDefault();
+                            if (attendance == null)
+                                _attendanceLogic.PopulateAttendanceForEvent(currentEvent);
 
-                        _attendanceLogic.MarkAttendance(_student, currentEvent, AttendanceStatuses.Present);
+                            _attendanceLogic.MarkAttendance(_student, currentEvent, AttendanceStatuses.Present);
 
-                        result.IsError = false;
-                        result.Message = "Attendance Marked";
+                            result.IsError = false;
+                            result.Message = "Attendance Marked";
+                        }
+                        else
+                        {
+                            result.IsError = true;
+                            result.Message = "Kindly login with your own device to take this attendnace.";
+                        }
                     }
                     else
                     {
@@ -107,6 +117,36 @@ namespace Attendance.Web.Areas.Student.Controllers
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        private bool IsCorrectDevice(STUDENT student)
+        {
+            try
+            {
+                StudentLogic studentLogic = new StudentLogic();
+                string hostname = Dns.GetHostName();
+                string ip = Dns.GetHostByName(hostname).AddressList[0].ToString();
+
+                if (student.Ip_Address == null)
+                {
+                    student.Ip_Address = ip;
+
+                    studentLogic.Modify(student);
+                    return true;
+                }
+                else
+                {
+                    if (student.Ip_Address == ip)
+                        return true;
+                    else
+                        return false;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public JsonResult SaveAbsenceRequest(long eventId, int absentType, string dateRange, string remark)
         {
             JsonResponseModel result = new JsonResponseModel();
@@ -247,12 +287,12 @@ namespace Attendance.Web.Areas.Student.Controllers
 
                 int numberOfTimesPresent = _attendanceLogic.GetEntitiesBy(s => s.EVENT.Course_Id == courseId && s.Student_Id == _student.Person_Id &&
                                             s.Attendance_Status_Id == (int)AttendanceStatuses.Present).Count();
-                int numberOfLectures = _eventLogic.GetEntitiesBy(s => s.Course_Id == courseId).Count();
+                int numberOfLectures = _eventLogic.GetEntitiesBy(s => s.Course_Id == courseId && (s.Active == true || s.Active == null)).Count();
                 int numberOfAbsence = _attendanceLogic.GetEntitiesBy(s => s.EVENT.Course_Id == courseId && s.Student_Id == _student.Person_Id &&
                                             s.Attendance_Status_Id == (int)AttendanceStatuses.Excused).Count();
                 int numberOfLecturesHeld = numberOfLectures - numberOfAbsence;
 
-                double eligibilityPercentage = (numberOfTimesPresent / numberOfLecturesHeld) * 100;
+                double eligibilityPercentage = (Convert.ToDouble(numberOfTimesPresent) / Convert.ToDouble(numberOfLecturesHeld)) * 100.0;
 
                 result.ApproximateNumberOfLectures = numberOfLecturesHeld;
                 result.EligibilityPercentage = eligibilityPercentage;

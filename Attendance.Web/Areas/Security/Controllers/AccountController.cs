@@ -1,4 +1,5 @@
 ﻿using Attendance.Business;
+using Attendance.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +50,7 @@ namespace Attendance.Web.Areas.Security.Controllers
         }
         public ActionResult Home()
         {
+            Utility.AddWeeklyEvents();
             return View();
         }
     }

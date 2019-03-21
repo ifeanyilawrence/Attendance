@@ -394,7 +394,41 @@ namespace Attendance.Web.Models
                 throw;
             }
         }
+        public static List<SelectListItem> PopulateEventTypeSelectListItem()
+        {
+            try
+            {
+                EventTypeLogic eventTypeLogic = new EventTypeLogic();
+                List<EVENT_TYPE> eventTypes = eventTypeLogic.GetEntitiesBy(p => p.Active);
 
+                if (eventTypes == null || eventTypes.Count <= 0)
+                {
+                    return new List<SelectListItem>();
+                }
+
+                List<SelectListItem> selectItemList = new List<SelectListItem>();
+
+                SelectListItem list = new SelectListItem();
+                list.Value = "";
+                list.Text = Select;
+                selectItemList.Add(list);
+
+                foreach (EVENT_TYPE eventType in eventTypes)
+                {
+                    SelectListItem selectList = new SelectListItem();
+                    selectList.Value = eventType.Id.ToString();
+                    selectList.Text = eventType.Name;
+
+                    selectItemList.Add(selectList);
+                }
+
+                return selectItemList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         public static List<SelectListItem> PopulateSessionSelectListItem()
         {
             try
@@ -967,6 +1001,91 @@ namespace Attendance.Web.Models
             catch (Exception)
             {
                 throw;
+            }
+        }
+        public static List<SelectListItem> PopulateLocationSelectListItem()
+        {
+            try
+            {
+                LocationLogic locationLogic = new LocationLogic();
+                List<LOCATION> locations = locationLogic.GetEntitiesBy(p => p.Active);
+                if (locations == null || locations.Count <= 0)
+                {
+                    return new List<SelectListItem>();
+                }
+
+                List<SelectListItem> selectlist = new List<SelectListItem>();
+
+                SelectListItem list = new SelectListItem();
+                list.Value = "";
+                list.Text = Select;
+                selectlist.Add(list);
+
+                foreach (LOCATION location in locations)
+                {
+                    SelectListItem selectList = new SelectListItem();
+                    selectList.Value = location.Id.ToString();
+                    selectList.Text = location.Name;
+
+                    selectlist.Add(selectList);
+                }
+
+                return selectlist;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static void AddWeeklyEvents()
+        {
+            try
+            {
+                EventLogic eventLogic = new EventLogic();
+                UserLogic userLogic = new UserLogic();
+
+                List<EVENT> activeEvents = new List<EVENT>();
+                List<EVENT> weeklyEvents = new List<EVENT>();
+
+                activeEvents = eventLogic.GetEntitiesBy(e => e.Is_Weekly == true && e.Active == true && e.Date != DateTime.Now);
+
+                if (activeEvents != null)
+                {
+                    weeklyEvents = activeEvents.Where(e => e.Date.DayOfWeek == DateTime.Now.DayOfWeek).ToList();
+                    weeklyEvents.ForEach(e =>
+                    {
+                        EVENT weekLyEvent = new EVENT();
+
+                        weekLyEvent.Active = true;
+                        weekLyEvent.Course_Id = e.Course_Id;
+                        weekLyEvent.Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                        weekLyEvent.Department_Id = e.Department_Id;
+                        weekLyEvent.Event_End = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, e.Event_End.Hour, e.Event_End.Minute, e.Event_End.Second);
+                        weekLyEvent.Event_Start = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, e.Event_Start.Hour, e.Event_Start.Minute, e.Event_Start.Second);
+                        weekLyEvent.Event_Type_Id = e.Event_Type_Id;
+                        weekLyEvent.Hall_Id = e.Hall_Id;
+                        weekLyEvent.Is_Weekly = true;
+                        weekLyEvent.Level_Id = e.Level_Id;
+                        weekLyEvent.Location_Id = e.Location_Id;
+                        weekLyEvent.Programme_Id = e.Programme_Id;
+                        weekLyEvent.Session_Id = e.Session_Id;
+                        weekLyEvent.User_Id = userLogic.GetAll().FirstOrDefault().Id;
+
+                        EVENT existingEvent = eventLogic.GetEntitiesBy(c => c.Course_Id == e.Course_Id && c.Date == weekLyEvent.Date && c.Department_Id == e.Department_Id &&
+                                            c.Event_End == weekLyEvent.Event_End && c.Event_Start == weekLyEvent.Event_Start && c.Event_Type_Id == e.Event_Type_Id && c.Hall_Id == e.Hall_Id &&
+                                            c.Level_Id == e.Level_Id && c.Location_Id == e.Location_Id && c.Programme_Id == e.Programme_Id &&
+                                            c.Session_Id == e.Session_Id).LastOrDefault();
+                        if (existingEvent == null)
+                        {
+                            eventLogic.Create(weekLyEvent);
+                        }
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return;
             }
         }
     }

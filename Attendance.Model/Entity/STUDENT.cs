@@ -25,6 +25,7 @@ namespace Attendance.Model.Entity
         public string Matric_Number { get; set; }
         public Nullable<int> Hall_Id { get; set; }
         public bool Active { get; set; }
+        public string Ip_Address { get; set; }
     
         public virtual ICollection<ABSENT_LOG> ABSENT_LOG { get; set; }
         public virtual ICollection<ATTENDANCE> ATTENDANCE { get; set; }
